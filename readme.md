@@ -76,11 +76,11 @@ builder
         .UseMauiApp<App>()
         .UseUserDialogs(() =>
         {
-#if ANDROID
+    #if ANDROID
             Maui.Controls.UserDialogs.UserDialogs.Instance = new MyCustomUserDialogs(); //Android realization
-#else
+    #else
             Maui.Controls.UserDialogs.UserDialogs.Instance = new MyCustomUserDialogs(); //iOS realization
-#endif
+    #endif
 
             //setup your default styles for dialogs
         })
