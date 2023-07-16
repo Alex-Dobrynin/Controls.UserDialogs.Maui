@@ -10,7 +10,7 @@ namespace Maui.Controls.UserDialogs;
 
 public static class Extensions
 {
-    public static void ScaleTo(this Drawable drawable, double size)
+    public static void ScaleTo(this Drawable drawable, double newSize)
     {
         double width = drawable.IntrinsicWidth;
         double height = drawable.IntrinsicHeight;
@@ -18,9 +18,9 @@ public static class Extensions
         var ratio = width / height;
         if (width < height)
         {
-            drawable.SetBounds(0, 0, DpToPixels(size * ratio), DpToPixels(size));
+            drawable.SetBounds(0, 0, DpToPixels(newSize * ratio), DpToPixels(newSize));
         }
-        else drawable.SetBounds(0, 0, DpToPixels(size), DpToPixels(size / ratio));
+        else drawable.SetBounds(0, 0, DpToPixels(newSize), DpToPixels(newSize / ratio));
     }
 
     public static int DpToPixels(double number)

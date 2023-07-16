@@ -20,30 +20,30 @@ namespace Sample
             else
                 CounterBtn.Text = $"Clicked {count} times";
 
-            await UserDialogs.Instance.AlertAsync("sjbknsdkbvlsdbds", "Title", "Cancel");
-            await UserDialogs.Instance.ConfirmAsync("sjbknsdkbvlsdbds", "Title", "Cancel", "Cancel");
+            //await UserDialogs.Instance.AlertAsync("sjbknsdkbvlsdbds", "Title", "Ok");
+            //await UserDialogs.Instance.ConfirmAsync("sjbknsdkbvlsdbds", "Title", "Ok", "Cancel");
 
-            UserDialogs.Instance.ShowLoading("aghah", null, MaskType.Gradient);
-            await Task.Delay(2000);
+            //UserDialogs.Instance.ShowLoading("aghah", null, MaskType.Gradient);
+            //await Task.Delay(2000);
 
-            UserDialogs.Instance.HideHud();
+            //UserDialogs.Instance.HideHud();
 
-            UserDialogs.Instance.ShowToast(new ToastConfig() { Icon = "dotnet_bot.png", Message = "agasgahadhs" });
-            await Task.Delay(3000);
-            UserDialogs.Instance.ShowSnackbar(
-                new SnackbarConfig()
-                {
-                    Icon = "dotnet_bot.png",
-                    Message = "agasgahadhs",
-                    Action = new SnackbarAction()
-                    {
-                        Action = () => { },
-                        Icon = "dotnet_bot.png",
-                        Text = "sdhhfgd",
-                        ShowCountDown = true
-                    }
-                });
-            await Task.Delay(3000);
+            //UserDialogs.Instance.ShowToast(new ToastConfig() { Icon = "dotnet_bot.png", Message = "agasgahadhs" });
+            //await Task.Delay(3000);
+            //UserDialogs.Instance.ShowSnackbar(
+            //    new SnackbarConfig()
+            //    {
+            //        Icon = "dotnet_bot.png",
+            //        Message = "agasgahadhs",
+            //        Action = new SnackbarAction()
+            //        {
+            //            Action = () => { },
+            //            Icon = "dotnet_bot.png",
+            //            Text = "sdhhfgd",
+            //            ShowCountDown = true
+            //        }
+            //    });
+            //await Task.Delay(3000);
 
             var config = new ActionSheetConfig()
             {

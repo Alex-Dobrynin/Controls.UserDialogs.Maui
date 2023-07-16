@@ -33,7 +33,11 @@ builder
     {
         //setup your default styles for dialogs
         AlertConfig.DefaultBackgroundColor = Colors.Purple;
+#if ANDROID
         AlertConfig.DefaultFontFamily = "OpenSans-Regular.ttf";
+#else
+        AlertConfig.DefaultFontFamily = "OpenSans-Regular";
+#endif
 
         ToastConfig.DefaultCornerRadius = 15;
     })
@@ -43,6 +47,8 @@ builder
         fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
     });
 ```
+
+##### Note: there are some properties available only for Android or only for iOS
 
 ## Powered By:
 

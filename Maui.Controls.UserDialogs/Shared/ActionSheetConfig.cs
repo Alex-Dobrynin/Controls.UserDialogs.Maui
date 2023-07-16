@@ -20,14 +20,26 @@ public class ActionSheetConfig
 
     public static Color DefaultMessageColor { get; set; }
     public static Color DefaultTitleColor { get; set; }
-    public static double DefaultTitleFontSize { get; set; } = 20;
-    public static double DefaultMessageFontSize { get; set; } = 16;
+    public static float DefaultTitleFontSize { get; set; } = 20;
+    public static float DefaultMessageFontSize { get; set; } = 16;
     public static Color DefaultDestructiveButtonTextColor { get; set; }
-    public static double DefaultDestructiveButtonFontSize { get; set; } = 18;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public static float DefaultDestructiveButtonFontSize { get; set; } = 18;
     public static Color DefaultNegativeButtonTextColor { get; set; }
-    public static double DefaultNegativeButtonFontSize { get; set; } = 18;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public static float DefaultNegativeButtonFontSize { get; set; } = 18;
     public static Color DefaultActionSheetOptionTextColor { get; set; }
-    public static double DefaultActionSheetOptionFontSize { get; set; } = 18;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public static float DefaultActionSheetOptionFontSize { get; set; } = 18;
 
     public string FontFamily { get; set; } = DefaultFontFamily;
 
@@ -62,11 +74,23 @@ public class ActionSheetConfig
     public Color DestructiveButtonTextColor { get; set; } = DefaultDestructiveButtonTextColor;
     public Color NegativeButtonTextColor { get; set; } = DefaultNegativeButtonTextColor;
     public Color ActionSheetOptionTextColor { get; set; } = DefaultActionSheetOptionTextColor;
-    public double TitleFontSize { get; set; } = DefaultTitleFontSize;
-    public double MessageFontSize { get; set; } = DefaultMessageFontSize;
-    public double DestructiveButtonFontSize { get; set; } = DefaultDestructiveButtonFontSize;
-    public double NegativeButtonFontSize { get; set; } = DefaultNegativeButtonFontSize;
-    public double ActionSheetOptionFontSize { get; set; } = DefaultActionSheetOptionFontSize;
+    public float TitleFontSize { get; set; } = DefaultTitleFontSize;
+    public float MessageFontSize { get; set; } = DefaultMessageFontSize;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public float DestructiveButtonFontSize { get; set; } = DefaultDestructiveButtonFontSize;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public float NegativeButtonFontSize { get; set; } = DefaultNegativeButtonFontSize;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public float ActionSheetOptionFontSize { get; set; } = DefaultActionSheetOptionFontSize;
 
     /// <summary>
     /// Android only
@@ -82,6 +106,10 @@ public class ActionSheetConfig
     /// Used only within bottom action sheet
     /// </summary>
     public string Message { get; set; }
+
+    /// <summary>
+    /// Android only
+    /// </summary>
     public string Icon { get; set; }
     public ActionSheetOption Cancel { get; set; }
     public ActionSheetOption Destructive { get; set; }

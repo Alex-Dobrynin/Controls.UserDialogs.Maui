@@ -6,25 +6,20 @@ namespace Maui.Controls.UserDialogs;
 
 public partial class UserDialogsImplementation
 {
-    public UserDialogsImplementation()
-    {
-
-    }
-
     public virtual partial IDisposable Alert(AlertConfig config) => this.Present(() =>
     {
         return new AlertBuilder().Build(config);
     });
 
-    public virtual partial IDisposable Confirm(ConfirmConfig config)
+    public virtual partial IDisposable Confirm(ConfirmConfig config) => this.Present(() =>
     {
-        return null;
-    }
+        return new ConfirmBuilder().Build(config);
+    });
 
-    public virtual partial IDisposable ActionSheet(ActionSheetConfig config)
+    public virtual partial IDisposable ActionSheet(ActionSheetConfig config) => this.Present(() =>
     {
-        return null;
-    }
+        return new ActionSheetBuilder().Build(config);
+    });
 
     public virtual partial IDisposable ShowToast(ToastConfig config)
     {

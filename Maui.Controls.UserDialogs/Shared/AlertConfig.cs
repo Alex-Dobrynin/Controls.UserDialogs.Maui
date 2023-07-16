@@ -21,10 +21,14 @@ public class AlertConfig
 
     public static Color DefaultMessageColor { get; set; }
     public static Color DefaultTitleColor { get; set; }
-    public static double DefaultTitleFontSize { get; set; } = 20;
-    public static double DefaultMessageFontSize { get; set; } = 16;
+    public static float DefaultTitleFontSize { get; set; } = 20;
+    public static float DefaultMessageFontSize { get; set; } = 16;
     public static Color DefaultPositiveButtonTextColor { get; set; }
-    public static double DefaultPositiveButtonFontSize { get; set; } = 18;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public static float DefaultPositiveButtonFontSize { get; set; } = 18;
 
     public string FontFamily { get; set; } = DefaultFontFamily;
     /// <summary>
@@ -51,15 +55,22 @@ public class AlertConfig
     public Color MessageColor { get; set; } = DefaultMessageColor;
     public Color TitleColor { get; set; } = DefaultTitleColor;
     public Color PositiveButtonTextColor { get; set; } = DefaultPositiveButtonTextColor;
-    public double TitleFontSize { get; set; } = DefaultTitleFontSize;
-    public double MessageFontSize { get; set; } = DefaultMessageFontSize;
-    public double PositiveButtonFontSize { get; set; } = DefaultPositiveButtonFontSize;
+    public float TitleFontSize { get; set; } = DefaultTitleFontSize;
+    public float MessageFontSize { get; set; } = DefaultMessageFontSize;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public float PositiveButtonFontSize { get; set; } = DefaultPositiveButtonFontSize;
 
     public static string DefaultOkText { get; set; } = "Ok";
 
     public string OkText { get; set; } = DefaultOkText;
     public string Title { get; set; }
     public string Message { get; set; }
+    /// <summary>
+    /// Android only
+    /// </summary>
     public string Icon { get; set; }
     public Action Action { get; set; }
 

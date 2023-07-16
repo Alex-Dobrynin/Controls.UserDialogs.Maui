@@ -13,8 +13,9 @@ namespace Sample
                 .UseMauiApp<App>()
                 .UseUserDialogs(() =>
                 {
-                    var fontFamily = "OpenSans-Semibold.ttf";
+                    var fontFamily = "OpenSans-Semibold";
                     AlertConfig.DefaultFontFamily = fontFamily;
+                    AlertConfig.DefaultPositiveButtonTextColor = Colors.Purple;
                     ConfirmConfig.DefaultFontFamily = fontFamily;
                     ActionSheetConfig.DefaultFontFamily = fontFamily;
                     ToastConfig.DefaultFontFamily = fontFamily;
