@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Views;
 using Android.Widget;
@@ -13,8 +14,15 @@ namespace Maui.Controls.UserDialogs;
 
 public class ToastBuilder
 {
+    private Typeface _typeface;
+
     public virtual Snackbar Build(Activity activity, ToastConfig config)
     {
+        if (config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+        }
+
         var view = activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
 
         var snackBar = Snackbar.Make(
@@ -25,8 +33,15 @@ public class ToastBuilder
         );
 
         SetupSnackbarText(snackBar, config);
+        if (config.MessageColor is not null)
+        {
+            snackBar.SetTextColor(config.MessageColor.ToInt());
+        }
 
-        snackBar.View.Background = GetDialogBackground(config);
+        if (config.BackgroundColor is not null)
+        {
+            snackBar.View.Background = GetDialogBackground(config);
+        }
 
         if (snackBar.View.LayoutParameters is FrameLayout.LayoutParams layoutParams)
         {
@@ -35,7 +50,7 @@ public class ToastBuilder
             layoutParams.SetMargins(0, DpToPixels(50), 0, DpToPixels(80));
             layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Bottom;
 
-            if (ToastConfig.Position == ToastPosition.Top)
+            if (config.Position == ToastPosition.Top)
             {
                 layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Top;
             }
@@ -45,16 +60,14 @@ public class ToastBuilder
 
         snackBar.SetAnimationMode(Snackbar.AnimationModeFade);
 
-        snackBar.SetTextColor(ToastConfig.MessageColor.ToInt());
-
         return snackBar;
     }
 
     protected virtual Drawable GetDialogBackground(ToastConfig config)
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(ToastConfig.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(ToastConfig.CornerRadius));
+        backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
 
         return backgroundDrawable;
     }
@@ -63,12 +76,13 @@ public class ToastBuilder
     {
         var l = (snackbar.View as Snackbar.SnackbarLayout).GetChildAt(0) as SnackbarContentLayout;
         var text = l.GetChildAt(0) as TextView;
-        text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)SnackbarConfig.MessageFontSize);
+        text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)config.MessageFontSize);
+        text.SetTypeface(_typeface, TypefaceStyle.Normal);
 
         if (config.Icon is null) return;
 
         var icon = GetIcon(config);
-        icon.ScaleTo(22);
+
         text.SetCompoundDrawables(icon, null, null, null);
         text.CompoundDrawablePadding = DpToPixels(10);
     }
@@ -77,6 +91,7 @@ public class ToastBuilder
     {
         var imgId = MauiApplication.Current.GetDrawableId(config.Icon);
         var img = MauiApplication.Current.GetDrawable(imgId);
+        img.ScaleTo(22);
 
         return img;
     }

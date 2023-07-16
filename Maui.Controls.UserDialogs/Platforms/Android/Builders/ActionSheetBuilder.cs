@@ -1,4 +1,7 @@
-﻿using Android.App;
+﻿using System;
+
+using Android.App;
+using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Text;
 using Android.Text.Style;
@@ -16,9 +19,16 @@ namespace Maui.Controls.UserDialogs;
 
 public class ActionSheetBuilder
 {
+    private Typeface _typeface;
+
     public virtual Dialog Build(Activity activity, ActionSheetConfig config)
     {
         var builder = new AlertDialog.Builder(activity);
+
+        if (config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+        }
 
         if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
@@ -50,6 +60,11 @@ public class ActionSheetBuilder
     {
         var builder = new AppCompatAlertDialog.Builder(activity);
 
+        if (config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+        }
+
         if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
         if (config.Icon is not null) builder.SetIcon(GetIcon(config));
@@ -78,7 +93,7 @@ public class ActionSheetBuilder
 
     protected virtual ActionSheetListAdapter GetActionsAdapter(Android.Content.Context context, ActionSheetConfig config)
     {
-        return new ActionSheetListAdapter(context, Android.Resource.Layout.SelectDialogItem, Android.Resource.Id.Text1, config);
+        return new ActionSheetListAdapter(context, Android.Resource.Layout.SelectDialogItem, Android.Resource.Id.Text1, config, _typeface);
     }
 
     protected virtual Drawable GetDialogBackground(ActionSheetConfig config)
@@ -101,6 +116,10 @@ public class ActionSheetBuilder
             messageSpan.SetSpan(new ForegroundColorSpan(config.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
         messageSpan.SetSpan(new AbsoluteSizeSpan((int)config.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        if (config.FontFamily is not null)
+        {
+            messageSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        }
 
         return messageSpan;
     }
@@ -114,6 +133,10 @@ public class ActionSheetBuilder
             titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
         titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        if (config.FontFamily is not null)
+        {
+            titleSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        }
 
         return titleSpan;
     }
@@ -136,6 +159,10 @@ public class ActionSheetBuilder
         }
         buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.NegativeButtonFontSize, true), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+        if (config.FontFamily is not null)
+        {
+            buttonSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+        }
 
         return buttonSpan;
     }
@@ -150,6 +177,10 @@ public class ActionSheetBuilder
         }
         buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.DestructiveButtonFontSize, true), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+        if (config.FontFamily is not null)
+        {
+            buttonSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+        }
 
         return buttonSpan;
     }

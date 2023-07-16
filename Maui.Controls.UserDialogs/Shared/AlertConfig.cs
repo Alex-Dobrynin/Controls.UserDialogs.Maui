@@ -2,6 +2,8 @@
 
 public class AlertConfig
 {
+    public static string DefaultFontFamily { get; set; }
+
     /// <summary>
     /// iOS only
     /// </summary>
@@ -24,6 +26,7 @@ public class AlertConfig
     public static Color DefaultPositiveButtonTextColor { get; set; }
     public static double DefaultPositiveButtonFontSize { get; set; } = 18;
 
+    public string FontFamily { get; set; } = DefaultFontFamily;
     /// <summary>
     /// iOS only
     /// </summary>

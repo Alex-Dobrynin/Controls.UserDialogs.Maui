@@ -2,6 +2,8 @@
 
 public class ConfirmConfig
 {
+    public static string DefaultFontFamily { get; set; }
+
     /// <summary>
     /// iOS only
     /// </summary>
@@ -26,6 +28,7 @@ public class ConfirmConfig
     public static Color DefaultNegativeButtonTextColor { get; set; }
     public static double DefaultNegativeButtonFontSize { get; set; } = 18;
 
+    public string FontFamily { get; set; } = DefaultFontFamily;
     /// <summary>
     /// iOS only
     /// </summary>

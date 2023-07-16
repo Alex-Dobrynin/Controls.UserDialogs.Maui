@@ -77,6 +77,13 @@ public class HudDialog : IHudDialog
     {
         if (dialog is null)
             return;
+
+        Typeface typeFace = null;
+        if (_config.FontFamily is not null)
+        {
+            typeFace = Typeface.CreateFromAsset(Platform.CurrentActivity.Assets, _config.FontFamily);
+        }
+
         dialog.Window.AddFlags(WindowManagerFlags.NotFocusable);
 
         var textViewId = Platform.CurrentActivity.Resources.GetIdentifier("textViewStatus", "id", Platform.CurrentActivity.PackageName);
@@ -84,6 +91,7 @@ public class HudDialog : IHudDialog
 
         textView.SetTextColor(HudDialogConfig.TitleColor.ToPlatform());
         textView.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.TitleFontSize);
+        textView.SetTypeface(typeFace, TypefaceStyle.Normal);
 
         var parent = textView.Parent as RelativeLayout;
 
@@ -101,10 +109,11 @@ public class HudDialog : IHudDialog
                 TextAlignment = Android.Views.TextAlignment.Gravity,
                 Gravity = GravityFlags.Center,
                 LayoutParameters = rParams,
+                Id = messageViewId
             };
-            messageView.Id = messageViewId;
             messageView.SetTextColor(HudDialogConfig.MessageColor.ToPlatform());
             messageView.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.MessageFontSize);
+            messageView.SetTypeface(typeFace, TypefaceStyle.Normal);
 
             _onMessageChange = m =>
             {
@@ -158,6 +167,7 @@ public class HudDialog : IHudDialog
 
             progressText.SetTextColor(HudDialogConfig.ProgressColor.ToPlatform());
             progressText.SetTextSize(Android.Util.ComplexUnitType.Sp, 14f);
+            progressText.SetTypeface(typeFace, TypefaceStyle.Normal);
 
             _onProgressChange = p =>
             {
@@ -186,6 +196,7 @@ public class HudDialog : IHudDialog
             cnclBtn.SetBackgroundColor(Colors.Transparent.ToPlatform());
             cnclBtn.SetTextColor(HudDialogConfig.NegativeButtonTextColor.ToPlatform());
             cnclBtn.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.NegativeButtonFontSize);
+            cnclBtn.SetTypeface(typeFace, TypefaceStyle.Normal);
             cnclBtn.Click += (s, e) =>
             {
                 OnCancelClick();

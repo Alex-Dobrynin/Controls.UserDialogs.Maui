@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Util;
 using Android.Views;
@@ -11,6 +12,7 @@ using Microsoft.Maui.Platform;
 
 using static Maui.Controls.UserDialogs.Extensions;
 
+using Color = Microsoft.Maui.Graphics.Color;
 using Orientation = Android.Widget.Orientation;
 using View = Android.Views.View;
 
@@ -18,6 +20,8 @@ namespace Maui.Controls.UserDialogs;
 
 public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionSheetConfig>
 {
+    private Typeface _typeface;
+
     protected override void SetDialogDefaults(Dialog dialog)
     {
         base.SetDialogDefaults(dialog);
@@ -43,6 +47,11 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
 
     protected override Dialog CreateDialog(ActionSheetConfig config)
     {
+        if (config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(Activity.Assets, config.FontFamily);
+        }
+
         var dialog = new BottomSheetDialog(this.Activity);
 
         var layout = new LinearLayout(this.Activity)
@@ -99,7 +108,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Gravity = GravityFlags.CenterVertical
         };
         textView.SetTextSize(ComplexUnitType.Sp, (float)Config.TitleFontSize);
-        textView.SetTypeface(null, Android.Graphics.TypefaceStyle.Bold);
+        textView.SetTypeface(_typeface, TypefaceStyle.Bold);
         if (Config.TitleColor is not null)
         {
             textView.SetTextColor(Config.TitleColor.ToPlatform());
@@ -138,6 +147,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         {
             textView.SetTextColor(Config.MessageColor.ToPlatform());
         }
+        textView.SetTypeface(_typeface, TypefaceStyle.Normal);
 
         return textView;
     }
@@ -216,6 +226,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         {
             textView.SetTextColor(color.ToPlatform());
         }
+        textView.SetTypeface(_typeface, TypefaceStyle.Normal);
 
         if (action.Icon is not null)
         {

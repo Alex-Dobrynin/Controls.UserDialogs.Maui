@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Text;
@@ -17,8 +18,15 @@ namespace Maui.Controls.UserDialogs;
 
 public class SnackbarBuilder
 {
+    private Typeface _typeface;
+
     public virtual Snackbar Build(Activity activity, SnackbarConfig config)
     {
+        if (config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+        }
+
         var view = activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
 
         var snackbar = Snackbar.Make(
@@ -28,22 +36,28 @@ public class SnackbarBuilder
             (int)config.Duration.TotalMilliseconds
         );
 
-        snackbar.SetTextColor(SnackbarConfig.MessageColor.ToInt());
         SetupSnackbarText(snackbar, config);
+        if (config.MessageColor is not null)
+        {
+            snackbar.SetTextColor(config.MessageColor.ToInt());
+        }
 
         if (config.Action?.Action is not null)
         {
-            SetupSnacbarAction(activity, snackbar, config);
+            SetupSnackbarAction(activity, snackbar, config);
         }
 
-        snackbar.View.Background = GetDialogBackground(config);
+        if (config.BackgroundColor is not null)
+        {
+            snackbar.View.Background = GetDialogBackground(config);
+        }
 
         if (snackbar.View.LayoutParameters is FrameLayout.LayoutParams layoutParams)
         {
             layoutParams.SetMargins(DpToPixels(20), DpToPixels(50), DpToPixels(20), DpToPixels(30));
             layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Bottom;
 
-            if (SnackbarConfig.Position == ToastPosition.Top)
+            if (config.Position == ToastPosition.Top)
             {
                 layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Top;
             }
@@ -59,8 +73,8 @@ public class SnackbarBuilder
     protected virtual Drawable GetDialogBackground(SnackbarConfig config)
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(SnackbarConfig.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(SnackbarConfig.CornerRadius));
+        backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
 
         return backgroundDrawable;
     }
@@ -69,7 +83,8 @@ public class SnackbarBuilder
     {
         var l = (snackbar.View as Snackbar.SnackbarLayout).GetChildAt(0) as SnackbarContentLayout;
         var text = l.GetChildAt(0) as TextView;
-        text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)SnackbarConfig.MessageFontSize);
+        text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)config.MessageFontSize);
+        text.SetTypeface(_typeface, TypefaceStyle.Normal);
 
         if (config.Icon is null) return;
 
@@ -79,7 +94,7 @@ public class SnackbarBuilder
         text.CompoundDrawablePadding = DpToPixels(10);
     }
 
-    protected virtual void SetupSnacbarAction(Activity activity, Snackbar snackbar, SnackbarConfig config)
+    protected virtual void SetupSnackbarAction(Activity activity, Snackbar snackbar, SnackbarConfig config)
     {
         CountDownTimer cd = null;
 
@@ -91,7 +106,10 @@ public class SnackbarBuilder
         var text = new SpannableString(config.Action.Text);
         text.SetSpan(new LetterSpacingSpan(0), 0, config.Action.Text.Length, SpanTypes.ExclusiveExclusive);
 
-        snackbar.SetActionTextColor(SnackbarConfig.PositiveButtonTextColor.ToInt());
+        if (config.PositiveButtonTextColor is not null)
+        {
+            snackbar.SetActionTextColor(config.PositiveButtonTextColor.ToInt());
+        }
         snackbar.SetAction(text, v =>
         {
             cd?.Cancel();
@@ -100,7 +118,8 @@ public class SnackbarBuilder
 
         var l = (snackbar.View as Snackbar.SnackbarLayout).GetChildAt(0) as SnackbarContentLayout;
         var button = l.GetChildAt(1) as Android.Widget.Button;
-        button.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)SnackbarConfig.PositiveButtonFontSize);
+        button.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)config.PositiveButtonFontSize);
+        button.SetTypeface(_typeface, TypefaceStyle.Normal);
 
         if (config.Action.Icon is null) return;
 
@@ -130,7 +149,7 @@ public class SnackbarBuilder
             RimWidth = DpToPixels(2),
             BarWidth = DpToPixels(2),
             RimColor = Android.Graphics.Color.Transparent,
-            BarColor = SnackbarConfig.PositiveButtonTextColor.ToPlatform(),
+            BarColor = (config.PositiveButtonTextColor ?? Colors.White).ToPlatform(),
             LayoutParameters = lParams
         };
 

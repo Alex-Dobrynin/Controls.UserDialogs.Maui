@@ -2,16 +2,32 @@
 
 public class SnackbarConfig
 {
-    public static float CornerRadius { get; set; } = 10;
-    public static Color BackgroundColor { get; set; } = Colors.Black.WithAlpha(0.4f);
-    public static double MessageFontSize { get; set; } = 16;
-    public static Color MessageColor { get; set; } = Colors.White;
-    public static Color PositiveButtonTextColor { get; set; } = Colors.White;
-    public static double PositiveButtonFontSize { get; set; } = 16;
-    public static ToastPosition Position { get; set; }
+    public static string DefaultFontFamily { get; set; }
+
+    public static float DefaultCornerRadius { get; set; } = 10;
+    public static Color DefaultBackgroundColor { get; set; }
+    public static double DefaultMessageFontSize { get; set; } = 16;
+    public static Color DefaultMessageColor { get; set; }
+    public static Color DefaultPositiveButtonTextColor { get; set; }
+    public static double DefaultPositiveButtonFontSize { get; set; } = 16;
+    public static ToastPosition DefaultPosition { get; set; }
 
     public static TimeSpan DefaultDuration { get; set; } = TimeSpan.FromSeconds(10);
-    public static bool ShowCountDown { get; set; } = true;
+
+    public string FontFamily { get; set; } = DefaultFontFamily;
+    public Color BackgroundColor { get; set; } = DefaultBackgroundColor;
+    /// <summary>
+    /// Android only
+    /// </summary>
+    /// <remarks>
+    /// Works only if <see cref="BackgroundColor"/> was set
+    /// </remarks>
+    public float CornerRadius { get; set; } = DefaultCornerRadius;
+    public double MessageFontSize { get; set; } = DefaultMessageFontSize;
+    public Color MessageColor { get; set; } = DefaultMessageColor;
+    public Color PositiveButtonTextColor { get; set; } = DefaultPositiveButtonTextColor;
+    public double PositiveButtonFontSize { get; set; } = DefaultPositiveButtonFontSize;
+    public ToastPosition Position { get; set; } = DefaultPosition;
 
     public string Message { get; set; }
     public string Icon { get; set; }

@@ -2,6 +2,7 @@
 
 public class ActionSheetConfig
 {
+    public static string DefaultFontFamily { get; set; }
     /// <summary>
     /// iOS only
     /// </summary>
@@ -27,6 +28,8 @@ public class ActionSheetConfig
     public static double DefaultNegativeButtonFontSize { get; set; } = 18;
     public static Color DefaultActionSheetOptionTextColor { get; set; }
     public static double DefaultActionSheetOptionFontSize { get; set; } = 18;
+
+    public string FontFamily { get; set; } = DefaultFontFamily;
 
     /// <summary>
     /// Android only
@@ -85,7 +88,7 @@ public class ActionSheetConfig
     public IList<ActionSheetOption> Options { get; set; } = new List<ActionSheetOption>();
 
     /// <summary>
-    /// This only currently applies to android
+    /// Android only
     /// </summary>
     public bool UseBottomSheet { get; set; } = true;
 

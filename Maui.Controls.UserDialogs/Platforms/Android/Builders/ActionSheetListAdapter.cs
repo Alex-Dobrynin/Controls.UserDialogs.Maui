@@ -1,4 +1,5 @@
 ﻿using Android.Content;
+using Android.Graphics;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -14,11 +15,13 @@ namespace Maui.Controls.UserDialogs;
 public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
 {
     readonly ActionSheetConfig _config;
+    private readonly Typeface _typeface;
 
-    public ActionSheetListAdapter(Context context, int resource, int textViewResourceId, ActionSheetConfig config)
+    public ActionSheetListAdapter(Context context, int resource, int textViewResourceId, ActionSheetConfig config, Typeface typeface)
         : base(context, resource, textViewResourceId, config.Options)
     {
         _config = config;
+        _typeface = typeface;
     }
 
     public override View GetView(int position, View convertView, ViewGroup parent)
@@ -36,6 +39,7 @@ public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
             textView.SetTextColor(_config.ActionSheetOptionTextColor.ToPlatform());
         }
         textView.SetPadding(DpToPixels(20), 0, DpToPixels(20), 0);
+        textView.SetTypeface(_typeface, TypefaceStyle.Normal);
 
         if (item.Icon is not null)
         {

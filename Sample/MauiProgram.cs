@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Maui.Controls.UserDialogs;
-using Microsoft.Maui.Graphics;
+﻿using Maui.Controls.UserDialogs;
+
+using Microsoft.Extensions.Logging;
 
 namespace Sample
 {
@@ -13,7 +13,13 @@ namespace Sample
                 .UseMauiApp<App>()
                 .UseUserDialogs(() =>
                 {
-
+                    var fontFamily = "OpenSans-Semibold.ttf";
+                    AlertConfig.DefaultFontFamily = fontFamily;
+                    ConfirmConfig.DefaultFontFamily = fontFamily;
+                    ActionSheetConfig.DefaultFontFamily = fontFamily;
+                    ToastConfig.DefaultFontFamily = fontFamily;
+                    SnackbarConfig.DefaultFontFamily = fontFamily;
+                    HudDialogConfig.DefaultFontFamily = fontFamily;
                 })
                 .ConfigureFonts(fonts =>
                 {

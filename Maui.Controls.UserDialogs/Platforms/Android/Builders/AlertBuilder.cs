@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Text;
 using Android.Text.Style;
@@ -16,10 +17,17 @@ namespace Maui.Controls.UserDialogs;
 
 public class AlertBuilder
 {
+    private Typeface _typeface;
+
     public virtual Dialog Build(Activity activity, AlertConfig config)
     {
         var builder = new AlertDialog.Builder(activity)
             .SetCancelable(false);
+
+        if (config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+        }
 
         builder.SetMessage(GetMessage(config));
 
@@ -27,7 +35,7 @@ public class AlertBuilder
 
         if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
-        builder.SetPositiveButton(GetPositiveButton(config), (o, e) => config.Action?.Invoke());
+        builder.SetPositiveButton(GetPositiveButton(activity, config), (o, e) => config.Action?.Invoke());
 
         var dialog = builder.Create();
 
@@ -44,13 +52,18 @@ public class AlertBuilder
         var builder = new AppCompatAlertDialog.Builder(activity)
             .SetCancelable(false);
 
+        if (config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+        }
+
         builder.SetMessage(GetMessage(config));
 
         if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
         if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
-        builder.SetPositiveButton(GetPositiveButton(config), (o, e) => config.Action?.Invoke());
+        builder.SetPositiveButton(GetPositiveButton(activity, config), (o, e) => config.Action?.Invoke());
 
         var dialog = builder.Create();
 
@@ -83,6 +96,11 @@ public class AlertBuilder
         }
         messageSpan.SetSpan(new AbsoluteSizeSpan((int)config.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
 
+        if (config.FontFamily is not null)
+        {
+            messageSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        }
+
         return messageSpan;
     }
 
@@ -94,7 +112,13 @@ public class AlertBuilder
         {
             titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
+
         titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+
+        if (config.FontFamily is not null)
+        {
+            titleSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        }
 
         return titleSpan;
     }
@@ -107,7 +131,7 @@ public class AlertBuilder
         return img;
     }
 
-    protected virtual SpannableString GetPositiveButton(AlertConfig config)
+    protected virtual SpannableString GetPositiveButton(Activity activity, AlertConfig config)
     {
         var buttonSpan = new SpannableString(config.OkText);
 
@@ -117,6 +141,11 @@ public class AlertBuilder
         }
         buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.PositiveButtonFontSize, true), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+
+        if (config.FontFamily is not null)
+        {
+            buttonSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+        }
 
         return buttonSpan;
     }

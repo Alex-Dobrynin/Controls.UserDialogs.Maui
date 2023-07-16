@@ -2,6 +2,7 @@
 
 public class HudDialogConfig
 {
+    public static string DefaultFontFamily { get; set; }
     public static float CornerRadius { get; set; } = 15;
     public static Color BackgroundColor { get; set; } = Colors.Black.WithAlpha(0.5f);
     public static double TitleFontSize { get; set; } = 16;
@@ -25,6 +26,7 @@ public class HudDialogConfig
     public int PercentComplete { get; set; } = -1;
     public MaskType MaskType { get; set; } = DefaultMaskType;
     public Action OnCancel { get; set; }
+    public string FontFamily { get; set; } = DefaultFontFamily;
 
     public HudDialogConfig()
     {
