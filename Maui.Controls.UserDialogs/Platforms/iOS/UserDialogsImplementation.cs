@@ -8,7 +8,7 @@ public partial class UserDialogsImplementation
 {
     public UserDialogsImplementation()
     {
-        Platform.GetCurrentUIViewController();
+
     }
 
     public virtual partial IDisposable Alert(AlertConfig config) => this.Present(() =>

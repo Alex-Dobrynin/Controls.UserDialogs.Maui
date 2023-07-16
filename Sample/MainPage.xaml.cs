@@ -20,6 +20,8 @@ namespace Sample
             else
                 CounterBtn.Text = $"Clicked {count} times";
 
+            UserDialogs.Instance.Alert("sjbknsdkbvlsdbds", "Title", "Cancel");
+
             //UserDialogs.Instance.ShowLoading("aghah", MaskType.Gradient);
             //var dialog = UserDialogs.Instance.Loading("Some progress", "Great job");
 

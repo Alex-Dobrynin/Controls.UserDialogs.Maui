@@ -3,13 +3,22 @@
 public class AlertConfig
 {
     public static float CornerRadius { get; set; } = 15;
-    public static Color BackgroundColor { get; set; } = Colors.White;
     public static double TitleFontSize { get; set; } = 20;
     public static Color TitleColor { get; set; } = Colors.Black;
     public static double MessageFontSize { get; set; } = 16;
     public static Color MessageColor { get; set; } = Colors.Black;
     public static Color PositiveButtonTextColor { get; set; } = Colors.Black;
     public static double PositiveButtonFontSize { get; set; } = 18;
+
+    /// <summary>
+    /// Android only
+    /// </summary>
+    public static Color BackgroundColor { get; set; } = Colors.White;
+
+    /// <summary>
+    /// iOS only
+    /// </summary>
+    public static UserInterfaceStyle? DefaultUserInterfaceStyle { get; set; }
 
     public static string DefaultOkText { get; set; } = "Ok";
 
@@ -18,6 +27,11 @@ public class AlertConfig
     public string Message { get; set; }
     public string Icon { get; set; }
     public Action Action { get; set; }
+
+    /// <summary>
+    /// iOS only
+    /// </summary>
+    public UserInterfaceStyle? UserInterfaceStyle { get; set; }
 
     public AlertConfig SetOkText(string text)
     {

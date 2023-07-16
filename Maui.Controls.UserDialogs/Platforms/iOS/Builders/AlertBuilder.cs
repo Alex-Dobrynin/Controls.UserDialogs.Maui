@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Platform;
-
-using UIKit;
+﻿using UIKit;
 
 namespace Maui.Controls.UserDialogs;
 
@@ -8,14 +6,14 @@ public class AlertBuilder
 {
     public virtual UIAlertController Build(AlertConfig config)
     {
-        var alert = UIAlertController.Create(config.Title ?? String.Empty, config.Message, UIAlertControllerStyle.Alert);
+        var alert = UIAlertController.Create(config.Title ?? string.Empty, config.Message, UIAlertControllerStyle.Alert);
         alert.AddAction(UIAlertAction.Create(config.OkText, UIAlertActionStyle.Default, x => config.Action?.Invoke()));
-
-        var backgroundView = alert.View.Subviews.FirstOrDefault()?.Subviews.FirstOrDefault();
-        if (backgroundView != null)
+        if (config.UserInterfaceStyle is not null)
         {
-            backgroundView.BackgroundColor = AlertConfig.BackgroundColor.ToPlatform();
+            alert.OverrideUserInterfaceStyle = config.UserInterfaceStyle.Value.ToNative();
         }
+
+        
 
         return alert;
     }
