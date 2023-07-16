@@ -20,24 +20,28 @@ public class ActionSheetBuilder
     {
         var builder = new AlertDialog.Builder(activity);
 
-        if (config.Title != null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
-        if (config.Icon != null) builder.SetIcon(GetIcon(config));
+        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
         builder.SetAdapter(GetActionsAdapter(activity, config), (s, a) => config.Options[a.Which].Action?.Invoke());
 
-        if (config.Destructive != null)
+        if (config.Destructive is not null)
         {
             builder.SetNegativeButton(GetDestructiveButton(config), (o, a) => config.Destructive.Action?.Invoke());
         }
 
-        if (config.Cancel != null)
+        if (config.Cancel is not null)
         {
             builder.SetNeutralButton(GetCancelButton(config), (o, a) => config.Cancel.Action?.Invoke());
         }
 
         var dialog = builder.Create();
-        dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+
+        if (config.BackgroundColor is not null)
+        {
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+        }
 
         return dialog;
     }
@@ -46,24 +50,28 @@ public class ActionSheetBuilder
     {
         var builder = new AppCompatAlertDialog.Builder(activity);
 
-        if (config.Title != null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
-        if (config.Icon != null) builder.SetIcon(GetIcon(config));
+        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
         builder.SetAdapter(GetActionsAdapter(activity, config), (s, a) => config.Options[a.Which].Action?.Invoke());
 
-        if (config.Destructive != null)
+        if (config.Destructive is not null)
         {
             builder.SetNegativeButton(GetDestructiveButton(config), (o, a) => config.Destructive.Action?.Invoke());
         }
 
-        if (config.Cancel != null)
+        if (config.Cancel is not null)
         {
             builder.SetNeutralButton(GetCancelButton(config), (o, a) => config.Cancel.Action?.Invoke());
         }
 
         var dialog = builder.Create();
-        dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+
+        if (config.BackgroundColor is not null)
+        {
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+        }
 
         return dialog;
     }
@@ -76,8 +84,8 @@ public class ActionSheetBuilder
     protected virtual Drawable GetDialogBackground(ActionSheetConfig config)
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(ActionSheetConfig.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(ActionSheetConfig.CornerRadius));
+        backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
 
         var draw = new InsetDrawable(backgroundDrawable, DpToPixels(20), 0, DpToPixels(20), 0);
 
@@ -88,8 +96,11 @@ public class ActionSheetBuilder
     {
         var messageSpan = new SpannableString(config.Message);
 
-        messageSpan.SetSpan(new ForegroundColorSpan(ActionSheetConfig.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
-        messageSpan.SetSpan(new AbsoluteSizeSpan((int)ActionSheetConfig.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        if (config.MessageColor is not null)
+        {
+            messageSpan.SetSpan(new ForegroundColorSpan(config.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        }
+        messageSpan.SetSpan(new AbsoluteSizeSpan((int)config.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
 
         return messageSpan;
     }
@@ -98,8 +109,11 @@ public class ActionSheetBuilder
     {
         var titleSpan = new SpannableString(config.Title);
 
-        titleSpan.SetSpan(new ForegroundColorSpan(ActionSheetConfig.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
-        titleSpan.SetSpan(new AbsoluteSizeSpan((int)ActionSheetConfig.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        if (config.TitleColor is not null)
+        {
+            titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        }
+        titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
 
         return titleSpan;
     }
@@ -116,8 +130,11 @@ public class ActionSheetBuilder
     {
         var buttonSpan = new SpannableString(config.Cancel.Text);
 
-        buttonSpan.SetSpan(new ForegroundColorSpan(ActionSheetConfig.NegativeButtonTextColor.ToPlatform()), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)ActionSheetConfig.NegativeButtonFontSize, true), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+        if (config.NegativeButtonTextColor is not null)
+        {
+            buttonSpan.SetSpan(new ForegroundColorSpan(config.NegativeButtonTextColor.ToPlatform()), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+        }
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.NegativeButtonFontSize, true), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
 
         return buttonSpan;
@@ -127,8 +144,11 @@ public class ActionSheetBuilder
     {
         var buttonSpan = new SpannableString(config.Destructive.Text);
 
-        buttonSpan.SetSpan(new ForegroundColorSpan(ActionSheetConfig.DestructiveButtonTextColor.ToPlatform()), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)ActionSheetConfig.DestructiveButtonFontSize, true), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+        if (config.DestructiveButtonTextColor is not null)
+        {
+            buttonSpan.SetSpan(new ForegroundColorSpan(config.DestructiveButtonTextColor.ToPlatform()), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+        }
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.DestructiveButtonFontSize, true), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
 
         return buttonSpan;

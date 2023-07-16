@@ -36,7 +36,7 @@ public class HudDialog : IHudDialog
 
     public void Show()
     {
-        if (_config.Image != null)
+        if (_config.Image is not null)
         {
             ShowImage();
             return;
@@ -75,7 +75,7 @@ public class HudDialog : IHudDialog
 
     protected virtual void BeforeShow(Dialog dialog)
     {
-        if (dialog == null)
+        if (dialog is null)
             return;
         dialog.Window.AddFlags(WindowManagerFlags.NotFocusable);
 
@@ -89,7 +89,7 @@ public class HudDialog : IHudDialog
 
         parent.Background = GetDialogBackground(_config);
         int messageViewId = Android.Views.View.GenerateViewId();
-        if (_config.Message != null)
+        if (_config.Message is not null)
         {
             var rParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WrapContent, RelativeLayout.LayoutParams.WrapContent);
             rParams.AddRule(LayoutRules.Below, textView.Id);
@@ -108,7 +108,7 @@ public class HudDialog : IHudDialog
 
             _onMessageChange = m =>
             {
-                messageView.Visibility = m == null ? ViewStates.Gone : ViewStates.Visible;
+                messageView.Visibility = m is null ? ViewStates.Gone : ViewStates.Visible;
 
                 messageView.Text = m;
             };
@@ -167,9 +167,9 @@ public class HudDialog : IHudDialog
             parent.AddView(progressText);
         }
 
-        if (_config.OnCancel != null)
+        if (_config.OnCancel is not null)
         {
-            int id = _config.Message != null ? messageViewId : textViewId;
+            int id = _config.Message is not null ? messageViewId : textViewId;
 
             var rParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WrapContent, RelativeLayout.LayoutParams.WrapContent);
             rParams.AddRule(LayoutRules.Below, id);
@@ -193,8 +193,8 @@ public class HudDialog : IHudDialog
 
             _onCancelChange = a =>
             {
-                cnclBtn.Clickable = a != null;
-                cnclBtn.Visibility = a == null ? ViewStates.Gone : ViewStates.Visible;
+                cnclBtn.Clickable = a is not null;
+                cnclBtn.Visibility = a is null ? ViewStates.Gone : ViewStates.Visible;
             };
 
             parent.AddView(cnclBtn);
@@ -212,7 +212,7 @@ public class HudDialog : IHudDialog
 
     void OnCancelClick()
     {
-        if (_config.OnCancel == null)
+        if (_config.OnCancel is null)
             return;
 
         Hide();

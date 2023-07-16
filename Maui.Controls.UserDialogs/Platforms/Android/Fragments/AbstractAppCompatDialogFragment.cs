@@ -20,7 +20,7 @@ public abstract class AbstractAppCompatDialogFragment<T> : AppCompatDialogFragme
     public override Dialog OnCreateDialog(Bundle bundle)
     {
         Dialog dialog = null;
-        if (this.Config == null && !ConfigStore.Instance.Contains(bundle))
+        if (this.Config is null && !ConfigStore.Instance.Contains(bundle))
         {
             this.ShowsDialog = false;
             this.Dismiss();
@@ -45,7 +45,7 @@ public abstract class AbstractAppCompatDialogFragment<T> : AppCompatDialogFragme
     public override void OnDetach()
     {
         base.OnDetach();
-        if (this.Dialog != null)
+        if (this.Dialog is not null)
             this.Dialog.KeyPress -= this.OnKeyPress;
     }
 

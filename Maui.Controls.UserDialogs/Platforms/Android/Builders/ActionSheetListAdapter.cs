@@ -30,11 +30,14 @@ public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
         var item = this._config.Options.ElementAt(position);
 
         textView.Text = item.Text;
-        textView.SetTextSize(ComplexUnitType.Sp, (float)ActionSheetConfig.ActionSheetOptionFontSize);
-        textView.SetTextColor(ActionSheetConfig.ActionSheetOptionTextColor.ToPlatform());
+        textView.SetTextSize(ComplexUnitType.Sp, (float)_config.ActionSheetOptionFontSize);
+        if (_config.ActionSheetOptionTextColor is not null)
+        {
+            textView.SetTextColor(_config.ActionSheetOptionTextColor.ToPlatform());
+        }
         textView.SetPadding(DpToPixels(20), 0, DpToPixels(20), 0);
 
-        if (item.Icon != null)
+        if (item.Icon is not null)
         {
             var imgId = MauiApplication.Current.GetDrawableId(_config.Icon);
             var img = MauiApplication.Current.GetDrawable(imgId);

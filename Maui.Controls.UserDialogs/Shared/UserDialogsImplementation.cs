@@ -38,7 +38,7 @@ public partial class UserDialogsImplementation : IUserDialogs
 
     public async Task AlertAsync(AlertConfig config, CancellationToken? cancelToken = null)
     {
-        if (config.Action != null)
+        if (config.Action is not null)
             throw new ArgumentException(_noAction);
 
         var tcs = new TaskCompletionSource<object>();
@@ -65,7 +65,7 @@ public partial class UserDialogsImplementation : IUserDialogs
 
     public virtual async Task<bool> ConfirmAsync(ConfirmConfig config, CancellationToken? cancelToken = null)
     {
-        if (config.Action != null)
+        if (config.Action is not null)
             throw new ArgumentException(_noAction);
 
         var tcs = new TaskCompletionSource<bool>();
@@ -90,11 +90,11 @@ public partial class UserDialogsImplementation : IUserDialogs
         };
 
         // you must have a cancel option for actionsheetasync
-        if (cancel == null)
+        if (cancel is null)
             throw new ArgumentException("You must have a cancel option for the async version");
 
         cfg.SetCancel(cancel, () => tcs.TrySetResult(cancel));
-        if (destructive != null)
+        if (destructive is not null)
             cfg.SetDestructive(destructive, () => tcs.TrySetResult(destructive));
 
         foreach (var btn in buttons)

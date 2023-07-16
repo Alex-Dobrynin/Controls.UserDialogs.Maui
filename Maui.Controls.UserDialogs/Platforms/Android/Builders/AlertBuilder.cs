@@ -23,14 +23,18 @@ public class AlertBuilder
 
         builder.SetMessage(GetMessage(config));
 
-        if (config.Title != null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
-        if (config.Icon != null) builder.SetIcon(GetIcon(config));
+        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
         builder.SetPositiveButton(GetPositiveButton(config), (o, e) => config.Action?.Invoke());
 
         var dialog = builder.Create();
-        dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+
+        if (config.BackgroundColor is not null)
+        {
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+        }
 
         return dialog;
     }
@@ -42,14 +46,18 @@ public class AlertBuilder
 
         builder.SetMessage(GetMessage(config));
 
-        if (config.Title != null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
-        if (config.Icon != null) builder.SetIcon(GetIcon(config));
+        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
         builder.SetPositiveButton(GetPositiveButton(config), (o, e) => config.Action?.Invoke());
 
         var dialog = builder.Create();
-        dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+
+        if (config.BackgroundColor is not null)
+        {
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+        }
 
         return dialog;
     }
@@ -57,8 +65,8 @@ public class AlertBuilder
     protected virtual Drawable GetDialogBackground(AlertConfig config)
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(AlertConfig.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(AlertConfig.CornerRadius));
+        backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
 
         var draw = new InsetDrawable(backgroundDrawable, DpToPixels(20), 0, DpToPixels(20), 0);
 
@@ -69,8 +77,11 @@ public class AlertBuilder
     {
         var messageSpan = new SpannableString(config.Message);
 
-        messageSpan.SetSpan(new ForegroundColorSpan(AlertConfig.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
-        messageSpan.SetSpan(new AbsoluteSizeSpan((int)AlertConfig.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        if (config.MessageColor is not null)
+        {
+            messageSpan.SetSpan(new ForegroundColorSpan(config.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        }
+        messageSpan.SetSpan(new AbsoluteSizeSpan((int)config.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
 
         return messageSpan;
     }
@@ -79,8 +90,11 @@ public class AlertBuilder
     {
         var titleSpan = new SpannableString(config.Title);
 
-        titleSpan.SetSpan(new ForegroundColorSpan(AlertConfig.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
-        titleSpan.SetSpan(new AbsoluteSizeSpan((int)AlertConfig.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        if (config.TitleColor is not null)
+        {
+            titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        }
+        titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
 
         return titleSpan;
     }
@@ -97,8 +111,11 @@ public class AlertBuilder
     {
         var buttonSpan = new SpannableString(config.OkText);
 
-        buttonSpan.SetSpan(new ForegroundColorSpan(AlertConfig.PositiveButtonTextColor.ToPlatform()), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)AlertConfig.PositiveButtonFontSize, true), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+        if (config.PositiveButtonTextColor is not null)
+        {
+            buttonSpan.SetSpan(new ForegroundColorSpan(config.PositiveButtonTextColor.ToPlatform()), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+        }
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.PositiveButtonFontSize, true), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
 
         return buttonSpan;

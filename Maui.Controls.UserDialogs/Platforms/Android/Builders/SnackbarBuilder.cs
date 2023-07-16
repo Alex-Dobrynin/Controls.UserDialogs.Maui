@@ -31,7 +31,7 @@ public class SnackbarBuilder
         snackbar.SetTextColor(SnackbarConfig.MessageColor.ToInt());
         SetupSnackbarText(snackbar, config);
 
-        if (config.Action?.Action != null)
+        if (config.Action?.Action is not null)
         {
             SetupSnacbarAction(activity, snackbar, config);
         }
@@ -71,7 +71,7 @@ public class SnackbarBuilder
         var text = l.GetChildAt(0) as TextView;
         text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)SnackbarConfig.MessageFontSize);
 
-        if (config.Icon == null) return;
+        if (config.Icon is null) return;
 
         var icon = GetIcon(config.Icon);
         icon.ScaleTo(22);
@@ -102,7 +102,7 @@ public class SnackbarBuilder
         var button = l.GetChildAt(1) as Android.Widget.Button;
         button.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)SnackbarConfig.PositiveButtonFontSize);
 
-        if (config.Action.Icon == null) return;
+        if (config.Action.Icon is null) return;
 
         var icon = GetIcon(config.Action.Icon);
         icon.ScaleTo(22);

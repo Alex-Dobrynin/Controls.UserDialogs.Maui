@@ -7,7 +7,7 @@ public partial class UserDialogs
     {
         get
         {
-            if (_currentInstance == null)
+            if (_currentInstance is null)
                 throw new ArgumentException("[Maui.Controls.UserDialogs] You must call UseUserDialogs() in your MauiProgram for initialization");
 
             return _currentInstance;

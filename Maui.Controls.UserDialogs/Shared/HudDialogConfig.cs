@@ -33,7 +33,7 @@ public class HudDialogConfig
 
     public HudDialogConfig SetCancel(string cancelText = null, Action onCancel = null)
     {
-        if (cancelText != null)
+        if (cancelText is not null)
             this.CancelText = cancelText;
 
         this.OnCancel = onCancel;

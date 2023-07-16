@@ -65,7 +65,7 @@ public class ToastBuilder
         var text = l.GetChildAt(0) as TextView;
         text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)SnackbarConfig.MessageFontSize);
 
-        if (config.Icon == null) return;
+        if (config.Icon is null) return;
 
         var icon = GetIcon(config);
         icon.ScaleTo(22);

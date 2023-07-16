@@ -24,7 +24,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
 
         dialog.CancelEvent += (sender, args) => this.Config?.Cancel?.Action?.Invoke();
 
-        var cancellable = this.Config.Cancel != null;
+        var cancellable = this.Config.Cancel is not null;
         dialog.SetCancelable(cancellable);
         dialog.SetCanceledOnTouchOutside(cancellable);
     }
@@ -50,37 +50,40 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Orientation = Orientation.Vertical
         };
 
-        if (config.Title != null)
+        if (config.Title is not null)
             layout.AddView(this.GetHeaderText());
 
-        if (config.Message != null)
+        if (config.Message is not null)
             layout.AddView(this.GetMessageText());
 
         foreach (var action in config.Options)
             layout.AddView(this.CreateActionRow(action));
 
-        if (config.Destructive != null)
+        if (config.Destructive is not null)
         {
             layout.AddView(this.CreateDivider());
             layout.AddView(this.CreateDestructiveRow(config.Destructive));
         }
-        if (config.Cancel != null)
+        if (config.Cancel is not null)
         {
             layout.AddView(this.CreateDivider());
             layout.AddView(this.CreateCancelRow(config.Cancel));
         }
-        layout.Background = GetDialogBackground(config);
+        if (config.BackgroundColor is not null)
+        {
+            layout.Background = GetDialogBackground();
+        }
 
         dialog.SetContentView(layout);
 
         return dialog;
     }
 
-    protected virtual Drawable GetDialogBackground(ActionSheetConfig config)
+    protected virtual Drawable GetDialogBackground()
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(ActionSheetConfig.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(ActionSheetConfig.CornerRadius));
+        backgroundDrawable.SetColor(Config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(Config.CornerRadius));
 
         return backgroundDrawable;
     }
@@ -95,11 +98,14 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             LayoutParameters = lParams,
             Gravity = GravityFlags.CenterVertical
         };
-        textView.SetTextSize(ComplexUnitType.Sp, (float)ActionSheetConfig.TitleFontSize);
+        textView.SetTextSize(ComplexUnitType.Sp, (float)Config.TitleFontSize);
         textView.SetTypeface(null, Android.Graphics.TypefaceStyle.Bold);
-        textView.SetTextColor(ActionSheetConfig.TitleColor.ToPlatform());
+        if (Config.TitleColor is not null)
+        {
+            textView.SetTextColor(Config.TitleColor.ToPlatform());
+        }
 
-        if (Config.Icon != null)
+        if (Config.Icon is not null)
         {
             textView.SetCompoundDrawables(GetDialogIcon(), null, null, null);
 
@@ -127,8 +133,11 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Text = Config.Message,
             LayoutParameters = lParams
         };
-        textView.SetTextSize(ComplexUnitType.Sp, (float)ActionSheetConfig.MessageFontSize);
-        textView.SetTextColor(ActionSheetConfig.MessageColor.ToPlatform());
+        textView.SetTextSize(ComplexUnitType.Sp, (float)Config.MessageFontSize);
+        if (Config.MessageColor is not null)
+        {
+            textView.SetTextColor(Config.MessageColor.ToPlatform());
+        }
 
         return textView;
     }
@@ -143,7 +152,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Foreground = Extensions.GetSelectableItemForeground(this.Activity)
         };
 
-        row.AddView(this.GetActionText(action, ActionSheetConfig.DestructiveButtonTextColor, ActionSheetConfig.DestructiveButtonFontSize));
+        row.AddView(this.GetActionText(action, Config.DestructiveButtonTextColor, Config.DestructiveButtonFontSize));
         row.Click += (sender, args) =>
         {
             action.Action?.Invoke();
@@ -162,7 +171,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Foreground = Extensions.GetSelectableItemForeground(this.Activity)
         };
 
-        row.AddView(this.GetActionText(action, ActionSheetConfig.NegativeButtonTextColor, ActionSheetConfig.NegativeButtonFontSize));
+        row.AddView(this.GetActionText(action, Config.NegativeButtonTextColor, Config.NegativeButtonFontSize));
         row.Click += (sender, args) =>
         {
             action.Action?.Invoke();
@@ -181,7 +190,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Foreground = Extensions.GetSelectableItemForeground(this.Activity)
         };
 
-        row.AddView(this.GetActionText(action, ActionSheetConfig.ActionSheetOptionTextColor, ActionSheetConfig.ActionSheetOptionFontSize));
+        row.AddView(this.GetActionText(action, Config.ActionSheetOptionTextColor, Config.ActionSheetOptionFontSize));
         row.Click += (sender, args) =>
         {
             action.Action?.Invoke();
@@ -203,9 +212,12 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Gravity = GravityFlags.CenterVertical
         };
         textView.SetTextSize(ComplexUnitType.Sp, (int)fontSize);
-        textView.SetTextColor(color.ToPlatform());
+        if (color is not null)
+        {
+            textView.SetTextColor(color.ToPlatform());
+        }
 
-        if (action.Icon != null)
+        if (action.Icon is not null)
         {
             textView.SetCompoundDrawables(GetActionIcon(action), null, null, null);
 
@@ -228,7 +240,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
     {
         var view = new View(this.Activity)
         {
-            Background = new ColorDrawable(ActionSheetConfig.ActionSheetSeparatorColor.ToPlatform()),
+            Background = new ColorDrawable(Config.ActionSheetSeparatorColor.ToPlatform()),
             LayoutParameters = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, DpToPixels(1))
         };
         view.SetPadding(0, DpToPixels(7), 0, DpToPixels(8));

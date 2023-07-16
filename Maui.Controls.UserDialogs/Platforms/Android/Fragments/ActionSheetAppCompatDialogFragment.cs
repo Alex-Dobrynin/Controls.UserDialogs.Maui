@@ -12,7 +12,7 @@ public class ActionSheetAppCompatDialogFragment : AbstractAppCompatDialogFragmen
 
         dialog.CancelEvent += (sender, args) => this.Config?.Cancel?.Action?.Invoke();
 
-        var cancellable = this.Config.Cancel != null;
+        var cancellable = this.Config.Cancel is not null;
         dialog.SetCancelable(cancellable);
         dialog.SetCanceledOnTouchOutside(cancellable);
     }

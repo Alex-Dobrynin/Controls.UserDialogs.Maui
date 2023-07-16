@@ -23,16 +23,20 @@ public class ConfirmBuilder
 
         builder.SetMessage(GetMessage(config));
 
-        if (config.Title != null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
-        if (config.Icon != null) builder.SetIcon(GetIcon(config));
+        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
         builder.SetPositiveButton(GetPositiveButton(config), (o, e) => config.Action?.Invoke(true));
 
         builder.SetNeutralButton(GetNegativeButton(config), (o, e) => config.Action?.Invoke(false));
 
         var dialog = builder.Create();
-        dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+
+        if (config.BackgroundColor is not null)
+        {
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+        }
 
         return dialog;
     }
@@ -44,16 +48,20 @@ public class ConfirmBuilder
 
         builder.SetMessage(GetMessage(config));
 
-        if (config.Title != null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(config));
 
-        if (config.Icon != null) builder.SetIcon(GetIcon(config));
+        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
         builder.SetPositiveButton(GetPositiveButton(config), (o, e) => config.Action?.Invoke(true));
 
         builder.SetNeutralButton(GetNegativeButton(config), (o, e) => config.Action?.Invoke(false));
 
         var dialog = builder.Create();
-        dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+
+        if (config.BackgroundColor is not null)
+        {
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+        }
 
         return dialog;
     }
@@ -61,8 +69,8 @@ public class ConfirmBuilder
     protected virtual Drawable GetDialogBackground(ConfirmConfig config)
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(ConfirmConfig.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(ConfirmConfig.CornerRadius));
+        backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
 
         var draw = new InsetDrawable(backgroundDrawable, DpToPixels(20), 0, DpToPixels(20), 0);
 
@@ -73,8 +81,11 @@ public class ConfirmBuilder
     {
         var messageSpan = new SpannableString(config.Message);
 
-        messageSpan.SetSpan(new ForegroundColorSpan(ConfirmConfig.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
-        messageSpan.SetSpan(new AbsoluteSizeSpan((int)ConfirmConfig.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        if (config.MessageColor is not null)
+        {
+            messageSpan.SetSpan(new ForegroundColorSpan(config.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        }
+        messageSpan.SetSpan(new AbsoluteSizeSpan((int)config.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
 
         return messageSpan;
     }
@@ -83,8 +94,11 @@ public class ConfirmBuilder
     {
         var titleSpan = new SpannableString(config.Title);
 
-        titleSpan.SetSpan(new ForegroundColorSpan(ConfirmConfig.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
-        titleSpan.SetSpan(new AbsoluteSizeSpan((int)ConfirmConfig.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        if (config.TitleColor is not null)
+        {
+            titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        }
+        titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
 
         return titleSpan;
     }
@@ -101,8 +115,11 @@ public class ConfirmBuilder
     {
         var buttonSpan = new SpannableString(config.OkText);
 
-        buttonSpan.SetSpan(new ForegroundColorSpan(ConfirmConfig.PositiveButtonTextColor.ToPlatform()), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)ConfirmConfig.PositiveButtonFontSize, true), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+        if (config.PositiveButtonTextColor is not null)
+        {
+            buttonSpan.SetSpan(new ForegroundColorSpan(config.PositiveButtonTextColor.ToPlatform()), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+        }
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.PositiveButtonFontSize, true), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
 
         return buttonSpan;
@@ -112,8 +129,11 @@ public class ConfirmBuilder
     {
         var buttonSpan = new SpannableString(config.CancelText);
 
-        buttonSpan.SetSpan(new ForegroundColorSpan(ConfirmConfig.NegativeButtonTextColor.ToPlatform()), 0, config.CancelText.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)ConfirmConfig.NegativeButtonFontSize, true), 0, config.CancelText.Length, SpanTypes.ExclusiveExclusive);
+        if (config.NegativeButtonTextColor is not null)
+        {
+            buttonSpan.SetSpan(new ForegroundColorSpan(config.NegativeButtonTextColor.ToPlatform()), 0, config.CancelText.Length, SpanTypes.ExclusiveExclusive);
+        }
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.NegativeButtonFontSize, true), 0, config.CancelText.Length, SpanTypes.ExclusiveExclusive);
         buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.CancelText.Length, SpanTypes.ExclusiveExclusive);
 
         return buttonSpan;

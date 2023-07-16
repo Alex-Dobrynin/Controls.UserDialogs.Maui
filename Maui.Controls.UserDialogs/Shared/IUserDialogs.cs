@@ -3,7 +3,7 @@
 public interface IUserDialogs
 {
     public IHudDialog CurrentHudDialog { get; }
-    public bool IsHudShowing => CurrentHudDialog != null;
+    public bool IsHudShowing => CurrentHudDialog is not null;
 
     IDisposable Alert(string message, string title = null, string okText = null, string icon = null);
     IDisposable Alert(AlertConfig config);
