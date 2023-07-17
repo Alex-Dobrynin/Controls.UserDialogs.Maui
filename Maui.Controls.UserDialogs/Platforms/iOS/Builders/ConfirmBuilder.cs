@@ -58,7 +58,7 @@ public class ConfirmBuilder
 
     protected virtual UIAlertAction GetOkAction(ConfirmConfig config)
     {
-        var action = UIAlertAction.Create(config.OkText, UIAlertActionStyle.Cancel, x => config.Action?.Invoke(true));
+        var action = UIAlertAction.Create(config.OkText, UIAlertActionStyle.Default, x => config.Action?.Invoke(true));
 
         if (config.PositiveButtonTextColor is not null)
         {
@@ -70,7 +70,7 @@ public class ConfirmBuilder
 
     protected virtual UIAlertAction GetCancelAction(ConfirmConfig config)
     {
-        var action = UIAlertAction.Create(config.CancelText, UIAlertActionStyle.Default, x => config.Action?.Invoke(false));
+        var action = UIAlertAction.Create(config.CancelText, UIAlertActionStyle.Cancel, x => config.Action?.Invoke(false));
 
         if (config.NegativeButtonTextColor is not null)
         {

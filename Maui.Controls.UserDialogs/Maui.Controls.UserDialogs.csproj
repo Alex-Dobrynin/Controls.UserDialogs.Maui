@@ -22,6 +22,9 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-android'">
 	  <PackageReference Include="AndHUD" Version="2.0.0">
 	  </PackageReference>
@@ -42,4 +45,7 @@
 	  </None>
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0-ios'">
+	  <PackageReference Include="BTProgressHUD" Version="2.0.0" />
+	</ItemGroup>
 </Project>

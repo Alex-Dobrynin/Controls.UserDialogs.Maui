@@ -56,7 +56,7 @@ public class AlertBuilder
 
     protected virtual UIAlertAction GetOkAction(AlertConfig config)
     {
-        var action = UIAlertAction.Create(config.OkText, UIAlertActionStyle.Cancel, x => config.Action?.Invoke());
+        var action = UIAlertAction.Create(config.OkText, UIAlertActionStyle.Default, x => config.Action?.Invoke());
 
         if (config.PositiveButtonTextColor is not null)
         {

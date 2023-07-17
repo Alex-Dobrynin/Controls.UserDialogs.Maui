@@ -21,7 +21,7 @@ namespace Sample
                 CounterBtn.Text = $"Clicked {count} times";
 
             //await UserDialogs.Instance.AlertAsync("sjbknsdkbvlsdbds", "Title", "Ok");
-            //await UserDialogs.Instance.ConfirmAsync("sjbknsdkbvlsdbds", "Title", "Ok", "Cancel");
+            await UserDialogs.Instance.ConfirmAsync("sjbknsdkbvlsdbds", "Title", "Ok", "Cancel");
 
             //UserDialogs.Instance.ShowLoading("aghah", null, MaskType.Gradient);
             //await Task.Delay(2000);
