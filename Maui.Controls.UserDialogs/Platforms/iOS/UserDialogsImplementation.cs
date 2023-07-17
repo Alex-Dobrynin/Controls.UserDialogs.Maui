@@ -23,6 +23,23 @@ public partial class UserDialogsImplementation
 
     public virtual partial IDisposable ShowToast(ToastConfig config)
     {
+        var window = GetDefaultWindow();
+
+        // Calculate the desired frame for your view
+        var margin = 20; // Adjust the margin value as needed
+        var viewWidth = window.Bounds.Width - (margin * 2);
+        var viewHeight = 50; // Adjust the height as needed
+
+        // Create your view and set its frame
+        var customView = new UIView(new CGRect(0, 0, viewWidth, viewHeight));
+        customView.BackgroundColor = UIColor.Red; // Set your desired background color
+
+        // Set the view's center to the bottom of the window
+        customView.Center = new CGPoint(window.Bounds.GetMidX(), window.Bounds.Height - (viewHeight / 2) - margin);
+
+        // Add the view to the window
+        window.AddSubview(customView);
+
         return null;
     }
 
@@ -67,5 +84,34 @@ public partial class UserDialogsImplementation
 
         app.InvokeOnMainThread(() => top.PresentViewController(controller, true, null));
         return new DisposableAction(() => app.SafeInvokeOnMainThread(() => controller.DismissViewController(true, null)));
+    }
+
+    public static UIWindow GetDefaultWindow()
+    {
+        UIWindow window = null;
+
+        if (OperatingSystem.IsMacCatalystVersionAtLeast(15) || OperatingSystem.IsIOSVersionAtLeast(15))
+        {
+            foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
+            {
+                if (scene is UIWindowScene windowScene)
+                {
+                    window = windowScene.KeyWindow;
+
+                    window ??= windowScene?.Windows?.LastOrDefault();
+                }
+            }
+        }
+        else if (OperatingSystem.IsMacCatalystVersionAtLeast(13) || OperatingSystem.IsIOSVersionAtLeast(13))
+        {
+            window = UIApplication.SharedApplication.Windows?.LastOrDefault();
+        }
+        else
+        {
+            window = UIApplication.SharedApplication.KeyWindow
+                ?? UIApplication.SharedApplication.Windows?.LastOrDefault();
+        }
+
+        return window;
     }
 }
