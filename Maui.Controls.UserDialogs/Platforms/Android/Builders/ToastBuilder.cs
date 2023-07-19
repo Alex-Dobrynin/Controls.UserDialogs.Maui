@@ -12,55 +12,113 @@ using static Maui.Controls.UserDialogs.Extensions;
 
 namespace Maui.Controls.UserDialogs;
 
-public class ToastBuilder
+public class ToastBuilder : Snackbar.Callback
 {
+    public static Thickness DefaultScreenMargin { get; set; } = new Thickness(20, 50, 20, 80);
+    public static double DefaultIconPadding { get; set; } = 10;
+    public static double DefaultIconSize { get; set; } = 24;
+    public static long DefaultFadeInFadeOutAnimationDuration { get; set; } = 300;
+
+    public Thickness ScreenMargin { get; set; } = DefaultScreenMargin;
+    public double IconPadding { get; set; } = DefaultIconPadding;
+    public double IconSize { get; set; } = DefaultIconSize;
+    public long FadeInFadeOutAnimationDuration { get; set; } = DefaultFadeInFadeOutAnimationDuration;
+
     private Typeface _typeface;
 
-    public virtual Snackbar Build(Activity activity, ToastConfig config)
+    private Action _dismissed;
+    private readonly Activity _activity;
+    private readonly ToastConfig _config;
+
+    public ToastBuilder(Activity activity, ToastConfig config)
     {
-        if (config.FontFamily is not null)
+        _activity = activity;
+        _config = config;
+    }
+
+    public override void OnShown(Snackbar snackbar)
+    {
+        base.OnShown(snackbar);
+
+        var timer = new System.Timers.Timer();
+        timer.Interval = _config.Duration.TotalMilliseconds - FadeInFadeOutAnimationDuration;
+        timer.AutoReset = false;
+        timer.Elapsed += (s, a) =>
         {
-            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+            _activity.RunOnUiThread(() =>
+            {
+                snackbar.View.Animate().Alpha(0f).SetDuration(FadeInFadeOutAnimationDuration).Start();
+            });
+        };
+        timer.Start();
+
+        _dismissed = () =>
+        {
+            try
+            {
+                timer.Stop();
+            }
+            catch { }
+        };
+
+        snackbar.View.Animate().Alpha(1f).SetDuration(FadeInFadeOutAnimationDuration).Start();
+    }
+
+    public override void OnDismissed(Snackbar snackbar, int e)
+    {
+        base.OnDismissed(snackbar, e);
+
+        _dismissed?.Invoke();
+    }
+
+    public virtual Snackbar Build()
+    {
+        if (_config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(_activity.Assets, _config.FontFamily);
         }
 
-        var view = activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
+        var view = _activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
 
-        var snackBar = Snackbar.Make(
-            activity,
+        var snackbar = Snackbar.Make(
+            _activity,
             view,
-            config.Message,
-            (int)config.Duration.TotalMilliseconds
+            _config.Message,
+            (int)_config.Duration.TotalMilliseconds
         );
 
-        SetupSnackbarText(snackBar, config);
-        if (config.MessageColor is not null)
+        SetupSnackbarText(snackbar, _config);
+        if (_config.MessageColor is not null)
         {
-            snackBar.SetTextColor(config.MessageColor.ToInt());
+            snackbar.SetTextColor(_config.MessageColor.ToInt());
         }
 
-        if (config.BackgroundColor is not null)
+        if (_config.BackgroundColor is not null)
         {
-            snackBar.View.Background = GetDialogBackground(config);
+            snackbar.View.Background = GetDialogBackground(_config);
         }
 
-        if (snackBar.View.LayoutParameters is FrameLayout.LayoutParams layoutParams)
+        if (snackbar.View.LayoutParameters is FrameLayout.LayoutParams layoutParams)
         {
             layoutParams.Height = FrameLayout.LayoutParams.WrapContent;
             layoutParams.Width = FrameLayout.LayoutParams.WrapContent;
-            layoutParams.SetMargins(0, DpToPixels(50), 0, DpToPixels(80));
+            layoutParams.SetMargins(DpToPixels(ScreenMargin.Left), DpToPixels(ScreenMargin.Top), DpToPixels(ScreenMargin.Right), DpToPixels(ScreenMargin.Bottom));
             layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Bottom;
 
-            if (config.Position == ToastPosition.Top)
+            if (_config.Position == ToastPosition.Top)
             {
                 layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Top;
             }
 
-            snackBar.View.LayoutParameters = layoutParams;
+
+            snackbar.View.LayoutParameters = layoutParams;
         }
 
-        snackBar.SetAnimationMode(Snackbar.AnimationModeFade);
+        snackbar.AddCallback(this);
 
-        return snackBar;
+        snackbar.View.Alpha = 0f;
+
+        return snackbar;
     }
 
     protected virtual Drawable GetDialogBackground(ToastConfig config)
@@ -78,20 +136,21 @@ public class ToastBuilder
         var text = l.GetChildAt(0) as TextView;
         text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)config.MessageFontSize);
         text.SetTypeface(_typeface, TypefaceStyle.Normal);
+        text.SetMaxLines(int.MaxValue);
 
         if (config.Icon is null) return;
 
         var icon = GetIcon(config);
 
         text.SetCompoundDrawables(icon, null, null, null);
-        text.CompoundDrawablePadding = DpToPixels(10);
+        text.CompoundDrawablePadding = DpToPixels(IconPadding);
     }
 
     protected virtual Drawable GetIcon(ToastConfig config)
     {
         var imgId = MauiApplication.Current.GetDrawableId(config.Icon);
         var img = MauiApplication.Current.GetDrawable(imgId);
-        img.ScaleTo(22);
+        img.ScaleTo(IconSize);
 
         return img;
     }

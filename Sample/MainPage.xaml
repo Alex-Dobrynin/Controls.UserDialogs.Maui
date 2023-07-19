@@ -5,40 +5,51 @@
              BackgroundColor="White">
 
     <ScrollView>
-        <VerticalStackLayout Spacing="25"
+        <VerticalStackLayout Spacing="5"
                              Padding="30,0"
                              VerticalOptions="Center">
 
-            <Image Source="dotnet_bot.png"
-                   SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                   HeightRequest="200"
-                   HorizontalOptions="Center" />
+            <Button Text="Alert"
+                    Clicked="Button_Clicked"/>
 
-            <Label Text="Hello, World!"
-                   SemanticProperties.HeadingLevel="Level1"
-                   FontSize="32"
-                   HorizontalOptions="Center"
-                   TextColor="Black" />
+            <Button Text="Async Alert"
+                    Clicked="Button_Clicked_1" />
 
-            <Label Text="Welcome to .NET Multi-platform App UI"
-                   SemanticProperties.HeadingLevel="Level2"
-                   SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                   FontSize="18"
-                   HorizontalOptions="Center" 
-                   TextColor="Black" />
+            <Button Text="Confirm"
+                    Clicked="Button_Clicked_2" />
+            
+            <Button Text="Async Confirm"
+                    Clicked="Button_Clicked_3" />
 
-            <Button x:Name="CounterBtn"
-                    Text="Click me"
-                    SemanticProperties.Hint="Counts the number of times you click"
-                    Clicked="OnCounterClicked"
-                    HorizontalOptions="Center" 
-                    BackgroundColor="Gray" />
+            <Button Text="Action sheet"
+                    Clicked="Button_Clicked_4" />
 
-            <Image Source="dotnet_bot.png"
-                   SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                   HeightRequest="200"
-                   HorizontalOptions="Center"
-                   Margin="0,150,0,0"/>
+            <Button Text="Async Action sheet"
+                    Clicked="Button_Clicked_5" />
+
+            <Button Text="Bottom Action sheet"
+                    Clicked="Button_Clicked_6" />
+
+            <Button Text="Async Bottom Action sheet"
+                    Clicked="Button_Clicked_7" />
+
+            <Button Text="Loading HUD"
+                    Clicked="Button_Clicked_8" />
+
+            <Button Text="Progress HUD"
+                    Clicked="Button_Clicked_9" />
+
+            <Button Text="Image HUD"
+                    Clicked="Button_Clicked_10" />
+
+            <Button Text="Toast"
+                    Clicked="Button_Clicked_11" />
+
+            <Button Text="Snackbar"
+                    Clicked="Button_Clicked_12" />
+
+            <Button Text="Async Snackbar"
+                    Clicked="Button_Clicked_13" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -14,13 +14,14 @@ public partial class UserDialogsImplementation : IUserDialogs
 
     protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config);
 
-    public virtual IDisposable Alert(string message, string title, string okText, string icon)
+    public virtual IDisposable Alert(string message, string title, string okText, string icon, Action action)
     {
         return Alert(new AlertConfig
         {
             Message = message,
             Title = title,
             Icon = icon,
+            Action = action,
             OkText = okText ?? AlertConfig.DefaultOkText
         });
     }
@@ -49,6 +50,19 @@ public partial class UserDialogsImplementation : IUserDialogs
         {
             await tcs.Task;
         }
+    }
+
+    public virtual IDisposable Confirm(string message, string title, string okText, string cancelText, string icon, Action<bool> action)
+    {
+        return this.Confirm(new ConfirmConfig
+        {
+            Message = message,
+            Title = title,
+            Icon = icon,
+            Action = action,
+            CancelText = cancelText ?? (!ConfirmConfig.DefaultUseYesNo ? ConfirmConfig.DefaultCancelText : ConfirmConfig.DefaultNo),
+            OkText = okText ?? (!ConfirmConfig.DefaultUseYesNo ? ConfirmConfig.DefaultOkText : ConfirmConfig.DefaultYes)
+        });
     }
 
     public virtual Task<bool> ConfirmAsync(string message, string title, string okText, string cancelText, string icon, CancellationToken? cancelToken = null)
@@ -107,7 +121,7 @@ public partial class UserDialogsImplementation : IUserDialogs
         }
     }
 
-    public virtual void ShowLoading(string message, string title, MaskType? maskType)
+    public virtual void ShowLoading(string message, MaskType? maskType)
     {
         this.Loading(message, null, true, maskType, null);
     }
@@ -118,7 +132,7 @@ public partial class UserDialogsImplementation : IUserDialogs
         CurrentHudDialog = null;
     }
 
-    public virtual IHudDialog Loading(string message, string cancelText, bool show, MaskType? maskType, Action onCancel)
+    public virtual IHudDialog Loading(string message, string cancelText, bool show, MaskType? maskType, Action cancel)
         => this.CreateOrUpdateHud(new HudDialogConfig
         {
             Message = message,
@@ -126,10 +140,10 @@ public partial class UserDialogsImplementation : IUserDialogs
             CancelText = cancelText ?? HudDialogConfig.DefaultCancelText,
             MaskType = maskType ?? HudDialogConfig.DefaultMaskType,
             PercentComplete = -1,
-            OnCancel = onCancel
+            Cancel = cancel
         });
 
-    public virtual IHudDialog Progress(string message, string cancelText, bool show, MaskType? maskType, Action onCancel)
+    public virtual IHudDialog Progress(string message, string cancelText, bool show, MaskType? maskType, Action cancel)
         => this.CreateOrUpdateHud(new HudDialogConfig
         {
             Message = message,
@@ -137,10 +151,10 @@ public partial class UserDialogsImplementation : IUserDialogs
             CancelText = cancelText ?? HudDialogConfig.DefaultCancelText,
             MaskType = maskType ?? HudDialogConfig.DefaultMaskType,
             PercentComplete = 0,
-            OnCancel = onCancel
+            Cancel = cancel
         });
 
-    public virtual IHudDialog ShowHudImage(string image, string message, string cancelText, bool show, MaskType? maskType, Action onCancel)
+    public virtual IHudDialog ShowHudImage(string image, string message, string cancelText, bool show, MaskType? maskType, Action cancel)
        => this.CreateOrUpdateHud(new HudDialogConfig
        {
            Message = message,
@@ -148,7 +162,7 @@ public partial class UserDialogsImplementation : IUserDialogs
            CancelText = cancelText ?? HudDialogConfig.DefaultCancelText,
            MaskType = maskType ?? HudDialogConfig.DefaultMaskType,
            Image = image,
-           OnCancel = onCancel
+           Cancel = cancel
        });
 
     public virtual IHudDialog CreateOrUpdateHud(HudDialogConfig config)

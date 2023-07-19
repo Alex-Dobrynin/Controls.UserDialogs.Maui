@@ -13,7 +13,11 @@ namespace Sample
                 .UseMauiApp<App>()
                 .UseUserDialogs(() =>
                 {
+#if ANDROID
+                    var fontFamily = "OpenSans-Semibold.ttf";
+#else
                     var fontFamily = "OpenSans-Semibold";
+#endif
                     AlertConfig.DefaultFontFamily = fontFamily;
                     AlertConfig.DefaultPositiveButtonTextColor = Colors.Purple;
                     ConfirmConfig.DefaultFontFamily = fontFamily;

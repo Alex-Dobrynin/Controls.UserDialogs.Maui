@@ -20,6 +20,20 @@ namespace Maui.Controls.UserDialogs;
 
 public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionSheetConfig>
 {
+    public static Thickness DefaultScreenMargin { get; set; } = new Thickness(0);
+    public static Thickness DefaultPadding { get; set; } = new Thickness(24, 18);
+    public static double DefaultIconPadding { get; set; } = 10;
+    public static double DefaultOptionIconPadding { get; set; } = 10;
+    public static double DefaultOptionIconSize { get; set; } = 24;
+    public static double DefaultIconSize { get; set; } = 36;
+
+    public Thickness ScreenMargin { get; set; } = DefaultScreenMargin;
+    public Thickness Padding { get; set; } = DefaultPadding;
+    public double IconPadding { get; set; } = DefaultIconPadding;
+    public double OptionIconPadding { get; set; } = DefaultOptionIconPadding;
+    public double OptionIconSize { get; set; } = DefaultOptionIconSize;
+    public double IconSize { get; set; } = DefaultIconSize;
+
     private Typeface _typeface;
 
     protected override void SetDialogDefaults(Dialog dialog)
@@ -94,13 +108,15 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         backgroundDrawable.SetColor(Config.BackgroundColor.ToInt());
         backgroundDrawable.SetCornerRadius(DpToPixels(Config.CornerRadius));
 
-        return backgroundDrawable;
+        var draw = new InsetDrawable(backgroundDrawable, DpToPixels(ScreenMargin.Left), DpToPixels(ScreenMargin.Top), DpToPixels(ScreenMargin.Right), DpToPixels(ScreenMargin.Bottom));
+
+        return draw;
     }
 
     protected virtual TextView GetHeaderText()
     {
         var lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.WrapContent);
-        lParams.SetMargins(DpToPixels(24), DpToPixels(18), DpToPixels(24), 0);
+        lParams.SetMargins(DpToPixels(Padding.Left), DpToPixels(Padding.Top), DpToPixels(Padding.Right), 0);
         var textView = new TextView(this.Activity)
         {
             Text = Config.Title,
@@ -118,7 +134,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         {
             textView.SetCompoundDrawables(GetDialogIcon(), null, null, null);
 
-            textView.CompoundDrawablePadding = DpToPixels(10);
+            textView.CompoundDrawablePadding = DpToPixels(IconPadding);
         }
 
         return textView;
@@ -128,7 +144,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
     {
         var imgId = MauiApplication.Current.GetDrawableId(Config.Icon);
         var img = MauiApplication.Current.GetDrawable(imgId);
-        img.ScaleTo(36);
+        img.ScaleTo(IconSize);
 
         return img;
     }
@@ -136,7 +152,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
     protected virtual TextView GetMessageText()
     {
         var lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.WrapContent);
-        lParams.SetMargins(DpToPixels(24), 0, DpToPixels(24), 0);
+        lParams.SetMargins(DpToPixels(Padding.Left), 0, DpToPixels(Padding.Right), 0);
         var textView = new TextView(this.Activity)
         {
             Text = Config.Message,
@@ -213,7 +229,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
     {
         var lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
 
-        lParams.SetMargins(DpToPixels(20), 0, DpToPixels(20), 0);
+        lParams.SetMargins(DpToPixels(Padding.Left), 0, DpToPixels(Padding.Right), 0);
 
         var textView = new TextView(this.Activity)
         {
@@ -232,7 +248,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         {
             textView.SetCompoundDrawables(GetActionIcon(action), null, null, null);
 
-            textView.CompoundDrawablePadding = DpToPixels(10);
+            textView.CompoundDrawablePadding = DpToPixels(OptionIconPadding);
         }
 
         return textView;
@@ -242,7 +258,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
     {
         var imgId = MauiApplication.Current.GetDrawableId(action.Icon);
         var img = MauiApplication.Current.GetDrawable(imgId);
-        img.ScaleTo(24);
+        img.ScaleTo(OptionIconSize);
 
         return img;
     }

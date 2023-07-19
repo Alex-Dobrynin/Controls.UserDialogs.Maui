@@ -21,13 +21,13 @@ public class ActionSheetConfig
     public static Color DefaultMessageColor { get; set; }
     public static Color DefaultTitleColor { get; set; }
     public static float DefaultTitleFontSize { get; set; } = 20;
-    public static float DefaultMessageFontSize { get; set; } = 16;
-    public static Color DefaultDestructiveButtonTextColor { get; set; }
+    public static float DefaultMessageFontSize { get; set; } = 14;
+    public static Color DefaultDestructiveButtonTextColor { get; set; } = Colors.Red;
 
     /// <summary>
     /// Android only
     /// </summary>
-    public static float DefaultDestructiveButtonFontSize { get; set; } = 18;
+    public static float DefaultDestructiveButtonFontSize { get; set; } = 16;
     public static Color DefaultNegativeButtonTextColor { get; set; }
 
     /// <summary>
@@ -39,7 +39,7 @@ public class ActionSheetConfig
     /// <summary>
     /// Android only
     /// </summary>
-    public static float DefaultActionSheetOptionFontSize { get; set; } = 18;
+    public static float DefaultActionSheetOptionFontSize { get; set; } = 16;
 
     public string FontFamily { get; set; } = DefaultFontFamily;
 

@@ -9,7 +9,7 @@ public class ToastConfig
     public static Color DefaultMessageColor { get; set; }
     public static ToastPosition DefaultPosition { get; set; }
 
-    public static TimeSpan DefaultDuration { get; set; } = TimeSpan.FromSeconds(2.5);
+    public static TimeSpan DefaultDuration { get; set; } = TimeSpan.FromSeconds(3);
 
     public string Message { get; set; }
     public string Icon { get; set; }

@@ -17,6 +17,10 @@ namespace Maui.Controls.UserDialogs;
 
 public class ConfirmBuilder
 {
+    public static Thickness DefaultScreenMargin { get; set; } = new Thickness(20, 50);
+
+    public Thickness ScreenMargin { get; set; } = DefaultScreenMargin;
+
     private Typeface _typeface;
 
     public virtual Dialog Build(Activity activity, ConfirmConfig config)
@@ -85,7 +89,7 @@ public class ConfirmBuilder
         backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
         backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
 
-        var draw = new InsetDrawable(backgroundDrawable, DpToPixels(20), 0, DpToPixels(20), 0);
+        var draw = new InsetDrawable(backgroundDrawable, DpToPixels(ScreenMargin.Left), DpToPixels(ScreenMargin.Top), DpToPixels(ScreenMargin.Right), DpToPixels(ScreenMargin.Bottom));
 
         return draw;
     }

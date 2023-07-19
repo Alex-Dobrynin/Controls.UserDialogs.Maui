@@ -19,6 +19,18 @@ namespace Maui.Controls.UserDialogs;
 
 public class ActionSheetBuilder
 {
+    public static Thickness DefaultScreenMargin { get; set; } = new Thickness(20, 50);
+    public static Thickness DefaultPadding { get; set; } = new Thickness(20, 18);
+    public static double DefaultIconPadding { get; set; } = 10;
+    public static double DefaultOptionIconPadding { get; set; } = 10;
+    public static double DefaultOptionIconSize { get; set; } = 24;
+
+    public Thickness ScreenMargin { get; set; } = DefaultScreenMargin;
+    public Thickness Padding { get; set; } = DefaultPadding;
+    public double IconPadding { get; set; } = DefaultIconPadding;
+    public double OptionIconPadding { get; set; } = DefaultOptionIconPadding;
+    public double OptionIconSize { get; set; } = DefaultOptionIconSize;
+
     private Typeface _typeface;
 
     public virtual Dialog Build(Activity activity, ActionSheetConfig config)
@@ -93,7 +105,7 @@ public class ActionSheetBuilder
 
     protected virtual ActionSheetListAdapter GetActionsAdapter(Android.Content.Context context, ActionSheetConfig config)
     {
-        return new ActionSheetListAdapter(context, Android.Resource.Layout.SelectDialogItem, Android.Resource.Id.Text1, config, _typeface);
+        return new ActionSheetListAdapter(context, Android.Resource.Layout.SelectDialogItem, Android.Resource.Id.Text1, this, config, _typeface);
     }
 
     protected virtual Drawable GetDialogBackground(ActionSheetConfig config)
@@ -102,7 +114,7 @@ public class ActionSheetBuilder
         backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
         backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
 
-        var draw = new InsetDrawable(backgroundDrawable, DpToPixels(20), 0, DpToPixels(20), 0);
+        var draw = new InsetDrawable(backgroundDrawable, DpToPixels(ScreenMargin.Left), DpToPixels(ScreenMargin.Top), DpToPixels(ScreenMargin.Right), DpToPixels(ScreenMargin.Bottom));
 
         return draw;
     }

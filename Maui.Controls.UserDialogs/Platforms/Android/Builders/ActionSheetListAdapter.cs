@@ -14,12 +14,14 @@ namespace Maui.Controls.UserDialogs;
 
 public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
 {
-    readonly ActionSheetConfig _config;
+    private readonly ActionSheetBuilder _builder;
+    private readonly ActionSheetConfig _config;
     private readonly Typeface _typeface;
 
-    public ActionSheetListAdapter(Context context, int resource, int textViewResourceId, ActionSheetConfig config, Typeface typeface)
+    public ActionSheetListAdapter(Context context, int resource, int textViewResourceId, ActionSheetBuilder builder, ActionSheetConfig config, Typeface typeface)
         : base(context, resource, textViewResourceId, config.Options)
     {
+        _builder = builder;
         _config = config;
         _typeface = typeface;
     }
@@ -38,17 +40,17 @@ public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
         {
             textView.SetTextColor(_config.ActionSheetOptionTextColor.ToPlatform());
         }
-        textView.SetPadding(DpToPixels(20), 0, DpToPixels(20), 0);
+        textView.SetPadding(DpToPixels(_builder.Padding.Left), 0, DpToPixels(_builder.Padding.Right), 0);
         textView.SetTypeface(_typeface, TypefaceStyle.Normal);
 
         if (item.Icon is not null)
         {
             var imgId = MauiApplication.Current.GetDrawableId(_config.Icon);
             var img = MauiApplication.Current.GetDrawable(imgId);
-            img.ScaleTo(24);
+            img.ScaleTo(_builder.OptionIconSize);
 
             textView.SetCompoundDrawables(img, null, null, null);
-            textView.CompoundDrawablePadding = DpToPixels(10);
+            textView.CompoundDrawablePadding = DpToPixels(_builder.OptionIconPadding);
         }
 
         view.Foreground = Extensions.GetSelectableItemForeground(this.Context);

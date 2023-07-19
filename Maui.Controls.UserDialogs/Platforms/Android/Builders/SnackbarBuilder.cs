@@ -14,48 +14,120 @@ using static Maui.Controls.UserDialogs.Extensions;
 
 namespace Maui.Controls.UserDialogs;
 
-public class SnackbarBuilder
+public class SnackbarBuilder : Snackbar.Callback
 {
-    private Typeface _typeface;
+    public static Thickness DefaultScreenMargin { get; set; } = new Thickness(20, 50, 20, 30);
+    public static double DefaultIconPadding { get; set; } = 10;
+    public static double DefaultActionIconPadding { get; set; } = 10;
+    public static double DefaultActionIconSize { get; set; } = 22;
+    public static double DefaultIconSize { get; set; } = 24;
+    public static long DefaultFadeInFadeOutAnimationDuration { get; set; } = 300;
 
-    public virtual Snackbar Build(Activity activity, SnackbarConfig config)
+
+    public Thickness ScreenMargin { get; set; } = DefaultScreenMargin;
+    public double IconPadding { get; set; } = DefaultIconPadding;
+    public double IconSize { get; set; } = DefaultIconSize;
+    public double ActionIconSize { get; set; } = DefaultActionIconSize;
+    public double ActionIconPadding { get; set; } = DefaultActionIconPadding;
+    public long FadeInFadeOutAnimationDuration { get; set; } = DefaultFadeInFadeOutAnimationDuration;
+
+
+    private Typeface _typeface;
+    private Action _dismissed;
+    private Activity _activity;
+    private SnackbarConfig _config;
+
+    public SnackbarBuilder(Activity activity, SnackbarConfig config)
     {
-        if (config.FontFamily is not null)
+        _activity = activity;
+        _config = config;
+    }
+
+    public override void OnShown(Snackbar snackbar)
+    {
+        base.OnShown(snackbar);
+
+        var timer = new System.Timers.Timer();
+        timer.Interval = _config.Duration.TotalMilliseconds - FadeInFadeOutAnimationDuration;
+        timer.AutoReset = false;
+        timer.Elapsed += (s, a) =>
         {
-            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+            _activity.RunOnUiThread(() =>
+            {
+                snackbar.View.Animate().Alpha(0f).SetDuration(FadeInFadeOutAnimationDuration).Start();
+            });
+        };
+        timer.Start();
+
+        _dismissed = () =>
+        {
+            try
+            {
+                timer.Stop();
+            }
+            catch { }
+        };
+
+        snackbar.View.Animate().Alpha(1f).SetDuration(FadeInFadeOutAnimationDuration).Start();
+    }
+
+    public override void OnDismissed(Snackbar snackbar, int e)
+    {
+        base.OnDismissed(snackbar, e);
+
+        _dismissed?.Invoke();
+
+        if (_config.Action is not null)
+        {
+            if (e == Snackbar.Callback.DismissEventTimeout)
+            {
+                _config.Action(SnackbarActionType.Timeout);
+            }
+            else if (e == Snackbar.Callback.DismissEventConsecutive)
+            {
+                _config.Action(SnackbarActionType.Cancelled);
+            }
+        }
+    }
+
+    public virtual Snackbar Build()
+    {
+        if (_config.FontFamily is not null)
+        {
+            _typeface = Typeface.CreateFromAsset(_activity.Assets, _config.FontFamily);
         }
 
-        var view = activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
+        var view = _activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
 
         var snackbar = Snackbar.Make(
-            activity,
+            _activity,
             view,
-            config.Message,
-            (int)config.Duration.TotalMilliseconds
+            _config.Message,
+            (int)_config.Duration.TotalMilliseconds
         );
 
-        SetupSnackbarText(snackbar, config);
-        if (config.MessageColor is not null)
+        SetupSnackbarText(snackbar, _config);
+        if (_config.MessageColor is not null)
         {
-            snackbar.SetTextColor(config.MessageColor.ToInt());
+            snackbar.SetTextColor(_config.MessageColor.ToInt());
         }
 
-        if (config.Action is not null)
+        if (_config.Action is not null)
         {
-            SetupSnackbarAction(activity, snackbar, config);
+            SetupSnackbarAction(_activity, snackbar, _config);
         }
 
-        if (config.BackgroundColor is not null)
+        if (_config.BackgroundColor is not null)
         {
-            snackbar.View.Background = GetDialogBackground(config);
+            snackbar.View.Background = GetDialogBackground(_config);
         }
 
         if (snackbar.View.LayoutParameters is FrameLayout.LayoutParams layoutParams)
         {
-            layoutParams.SetMargins(DpToPixels(20), DpToPixels(50), DpToPixels(20), DpToPixels(30));
+            layoutParams.SetMargins(DpToPixels(ScreenMargin.Left), DpToPixels(ScreenMargin.Top), DpToPixels(ScreenMargin.Right), DpToPixels(ScreenMargin.Bottom));
             layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Bottom;
 
-            if (config.Position == ToastPosition.Top)
+            if (_config.Position == ToastPosition.Top)
             {
                 layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Top;
             }
@@ -63,7 +135,9 @@ public class SnackbarBuilder
             snackbar.View.LayoutParameters = layoutParams;
         }
 
-        snackbar.SetAnimationMode(Snackbar.AnimationModeFade);
+        snackbar.AddCallback(this);
+
+        snackbar.View.Alpha = 0f;
 
         return snackbar;
     }
@@ -87,9 +161,9 @@ public class SnackbarBuilder
         if (config.Icon is null) return;
 
         var icon = GetIcon(config.Icon);
-        icon.ScaleTo(22);
+        icon.ScaleTo(IconSize);
         text.SetCompoundDrawables(icon, null, null, null);
-        text.CompoundDrawablePadding = DpToPixels(10);
+        text.CompoundDrawablePadding = DpToPixels(IconPadding);
     }
 
     protected virtual void SetupSnackbarAction(Activity activity, Snackbar snackbar, SnackbarConfig config)
@@ -122,8 +196,9 @@ public class SnackbarBuilder
         if (config.Icon is null) return;
 
         var icon = GetIcon(config.Icon);
-        icon.ScaleTo(22);
+        icon.ScaleTo(ActionIconSize);
         button.SetCompoundDrawables(icon, null, null, null);
+        button.CompoundDrawablePadding = DpToPixels(ActionIconPadding);
     }
 
     protected virtual Drawable GetIcon(string icon)
@@ -145,7 +220,10 @@ public class SnackbarBuilder
 
         var text = new TextView(activity);
         text.SetTypeface(_typeface, TypefaceStyle.Normal);
-        text.SetTextColor(config.PositiveButtonTextColor.ToPlatform());
+        if (config.PositiveButtonTextColor is not null)
+        {
+            text.SetTextColor(config.PositiveButtonTextColor.ToPlatform());
+        }
         text.Text = "" + Math.Round(config.Duration.TotalSeconds);
         text.LayoutParameters = lParams;
 

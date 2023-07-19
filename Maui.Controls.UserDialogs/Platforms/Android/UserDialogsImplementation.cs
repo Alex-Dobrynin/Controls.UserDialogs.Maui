@@ -52,18 +52,18 @@ public partial class UserDialogsImplementation
 
     public virtual partial IDisposable ShowToast(ToastConfig config)
     {
-        Snackbar snackBar = null;
+        Snackbar snackbar = null;
         var activity = Platform.CurrentActivity;
         activity.SafeRunOnUi(() =>
         {
-            snackBar = new ToastBuilder().Build(activity, config);
+            snackbar = new ToastBuilder(activity, config).Build();
 
-            snackBar.Show();
+            snackbar.Show();
         });
         return new DisposableAction(() =>
         {
-            if (snackBar.IsShown)
-                activity.SafeRunOnUi(snackBar.Dismiss);
+            if (snackbar.IsShown)
+                activity.SafeRunOnUi(snackbar.Dismiss);
         });
     }
 
@@ -73,23 +73,9 @@ public partial class UserDialogsImplementation
         var activity = Platform.CurrentActivity;
         activity.SafeRunOnUi(() =>
         {
-            snackBar = new SnackbarBuilder().Build(activity, config);
+            snackBar = new SnackbarBuilder(activity, config).Build();
 
             snackBar.Show();
-
-            var timer = new System.Timers.Timer
-            {
-                Interval = config.Duration.TotalMilliseconds,
-                AutoReset = false
-            };
-
-            var endOfAnimation = DateTime.Now + config.Duration;
-            timer.Elapsed += (s, a) =>
-            {
-                timer.Stop();
-                activity.SafeRunOnUi(() => config.Action?.Invoke(SnackbarActionType.Timeout));
-            };
-            timer.Start();
         });
         return new DisposableAction(() =>
         {

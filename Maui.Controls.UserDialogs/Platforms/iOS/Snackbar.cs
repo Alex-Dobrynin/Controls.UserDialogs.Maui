@@ -1,5 +1,7 @@
 ﻿using CoreGraphics;
+
 using Foundation;
+
 using Microsoft.Maui.Platform;
 
 using UIKit;
@@ -34,7 +36,7 @@ public class Snackbar : UIView
     public static float DefaultCornerRadius { get; set; } = 15f;
     public static float DefaultIconSpacing { get; set; } = 15f;
     public static UIBlurEffectStyle DefaultBlurEffectStyle { get; set; } = UIBlurEffectStyle.Dark;
-    public static UIColor DefaultBackground { get; set; } = Colors.Black.WithAlpha(0.1f).ToPlatform();
+    public static UIColor DefaultBackgroundColor { get; set; } = Colors.Black.WithAlpha(0.1f).ToPlatform();
 
     public double IconSize { get; set; } = DefaultIconSize;
     public double ActionIconSize { get; set; } = DefaultActionIconSize;
@@ -69,7 +71,7 @@ public class Snackbar : UIView
     public Snackbar()
     {
         this.TranslatesAutoresizingMaskIntoConstraints = false;
-        BackgroundColor = DefaultBackground;
+        BackgroundColor = DefaultBackgroundColor;
         CornerRadius = DefaultCornerRadius;
     }
 

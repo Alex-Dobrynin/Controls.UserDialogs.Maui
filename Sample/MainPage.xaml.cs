@@ -4,93 +4,202 @@ namespace Sample
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private async void OnCounterClicked(object sender, EventArgs e)
+        private void Button_Clicked(object sender, EventArgs e)
         {
-            count++;
+            UserDialogs.Instance.Alert("This is Alert dialog", "Alert dialog", "Understand", "dotnet_bot.png");
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+        private async void Button_Clicked_1(object sender, EventArgs e)
+        {
+            await UserDialogs.Instance.AlertAsync("This is asyn Alert dialog", "Async Alert dialog", "Understand", "dotnet_bot.png");
+        }
 
-            //await UserDialogs.Instance.AlertAsync("sjbknsdkbvlsdbds", "Title", "Ok");
-            //await UserDialogs.Instance.ConfirmAsync("sjbknsdkbvlsdbds", "Title", "Ok", "Cancel");
-
-            var p = UserDialogs.Instance.ShowHudImage("dotnet_bot.png", "dskjbnskdbsalv");
-
-            await Task.Delay(3000);
-
-            for (int i = 0; i < 100; i++)
+        private void Button_Clicked_2(object sender, EventArgs e)
+        {
+            UserDialogs.Instance.Confirm("This is Confirm dialog", "Confirm dialog", "Understand", "Nope", "dotnet_bot.png", res =>
             {
-                p.Update(i.ToString(), i);
-                await Task.Delay(1000);
-            }
 
-            //await Task.Delay(4000);
-            //p.Update("rjvrijr", "ejvmrjb", 50);
-            //await Task.Delay(4000);
+            });
+        }
 
-            //p.Update("ckjfevrbr", "ejvmrjb", 60);
-            //await Task.Delay(4000);
+        private async void Button_Clicked_3(object sender, EventArgs e)
+        {
+            var res = await UserDialogs.Instance.ConfirmAsync("This is Async Confirm dialog", "Async Confirm dialog", "Understand", "Cancel", "dotnet_bot.png");
+        }
 
-            //p.Update("kce dckevefb", "ejvmrjb", 70);
+        private void Button_Clicked_4(object sender, EventArgs e)
+        {
+#if IOS
+            UserDialogs.Instance.Alert("Action sheet is not supported on ios", "Warning", "Understand", "dotnet_bot.png");
+#else
+            var config = new ActionSheetConfig()
+            {
+                UseBottomSheet = false,
+                Destructive = new ActionSheetOption("Destroy", () => { }, "dotnet_bot.png"),
+                Cancel = new ActionSheetOption("Cancel", () => { }, "dotnet_bot.png"),
+                Title = "Action sheet",
+                Icon = "dotnet_bot.png",
+                Options = new ActionSheetOption[]
+                {
+                    new ActionSheetOption("First option", () => { }, "dotnet_bot.png"),
+                    new ActionSheetOption("Second option", () => { }, "dotnet_bot.png"),
+                    new ActionSheetOption("Third option", () => { }, "dotnet_bot.png"),
+                }
+            };
 
-            await Task.Delay(10000);
+            UserDialogs.Instance.ActionSheet(config);
+#endif
+        }
 
-            UserDialogs.Instance.HideHud();
+        private async void Button_Clicked_5(object sender, EventArgs e)
+        {
+#if IOS
+            UserDialogs.Instance.Alert("Async Action sheet is not supported on ios", "Warning", "Understand", "dotnet_bot.png");
+#else
+            var res = await UserDialogs.Instance.ActionSheetAsync(
+                "not supported", 
+                "Async Action sheet", 
+                "Cancel", 
+                "Destroy", 
+                "dotnet_bot.png", 
+                false, 
+                default, 
+                "First option", 
+                "Second option", 
+                "Third option"
+                );
+#endif
+        }
 
-            //UserDialogs.Instance.ShowToast(new ToastConfig() { Icon = "dotnet_bot.png", Message = "agasgahadhskjdsg skljh dfkbs dbkjsdbdfkjb djfb dslj sjfb dlfb odjfb d j sjdf vod bjdf bjsvodf bjd bks" });
-            //UserDialogs.Instance.ShowSnackbar(new SnackbarConfig()
-            //{
-            //    Icon = "dotnet_bot.png",
-            //    Message = "a kdjbgd sogd of bodfnbljndfbl elfg ledgli jdh elfigj ergij eflg df gelg erlgjerl elerjg erlhkhj er elrkj erhhl kerjhh ",
-            //    ActionText = "Cancel",
-            //    ActionIcon = "dotnet_bot.png",
-            //    Action = type =>
-            //    {
-
-            //    }
-            //});
-            //await Task.Delay(3000);
-            //UserDialogs.Instance.ShowSnackbar(
-            //    new SnackbarConfig()
-            //    {
-            //        Icon = "dotnet_bot.png",
-            //        Message = "agasgahadhs",
-            //        Action = new SnackbarAction()
-            //        {
-            //            Action = () => { },
-            //            Icon = "dotnet_bot.png",
-            //            Text = "sdhhfgd",
-            //            ShowCountDown = true
-            //        }
-            //    });
-            //await Task.Delay(3000);
-
+        private void Button_Clicked_6(object sender, EventArgs e)
+        {
             var config = new ActionSheetConfig()
             {
                 UseBottomSheet = true,
                 Destructive = new ActionSheetOption("Destroy", () => { }, "dotnet_bot.png"),
                 Cancel = new ActionSheetOption("Cancel", () => { }, "dotnet_bot.png"),
-                Message = "dfhdfjzdj dfh nld ldfnh d",
-                Title = "ShsilnAH sh",
+                Title = "Bottom Action sheet",
+                Message = "This is Bottom Action sheet",
                 Icon = "dotnet_bot.png",
                 Options = new ActionSheetOption[]
                 {
-                    new ActionSheetOption("ALgnsdlh sdh s", () => { }, "dotnet_bot.png"),
-                    new ActionSheetOption("LILsl.jh", () => { }, "dotnet_bot.png"),
-                    new ActionSheetOption("IAEShldfblo", () => { }, "dotnet_bot.png"),
+                    new ActionSheetOption("First option", () => { }, "dotnet_bot.png"),
+                    new ActionSheetOption("Second option", () => { }, "dotnet_bot.png"),
+                    new ActionSheetOption("Third option", () => { }, "dotnet_bot.png"),
                 }
             };
 
-            //UserDialogs.Instance.ActionSheet(config);
+            UserDialogs.Instance.ActionSheet(config);
+        }
+
+        private async void Button_Clicked_7(object sender, EventArgs e)
+        {
+            var res = await UserDialogs.Instance.ActionSheetAsync(
+                "This is Async Bottom Action sheet",
+                "Async Bottom Action sheet",
+                "Cancel",
+                "Destroy",
+                "dotnet_bot.png",
+                true,
+                default,
+                "First option",
+                "Second option",
+                "Third option"
+                );
+        }
+
+        private async void Button_Clicked_8(object sender, EventArgs e)
+        {
+            UserDialogs.Instance.ShowLoading("Loading HUD");
+            await Task.Delay(3000);
+            UserDialogs.Instance.HideHud();
+
+            var hudDialog = UserDialogs.Instance.Loading("Another loading HUD");
+            await Task.Delay(3000);
+            hudDialog.Update("Previous loading but with action", -1, null, "Cancel", cancel: () =>
+            {
+
+            });
+            await Task.Delay(10000);
+            hudDialog.Dispose();
+            // or
+            //UserDialogs.Instance.HideHud();
+        }
+
+        private async void Button_Clicked_9(object sender, EventArgs e)
+        {
+            var hudDialog = UserDialogs.Instance.Progress("Progress HUD");
+            await Task.Delay(3000);
+
+            for (int i = 0; i < 100; i++)
+            {
+                hudDialog.Update("Previous Progress but with action", i, null, "Cancel", cancel: () =>
+                {
+
+                });
+                await Task.Delay(500);
+            }
+            hudDialog.Dispose();
+            // or
+            //UserDialogs.Instance.HideHud();
+        }
+
+        private async void Button_Clicked_10(object sender, EventArgs e)
+        {
+            var hudDialog = UserDialogs.Instance.ShowHudImage("dotnet_bot.png", "Image HUD");
+            await Task.Delay(3000);
+            hudDialog.Dispose();
+
+            hudDialog = UserDialogs.Instance.ShowHudImage("dotnet_bot.png", "Another Image HUD");
+            await Task.Delay(3000);
+            hudDialog.Update("Previous Image but with action", -1, "dotnet_bot.png", "Cancel", cancel: () =>
+            {
+
+            });
+            await Task.Delay(10000);
+            hudDialog.Dispose();
+            // or
+            //UserDialogs.Instance.HideHud();
+        }
+
+        private void Button_Clicked_11(object sender, EventArgs e)
+        {
+            UserDialogs.Instance.ShowToast(new ToastConfig()
+            {
+                Icon = "dotnet_bot.png",
+                Message = "This is toast notification"
+            });
+        }
+
+        private void Button_Clicked_12(object sender, EventArgs e)
+        {
+            UserDialogs.Instance.ShowSnackbar(new SnackbarConfig()
+            {
+                Icon = "dotnet_bot.png",
+                Message = "This is a Snackbar",
+                ActionText = "Understand",
+                ActionIcon = "dotnet_bot.png",
+                Action = type =>
+                {
+
+                }
+            });
+        }
+
+        private async void Button_Clicked_13(object sender, EventArgs e)
+        {
+            var res = await UserDialogs.Instance.ShowSnackbarAsync(new SnackbarConfig()
+            {
+                Icon = "dotnet_bot.png",
+                Message = "This is a Snackbar",
+                ActionText = "Understand",
+                ActionIcon = "dotnet_bot.png"
+            });
         }
     }
 }

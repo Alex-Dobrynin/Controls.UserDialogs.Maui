@@ -27,7 +27,7 @@ public class HudDialog : IHudDialog
             Image = image,
             AutoShow = show,
             MaskType = maskType ?? HudDialogConfig.DefaultMaskType,
-            OnCancel = onCancel
+            Cancel = onCancel
         });
     }
 
@@ -41,11 +41,11 @@ public class HudDialog : IHudDialog
             UIFont font;
             if (_config.FontFamily is not null)
             {
-                font = UIFont.FromName(_config.FontFamily, (float)HudDialogConfig.NegativeButtonFontSize);
+                font = UIFont.FromName(_config.FontFamily, (float)config.NegativeButtonFontSize);
             }
-            else font = UIFont.SystemFontOfSize((float)HudDialogConfig.NegativeButtonFontSize);
+            else font = UIFont.SystemFontOfSize((float)config.NegativeButtonFontSize);
 
-            _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, HudDialogConfig.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
+            _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
         }
     }
 
@@ -63,11 +63,11 @@ public class HudDialog : IHudDialog
 
             BeforeShow(hud);
             var percent = _config.PercentComplete / 100f;
-            if (_config.OnCancel is not null)
+            if (_config.Cancel is not null)
             {
                 hud.Show(
                     _config.CancelText,
-                    _config.OnCancel,
+                    _config.Cancel,
                     _config.Message,
                     percent,
                     _config.MaskType.ToNative()
@@ -107,17 +107,17 @@ public class HudDialog : IHudDialog
 
     private void BeforeShowImage(ProgressHUD hud)
     {
-        if (HudDialogConfig.MessageColor is not null)
+        if (_config.MessageColor is not null)
         {
-            hud.HudForegroundColor = HudDialogConfig.MessageColor.ToPlatform();
+            hud.HudForegroundColor = _config.MessageColor.ToPlatform();
         }
 
         UIFont font;
         if (_config.FontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)HudDialogConfig.MessageFontSize);
+            font = UIFont.FromName(_config.FontFamily, (float)_config.MessageFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)HudDialogConfig.MessageFontSize);
+        else font = UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
         hud.HudFont = font;
     }
@@ -125,17 +125,17 @@ public class HudDialog : IHudDialog
     private void AfterShowImage(ProgressHUD hud)
     {
         var toolbar = hud.Subviews[0];
-        toolbar.Layer.CornerRadius = HudDialogConfig.CornerRadius;
-        if (HudDialogConfig.BackgroundColor is not null)
+        toolbar.Layer.CornerRadius = _config.CornerRadius;
+        if (_config.BackgroundColor is not null)
         {
-            toolbar.BackgroundColor = HudDialogConfig.BackgroundColor.ToPlatform();
+            toolbar.BackgroundColor = _config.BackgroundColor.ToPlatform();
         }
 
         var bgView = toolbar.Subviews[0];
         bgView.Alpha = 0;
 
         bool isAlpha0 = bgView.Alpha == 0;
-        if(isAlpha0)
+        if (isAlpha0)
         {
 
         }
@@ -147,45 +147,45 @@ public class HudDialog : IHudDialog
         UIFont font;
         if (_config.FontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)HudDialogConfig.NegativeButtonFontSize);
+            font = UIFont.FromName(_config.FontFamily, (float)_config.NegativeButtonFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)HudDialogConfig.NegativeButtonFontSize);
+        else font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
 
-        if (_config.OnCancel is null) return;
+        if (_config.Cancel is null) return;
         if (toolbar.Subviews[3] is not UIButton button) return;
 
         _cnclBtn = button;
-        _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, HudDialogConfig.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
+        _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, _config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
     }
 
     private void BeforeShow(ProgressHUD hud)
     {
-        if (HudDialogConfig.MessageColor is not null)
+        if (_config.MessageColor is not null)
         {
-            hud.HudForegroundColor = HudDialogConfig.MessageColor.ToPlatform();
+            hud.HudForegroundColor = _config.MessageColor.ToPlatform();
         }
         hud.RingThickness = 4f;
         hud.RingRadius = 22f;
 
-        if (hud.Subviews.FirstOrDefault() is UIToolbar toolbar && HudDialogConfig.ProgressColor is not null)
+        if (hud.Subviews.FirstOrDefault() is UIToolbar toolbar && _config.ProgressColor is not null)
         {
             var layers = toolbar.Layer.Sublayers.OfType<CAShapeLayer>().ToList();
             if (layers.Count > 0)
             {
                 var rimLayer = layers[0];
-                rimLayer.StrokeColor = HudDialogConfig.ProgressColor.WithAlpha(0.3f).ToPlatform().CGColor;
+                rimLayer.StrokeColor = _config.ProgressColor.WithAlpha(0.3f).ToPlatform().CGColor;
 
                 var barLayer = layers[1];
-                barLayer.StrokeColor = HudDialogConfig.ProgressColor.ToPlatform().CGColor;
+                barLayer.StrokeColor = _config.ProgressColor.ToPlatform().CGColor;
             }
         }
 
         UIFont font;
         if (_config.FontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)HudDialogConfig.MessageFontSize);
+            font = UIFont.FromName(_config.FontFamily, (float)_config.MessageFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)HudDialogConfig.MessageFontSize);
+        else font = UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
         hud.HudFont = font;
     }
@@ -193,34 +193,34 @@ public class HudDialog : IHudDialog
     private void AfterShow(ProgressHUD hud)
     {
         var toolbar = hud.Subviews[0];
-        toolbar.Layer.CornerRadius = HudDialogConfig.CornerRadius;
-        if (HudDialogConfig.BackgroundColor is not null)
+        toolbar.Layer.CornerRadius = _config.CornerRadius;
+        if (_config.BackgroundColor is not null)
         {
-            toolbar.BackgroundColor = HudDialogConfig.BackgroundColor.ToPlatform();
+            toolbar.BackgroundColor = _config.BackgroundColor.ToPlatform();
         }
 
         var bgView = toolbar.Subviews[0];
         bgView.Alpha = 0;
 
         var indicator = toolbar.Subviews.Last() as UIActivityIndicatorView;
-        if (HudDialogConfig.LoaderColor is not null)
+        if (_config.LoaderColor is not null)
         {
-            indicator.Color = HudDialogConfig.LoaderColor.ToPlatform();
+            indicator.Color = _config.LoaderColor.ToPlatform();
         }
         indicator.Transform = CGAffineTransform.MakeScale(1.3f, 1.3f);
 
         UIFont font;
         if (_config.FontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)HudDialogConfig.NegativeButtonFontSize);
+            font = UIFont.FromName(_config.FontFamily, (float)_config.NegativeButtonFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)HudDialogConfig.NegativeButtonFontSize);
+        else font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
 
-        if (_config.OnCancel is null) return;
+        if (_config.Cancel is null) return;
         if (toolbar.Subviews[3] is not UIButton button) return;
 
         _cnclBtn = button;
-        _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, HudDialogConfig.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
+        _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, _config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
     }
 
     public void Hide()
