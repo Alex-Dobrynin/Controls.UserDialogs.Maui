@@ -6,8 +6,6 @@ using Android.Text;
 using Android.Views;
 using Android.Widget;
 
-using AndroidHUD;
-
 using Google.Android.Material.Snackbar;
 
 using Microsoft.Maui.Platform;
@@ -42,7 +40,7 @@ public class SnackbarBuilder
             snackbar.SetTextColor(config.MessageColor.ToInt());
         }
 
-        if (config.Action?.Action is not null)
+        if (config.Action is not null)
         {
             SetupSnackbarAction(activity, snackbar, config);
         }
@@ -98,13 +96,13 @@ public class SnackbarBuilder
     {
         CountDownTimer cd = null;
 
-        if (config.Action.ShowCountDown is true)
+        if (config.ShowCountDown)
         {
             cd = PrepareProgress(activity, snackbar, config);
         }
 
-        var text = new SpannableString(config.Action.Text);
-        text.SetSpan(new LetterSpacingSpan(0), 0, config.Action.Text.Length, SpanTypes.ExclusiveExclusive);
+        var text = new SpannableString(config.ActionText);
+        text.SetSpan(new LetterSpacingSpan(0), 0, config.ActionText.Length, SpanTypes.ExclusiveExclusive);
 
         if (config.PositiveButtonTextColor is not null)
         {
@@ -113,7 +111,7 @@ public class SnackbarBuilder
         snackbar.SetAction(text, v =>
         {
             cd?.Cancel();
-            config.Action.Action();
+            config.Action?.Invoke(SnackbarActionType.UserInteraction);
         });
 
         var l = (snackbar.View as Snackbar.SnackbarLayout).GetChildAt(0) as SnackbarContentLayout;
@@ -121,9 +119,9 @@ public class SnackbarBuilder
         button.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)config.PositiveButtonFontSize);
         button.SetTypeface(_typeface, TypefaceStyle.Normal);
 
-        if (config.Action.Icon is null) return;
+        if (config.Icon is null) return;
 
-        var icon = GetIcon(config.Action.Icon);
+        var icon = GetIcon(config.Icon);
         icon.ScaleTo(22);
         button.SetCompoundDrawables(icon, null, null, null);
     }
@@ -140,48 +138,40 @@ public class SnackbarBuilder
     {
         var l = (snackbar.View as Snackbar.SnackbarLayout).GetChildAt(0) as SnackbarContentLayout;
 
-        var lParams = new LinearLayout.LayoutParams(DpToPixels(24), DpToPixels(24));
-        lParams.SetMargins(0, 0, 0, 0);
-        lParams.Gravity = GravityFlags.Center;
-
-        var wheel = new ProgressWheel(activity)
+        var lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent)
         {
-            RimWidth = DpToPixels(2),
-            BarWidth = DpToPixels(2),
-            RimColor = Android.Graphics.Color.Transparent,
-            BarColor = (config.PositiveButtonTextColor ?? Colors.White).ToPlatform(),
-            LayoutParameters = lParams
+            Gravity = GravityFlags.Center
         };
 
-        wheel.SetPadding(0, 0, 0, 0);
+        var text = new TextView(activity);
+        text.SetTypeface(_typeface, TypefaceStyle.Normal);
+        text.SetTextColor(config.PositiveButtonTextColor.ToPlatform());
+        text.Text = "" + Math.Round(config.Duration.TotalSeconds);
+        text.LayoutParameters = lParams;
 
-        l.AddView(wheel);
+        l.AddView(text);
 
-        return new CountDown((long)config.Duration.TotalMilliseconds, 200, wheel).Start();
+        return new CountDown((long)config.Duration.TotalMilliseconds, 500, text).Start();
     }
 
     private class CountDown : CountDownTimer
     {
-        private readonly long _millisInFuture;
-        private readonly ProgressWheel _wheel;
+        private readonly TextView _text;
 
-        public CountDown(long millisInFuture, long countDownInterval, ProgressWheel wheel)
+        public CountDown(long millisInFuture, long countDownInterval, TextView text)
             : base(millisInFuture, countDownInterval)
         {
-            _millisInFuture = millisInFuture;
-            _wheel = wheel;
+            _text = text;
         }
 
         public override void OnFinish()
         {
-            _wheel.SetProgress(0);
+            _text.Text = "0";
         }
 
         public override void OnTick(long millisUntilFinished)
         {
-            var percent = (double)millisUntilFinished / _millisInFuture * 100;
-
-            _wheel.SetProgress((int)percent);
+            _text.Text = "" + Math.Round(millisUntilFinished * 1000.0);
         }
     }
 }

@@ -76,11 +76,29 @@ public partial class UserDialogsImplementation
             snackBar = new SnackbarBuilder().Build(activity, config);
 
             snackBar.Show();
+
+            var timer = new System.Timers.Timer
+            {
+                Interval = config.Duration.TotalMilliseconds,
+                AutoReset = false
+            };
+
+            var endOfAnimation = DateTime.Now + config.Duration;
+            timer.Elapsed += (s, a) =>
+            {
+                timer.Stop();
+                activity.SafeRunOnUi(() => config.Action?.Invoke(SnackbarActionType.Timeout));
+            };
+            timer.Start();
         });
         return new DisposableAction(() =>
         {
             if (snackBar.IsShown)
-                activity.SafeRunOnUi(snackBar.Dismiss);
+                activity.SafeRunOnUi(() =>
+                {
+                    snackBar.Dismiss();
+                    config.Action?.Invoke(SnackbarActionType.Cancelled);
+                });
         });
     }
 

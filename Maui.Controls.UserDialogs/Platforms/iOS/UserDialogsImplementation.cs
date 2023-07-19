@@ -1,5 +1,7 @@
 ﻿using CoreGraphics;
 
+using Microsoft.Maui.Platform;
+
 using UIKit;
 
 namespace Maui.Controls.UserDialogs;
@@ -23,34 +25,77 @@ public partial class UserDialogsImplementation
 
     public virtual partial IDisposable ShowToast(ToastConfig config)
     {
-        var window = GetDefaultWindow();
+        Snackbar bar = null;
+        var app = UIApplication.SharedApplication;
 
-        // Calculate the desired frame for your view
-        var margin = 20; // Adjust the margin value as needed
-        var viewWidth = window.Bounds.Width - (margin * 2);
-        var viewHeight = 50; // Adjust the height as needed
+        app.SafeInvokeOnMainThread(() =>
+        {
+            bar = new Snackbar()
+            {
+                Message = config.Message,
+                Icon = config.Icon,
+                MessageFontSize = (float)config.MessageFontSize,
+                CornerRadius = config.CornerRadius,
+                DismissDuration = config.Duration,
+                FontFamily = config.FontFamily,
+                Position = config.Position.ToNative(),
+            };
+            bar.BackgroundColor ??= config.BackgroundColor.ToPlatform();
+            bar.MessageColor ??= config.MessageColor.ToPlatform();
+            bar.Show();
+        });
 
-        // Create your view and set its frame
-        var customView = new UIView(new CGRect(0, 0, viewWidth, viewHeight));
-        customView.BackgroundColor = UIColor.Red; // Set your desired background color
-
-        // Set the view's center to the bottom of the window
-        customView.Center = new CGPoint(window.Bounds.GetMidX(), window.Bounds.Height - (viewHeight / 2) - margin);
-
-        // Add the view to the window
-        window.AddSubview(customView);
-
-        return null;
+        return new DisposableAction(() => app.SafeInvokeOnMainThread(() => bar.Dismiss()));
     }
 
     public virtual partial IDisposable ShowSnackbar(SnackbarConfig config)
     {
-        return null;
+        Snackbar bar = null;
+        var app = UIApplication.SharedApplication;
+
+        app.SafeInvokeOnMainThread(() =>
+        {
+            bar = new Snackbar
+            {
+                Message = config.Message,
+                Icon = config.Icon,
+                MessageFontSize = (float)config.MessageFontSize,
+                CornerRadius = config.CornerRadius,
+                DismissDuration = config.Duration,
+                FontFamily = config.FontFamily,
+                Position = config.Position.ToNative(),
+                Style = Style.Snackbar,
+                ActionText = config.ActionText,
+                ActionIcon = config.ActionIcon,
+                ShowCountDown = config.ShowCountDown,
+                Action = () =>
+                {
+                    config.Action?.Invoke(SnackbarActionType.UserInteraction);
+                }
+            };
+            bar.BackgroundColor = config.BackgroundColor?.ToPlatform() ?? bar.BackgroundColor;
+            bar.MessageColor = config.MessageColor?.ToPlatform() ?? bar.MessageColor;
+            bar.ActionColor = config.PositiveButtonTextColor?.ToPlatform() ?? bar.ActionColor;
+            bar.Show();
+            bar.Timeout += (s, a) =>
+            {
+                config.Action?.Invoke(SnackbarActionType.Timeout);
+            };
+        });
+
+        return new DisposableAction(() => app.SafeInvokeOnMainThread(() =>
+        {
+            bar.Dismiss();
+            config.Action?.Invoke(SnackbarActionType.Cancelled);
+        }));
     }
 
     protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config)
     {
-        return null;
+        var dialog = new HudDialog();
+        dialog.Update(config);
+
+        return dialog;
     }
 
     protected virtual IDisposable Present(Func<UIAlertController> alertFunc)
@@ -84,34 +129,5 @@ public partial class UserDialogsImplementation
 
         app.InvokeOnMainThread(() => top.PresentViewController(controller, true, null));
         return new DisposableAction(() => app.SafeInvokeOnMainThread(() => controller.DismissViewController(true, null)));
-    }
-
-    public static UIWindow GetDefaultWindow()
-    {
-        UIWindow window = null;
-
-        if (OperatingSystem.IsMacCatalystVersionAtLeast(15) || OperatingSystem.IsIOSVersionAtLeast(15))
-        {
-            foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
-            {
-                if (scene is UIWindowScene windowScene)
-                {
-                    window = windowScene.KeyWindow;
-
-                    window ??= windowScene?.Windows?.LastOrDefault();
-                }
-            }
-        }
-        else if (OperatingSystem.IsMacCatalystVersionAtLeast(13) || OperatingSystem.IsIOSVersionAtLeast(13))
-        {
-            window = UIApplication.SharedApplication.Windows?.LastOrDefault();
-        }
-        else
-        {
-            window = UIApplication.SharedApplication.KeyWindow
-                ?? UIApplication.SharedApplication.Windows?.LastOrDefault();
-        }
-
-        return window;
     }
 }

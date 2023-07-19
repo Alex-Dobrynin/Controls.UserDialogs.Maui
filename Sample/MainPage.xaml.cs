@@ -21,14 +21,43 @@ namespace Sample
                 CounterBtn.Text = $"Clicked {count} times";
 
             //await UserDialogs.Instance.AlertAsync("sjbknsdkbvlsdbds", "Title", "Ok");
-            await UserDialogs.Instance.ConfirmAsync("sjbknsdkbvlsdbds", "Title", "Ok", "Cancel");
+            //await UserDialogs.Instance.ConfirmAsync("sjbknsdkbvlsdbds", "Title", "Ok", "Cancel");
 
-            //UserDialogs.Instance.ShowLoading("aghah", null, MaskType.Gradient);
-            //await Task.Delay(2000);
+            var p = UserDialogs.Instance.ShowHudImage("dotnet_bot.png", "dskjbnskdbsalv");
 
-            //UserDialogs.Instance.HideHud();
+            await Task.Delay(3000);
 
-            //UserDialogs.Instance.ShowToast(new ToastConfig() { Icon = "dotnet_bot.png", Message = "agasgahadhs" });
+            for (int i = 0; i < 100; i++)
+            {
+                p.Update(i.ToString(), i);
+                await Task.Delay(1000);
+            }
+
+            //await Task.Delay(4000);
+            //p.Update("rjvrijr", "ejvmrjb", 50);
+            //await Task.Delay(4000);
+
+            //p.Update("ckjfevrbr", "ejvmrjb", 60);
+            //await Task.Delay(4000);
+
+            //p.Update("kce dckevefb", "ejvmrjb", 70);
+
+            await Task.Delay(10000);
+
+            UserDialogs.Instance.HideHud();
+
+            //UserDialogs.Instance.ShowToast(new ToastConfig() { Icon = "dotnet_bot.png", Message = "agasgahadhskjdsg skljh dfkbs dbkjsdbdfkjb djfb dslj sjfb dlfb odjfb d j sjdf vod bjdf bjsvodf bjd bks" });
+            //UserDialogs.Instance.ShowSnackbar(new SnackbarConfig()
+            //{
+            //    Icon = "dotnet_bot.png",
+            //    Message = "a kdjbgd sogd of bodfnbljndfbl elfg ledgli jdh elfigj ergij eflg df gelg erlgjerl elerjg erlhkhj er elrkj erhhl kerjhh ",
+            //    ActionText = "Cancel",
+            //    ActionIcon = "dotnet_bot.png",
+            //    Action = type =>
+            //    {
+
+            //    }
+            //});
             //await Task.Delay(3000);
             //UserDialogs.Instance.ShowSnackbar(
             //    new SnackbarConfig()
@@ -61,7 +90,7 @@ namespace Sample
                 }
             };
 
-            UserDialogs.Instance.ActionSheet(config);
+            //UserDialogs.Instance.ActionSheet(config);
         }
     }
 }

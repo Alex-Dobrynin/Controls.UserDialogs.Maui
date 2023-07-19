@@ -8,6 +8,14 @@ namespace Maui.Controls.UserDialogs;
 
 public class ActionSheetBuilder
 {
+    public static double DefaultOptionIconSize { get; set; } = 24;
+    public static double DefaultDestructiveIconSize { get; set; } = 24;
+    public static double DefaultCancelIconSize { get; set; } = 24;
+
+    public double OptionIconSize { get; set; } = DefaultOptionIconSize;
+    public double DestructiveIconSize { get; set; } = DefaultDestructiveIconSize;
+    public double CancelIconSize { get; set; } = DefaultCancelIconSize;
+
     public virtual UIAlertController Build(ActionSheetConfig config)
     {
         var alert = UIAlertController.Create("", "", UIAlertControllerStyle.ActionSheet);
@@ -68,7 +76,7 @@ public class ActionSheetBuilder
 
         if (option.Icon is not null)
         {
-            var img = new UIImage(option.Icon).ScaleTo(24);
+            var img = new UIImage(option.Icon).ScaleTo(OptionIconSize);
             action.SetValueForKey(img, new NSString("image"));
         }
 
@@ -86,7 +94,7 @@ public class ActionSheetBuilder
 
         if (config.Destructive.Icon is not null)
         {
-            var img = new UIImage(config.Destructive.Icon).ScaleTo(24);
+            var img = new UIImage(config.Destructive.Icon).ScaleTo(DestructiveIconSize);
             action.SetValueForKey(img, new NSString("image"));
         }
 
@@ -104,7 +112,7 @@ public class ActionSheetBuilder
 
         if (config.Cancel.Icon is not null)
         {
-            var img = new UIImage(config.Cancel.Icon).ScaleTo(24);
+            var img = new UIImage(config.Cancel.Icon).ScaleTo(CancelIconSize);
             action.SetValueForKey(img, new NSString("image"));
         }
 

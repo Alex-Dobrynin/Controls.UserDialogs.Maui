@@ -32,12 +32,10 @@ public class SnackbarConfig
     public string Message { get; set; }
     public string Icon { get; set; }
     public TimeSpan Duration { get; set; } = DefaultDuration;
-    public SnackbarAction Action { get; set; }
-
-    public SnackbarConfig()
-    {
-
-    }
+    public Action<SnackbarActionType> Action { get; set; }
+    public string ActionText { get; set; }
+    public string ActionIcon { get; set; }
+    public bool ShowCountDown { get; set; }
 
     public SnackbarConfig SetMessage(string message)
     {
@@ -51,18 +49,17 @@ public class SnackbarConfig
         return this;
     }
 
+    public SnackbarConfig SetAction(Action<SnackbarActionType> action)
+    {
+        this.Action = action;
+        return this;
+    }
+
     public SnackbarConfig SetDuration(int millis) => this.SetDuration(TimeSpan.FromMilliseconds(millis));
 
     public SnackbarConfig SetDuration(TimeSpan? duration = null)
     {
         this.Duration = duration ?? DefaultDuration;
-        return this;
-    }
-
-    public SnackbarConfig SetAction(SnackbarAction action)
-    {
-        this.Action = action;
-
         return this;
     }
 }

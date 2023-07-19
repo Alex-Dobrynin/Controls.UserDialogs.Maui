@@ -27,6 +27,15 @@ public static class Extensions
         };
     }
 
+    public static Position ToNative(this ToastPosition position)
+    {
+        return position switch
+        {
+            ToastPosition.Bottom => Position.Bottom,
+            ToastPosition.Top => Position.Top,
+        };
+    }
+
     public static UIImage ScaleTo(this UIImage image, double newSize)
     {
         double width = image.Size.Width;
@@ -47,5 +56,50 @@ public static class Extensions
         }).ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
 
         return resizedImage;
+    }
+
+    public static UIWindow GetDefaultWindow()
+    {
+        UIWindow window = null;
+
+        if (OperatingSystem.IsMacCatalystVersionAtLeast(15) || OperatingSystem.IsIOSVersionAtLeast(15))
+        {
+            foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
+            {
+                if (scene is UIWindowScene windowScene)
+                {
+                    window = windowScene.KeyWindow;
+
+                    window ??= windowScene?.Windows?.LastOrDefault();
+                }
+            }
+        }
+        else
+        {
+            window = UIApplication.SharedApplication.Windows?.LastOrDefault();
+        }
+
+        return window;
+    }
+
+    public static BigTed.MaskType ToNative(this MaskType maskType)
+    {
+        switch (maskType)
+        {
+            case MaskType.Black:
+                return BigTed.MaskType.Black;
+
+            case MaskType.Clear:
+                return BigTed.MaskType.Clear;
+
+            case MaskType.Gradient:
+                return BigTed.MaskType.Black;
+
+            case MaskType.None:
+                return BigTed.MaskType.None;
+
+            default:
+                throw new ArgumentException("Invalid Mask Type");
+        }
     }
 }

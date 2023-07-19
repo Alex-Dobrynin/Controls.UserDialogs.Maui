@@ -18,20 +18,39 @@ namespace Maui.Controls.UserDialogs;
 public class HudDialog : IHudDialog
 {
     private HudDialogConfig _config;
-    private Action<int> _onProgressChange;
-    private Action<string> _onMessageChange;
-    private Action<Action> _onCancelChange;
+    private Android.Widget.Button _cnclBtn;
+    private TextView _progressText;
+
+    public void Update(string message = null, int percentComplete = -1, string image = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null)
+    {
+        this.Update(new HudDialogConfig()
+        {
+            Message = message,
+            CancelText = cancelText ?? HudDialogConfig.DefaultCancelText,
+            PercentComplete = percentComplete,
+            Image = image,
+            AutoShow = show,
+            MaskType = maskType ?? HudDialogConfig.DefaultMaskType,
+            OnCancel = onCancel
+        });
+    }
 
     public void Update(HudDialogConfig config)
     {
         _config = config;
         if (_config.AutoShow) Show();
 
-        if (config.PercentComplete == -1) _onProgressChange = null;
+        if (config.PercentComplete == -1) _progressText = null;
 
-        _onProgressChange?.Invoke(config.PercentComplete);
-        _onMessageChange?.Invoke(config.Message);
-        _onCancelChange?.Invoke(config.OnCancel);
+        if (_progressText is not null)
+        {
+            _progressText.Text = $"{config.PercentComplete}%";
+        }
+        if (_cnclBtn is not null)
+        {
+            _cnclBtn.Clickable = config.OnCancel is not null;
+            _cnclBtn.Visibility = config.OnCancel is null ? ViewStates.Gone : ViewStates.Visible;
+        }
     }
 
     public void Show()
@@ -44,7 +63,7 @@ public class HudDialog : IHudDialog
 
         AndHUD.Shared.Show(
             Platform.CurrentActivity,
-            _config.Title,
+            _config.Message,
             _config.PercentComplete,
             _config.MaskType.ToNative(),
             null,
@@ -63,7 +82,7 @@ public class HudDialog : IHudDialog
         AndHUD.Shared.ShowImage(
             Platform.CurrentActivity,
             imgId,
-            _config.Title,
+            _config.Message,
             _config.MaskType.ToNative(),
             null,
             null,
@@ -89,49 +108,21 @@ public class HudDialog : IHudDialog
         var textViewId = Platform.CurrentActivity.Resources.GetIdentifier("textViewStatus", "id", Platform.CurrentActivity.PackageName);
         var textView = dialog.FindViewById<TextView>(textViewId);
 
-        textView.SetTextColor(HudDialogConfig.TitleColor.ToPlatform());
-        textView.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.TitleFontSize);
+        textView.SetTextColor(HudDialogConfig.MessageColor.ToPlatform());
+        textView.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.MessageFontSize);
         textView.SetTypeface(typeFace, TypefaceStyle.Normal);
 
         var parent = textView.Parent as RelativeLayout;
 
         parent.Background = GetDialogBackground(_config);
-        int messageViewId = Android.Views.View.GenerateViewId();
-        if (_config.Message is not null)
-        {
-            var rParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WrapContent, RelativeLayout.LayoutParams.WrapContent);
-            rParams.AddRule(LayoutRules.Below, textView.Id);
-            rParams.AddRule(LayoutRules.CenterHorizontal);
-
-            var messageView = new TextView(Platform.CurrentActivity)
-            {
-                Text = _config.Message,
-                TextAlignment = Android.Views.TextAlignment.Gravity,
-                Gravity = GravityFlags.Center,
-                LayoutParameters = rParams,
-                Id = messageViewId
-            };
-            messageView.SetTextColor(HudDialogConfig.MessageColor.ToPlatform());
-            messageView.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.MessageFontSize);
-            messageView.SetTypeface(typeFace, TypefaceStyle.Normal);
-
-            _onMessageChange = m =>
-            {
-                messageView.Visibility = m is null ? ViewStates.Gone : ViewStates.Visible;
-
-                messageView.Text = m;
-            };
-
-            parent.AddView(messageView);
-        }
 
         var spinnerId = Platform.CurrentActivity.Resources.GetIdentifier("loadingProgressBar", "id", Platform.CurrentActivity.PackageName);
         var progressBar = dialog.FindViewById<Android.Widget.ProgressBar>(spinnerId);
 
         if (progressBar is not null)
         {
-            progressBar.LayoutParameters.Width = DpToPixels(60);
-            progressBar.LayoutParameters.Height = DpToPixels(60);
+            progressBar.LayoutParameters.Width = DpToPixels(50);
+            progressBar.LayoutParameters.Height = DpToPixels(50);
 
             var spinnerDraw = progressBar.IndeterminateDrawable;
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
@@ -157,7 +148,7 @@ public class HudDialog : IHudDialog
             rParams.AddRule(LayoutRules.AlignRight, progressWheel.Id);
             rParams.AddRule(LayoutRules.CenterHorizontal);
 
-            var progressText = new TextView(Platform.CurrentActivity)
+            _progressText = new TextView(Platform.CurrentActivity)
             {
                 Text = $"{_config.PercentComplete}%",
                 TextAlignment = Android.Views.TextAlignment.Gravity,
@@ -165,27 +156,22 @@ public class HudDialog : IHudDialog
                 LayoutParameters = rParams,
             };
 
-            progressText.SetTextColor(HudDialogConfig.ProgressColor.ToPlatform());
-            progressText.SetTextSize(Android.Util.ComplexUnitType.Sp, 14f);
-            progressText.SetTypeface(typeFace, TypefaceStyle.Normal);
+            _progressText.SetTextColor(HudDialogConfig.ProgressColor.ToPlatform());
+            _progressText.SetTextSize(Android.Util.ComplexUnitType.Sp, 14f);
+            _progressText.SetTypeface(typeFace, TypefaceStyle.Normal);
 
-            _onProgressChange = p =>
-            {
-                progressText.Text = $"{p}%";
-            };
-
-            parent.AddView(progressText);
+            parent.AddView(_progressText);
         }
 
         if (_config.OnCancel is not null)
         {
-            int id = _config.Message is not null ? messageViewId : textViewId;
+            int id = textViewId;
 
             var rParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WrapContent, RelativeLayout.LayoutParams.WrapContent);
             rParams.AddRule(LayoutRules.Below, id);
             rParams.AddRule(LayoutRules.CenterHorizontal);
 
-            var cnclBtn = new Android.Widget.Button(Platform.CurrentActivity)
+            _cnclBtn = new Android.Widget.Button(Platform.CurrentActivity)
             {
                 Text = _config.CancelText,
                 TextAlignment = Android.Views.TextAlignment.Gravity,
@@ -193,22 +179,16 @@ public class HudDialog : IHudDialog
                 LayoutParameters = rParams
             };
 
-            cnclBtn.SetBackgroundColor(Colors.Transparent.ToPlatform());
-            cnclBtn.SetTextColor(HudDialogConfig.NegativeButtonTextColor.ToPlatform());
-            cnclBtn.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.NegativeButtonFontSize);
-            cnclBtn.SetTypeface(typeFace, TypefaceStyle.Normal);
-            cnclBtn.Click += (s, e) =>
+            _cnclBtn.SetBackgroundColor(Colors.Transparent.ToPlatform());
+            _cnclBtn.SetTextColor(HudDialogConfig.NegativeButtonTextColor.ToPlatform());
+            _cnclBtn.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)HudDialogConfig.NegativeButtonFontSize);
+            _cnclBtn.SetTypeface(typeFace, TypefaceStyle.Normal);
+            _cnclBtn.Click += (s, e) =>
             {
                 OnCancelClick();
             };
 
-            _onCancelChange = a =>
-            {
-                cnclBtn.Clickable = a is not null;
-                cnclBtn.Visibility = a is null ? ViewStates.Gone : ViewStates.Visible;
-            };
-
-            parent.AddView(cnclBtn);
+            parent.AddView(_cnclBtn);
         }
     }
 
@@ -234,9 +214,8 @@ public class HudDialog : IHudDialog
     {
         try
         {
-            _onProgressChange = null;
-            _onMessageChange = null;
-            _onCancelChange = null;
+            _progressText = null;
+            _cnclBtn = null;
             AndHUD.Shared.Dismiss(Platform.CurrentActivity);
         }
         catch (Exception ex)

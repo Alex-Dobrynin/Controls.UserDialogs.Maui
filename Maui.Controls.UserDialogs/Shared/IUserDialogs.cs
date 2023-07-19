@@ -18,15 +18,17 @@ public interface IUserDialogs
     Task<string> ActionSheetAsync(string message = null, string title = null, string cancel = null, string destructive = null, string icon = null, bool useBottomSheet = true, CancellationToken? cancelToken = null, params string[] buttons);
 
 
-    void ShowLoading(string title = null, string message = null, MaskType? maskType = null);
+    void ShowLoading(string message = null, string title = null, MaskType? maskType = null);
     void HideHud();
-    IHudDialog Loading(string title = null, string message = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null);
-    IHudDialog Progress(string title = null, string message = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null);
-    IHudDialog ShowHudImage(string image, string title = null, string message = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null);
+    IHudDialog Loading(string message = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null);
+    IHudDialog Progress(string message = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null);
+    IHudDialog ShowHudImage(string image, string message = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null);
     IHudDialog CreateOrUpdateHud(HudDialogConfig config);
 
     IDisposable ShowToast(string message, string icon = null, TimeSpan? dismissTimer = null);
     IDisposable ShowToast(ToastConfig cfg);
-    IDisposable ShowSnackbar(string message, string icon = null, TimeSpan? dismissTimer = null, SnackbarAction action = null);
+    IDisposable ShowSnackbar(string message, string icon = null, TimeSpan? dismissTimer = null, string actionText = null, string actionIcon = null, bool showCountDown = false, Action<SnackbarActionType> action = null);
     IDisposable ShowSnackbar(SnackbarConfig config);
+    Task<SnackbarActionType> ShowSnackbarAsync(string message, string icon = null, TimeSpan? dismissTimer = null, string actionText = null, string actionIcon = null, bool showCountDown = false, CancellationToken? cancelToken = null);
+    Task<SnackbarActionType> ShowSnackbarAsync(SnackbarConfig config, CancellationToken? cancelToken = null);
 }
