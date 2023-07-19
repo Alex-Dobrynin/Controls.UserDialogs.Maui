@@ -28,7 +28,8 @@ public class Snackbar : UIView
     public static double DefaultIconSize { get; set; } = 26;
     public static double DefaultActionIconSize { get; set; } = 24;
     public static Thickness DefaultPadding { get; set; } = new Thickness(20);
-    public static Thickness DefaultMargin { get; set; } = new Thickness(20, 50);
+    public static Thickness DefaultToastMargin { get; set; } = new Thickness(20, 50, 20, 80);
+    public static Thickness DefaultSnackbarMargin { get; set; } = new Thickness(20, 50, 20, 30);
     public static bool DefaultUseBlur { get; set; } = true;
     public static bool DefaultUseAnimation { get; set; } = true;
     public static TimeSpan DefaultAnimationDuration { get; set; } = TimeSpan.FromMilliseconds(250);
@@ -41,7 +42,8 @@ public class Snackbar : UIView
     public double IconSize { get; set; } = DefaultIconSize;
     public double ActionIconSize { get; set; } = DefaultActionIconSize;
     public Thickness Padding { get; set; } = DefaultPadding;
-    public Thickness Margin { get; set; } = DefaultMargin;
+    public Thickness ToastMargin { get; set; } = DefaultToastMargin;
+    public Thickness SnackbarMargin { get; set; } = DefaultSnackbarMargin;
     public float MessageFontSize { get; set; } = 16f;
     public float ActionFontSize { get; set; } = 20f;
     public string Message { get; set; }
@@ -117,8 +119,16 @@ public class Snackbar : UIView
                 toast.BottomAnchor.ConstraintEqualTo(this.BottomAnchor, (float)-Padding.Bottom),
             });
 
-            constraints.Add(this.LeadingAnchor.ConstraintGreaterThanOrEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)Margin.Left));
-            constraints.Add(this.TrailingAnchor.ConstraintLessThanOrEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)Margin.Right));
+            constraints.Add(this.LeadingAnchor.ConstraintGreaterThanOrEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)ToastMargin.Left));
+            constraints.Add(this.TrailingAnchor.ConstraintLessThanOrEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)ToastMargin.Right));
+            if (Position is Position.Bottom)
+            {
+                constraints.Add(this.BottomAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.BottomAnchor, (float)-ToastMargin.Bottom));
+            }
+            else
+            {
+                constraints.Add(this.TopAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TopAnchor, (float)ToastMargin.Top));
+            }
         }
         else
         {
@@ -134,17 +144,20 @@ public class Snackbar : UIView
                 snack.BottomAnchor.ConstraintEqualTo(this.BottomAnchor, (float)-Padding.Bottom),
             });
 
-            constraints.Add(this.LeadingAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)Margin.Left));
-            constraints.Add(this.TrailingAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)-Margin.Right));
+            constraints.Add(this.LeadingAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)SnackbarMargin.Left));
+            constraints.Add(this.TrailingAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)-SnackbarMargin.Right));
+
+            if (Position is Position.Bottom)
+            {
+                constraints.Add(this.BottomAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.BottomAnchor, (float)-SnackbarMargin.Bottom));
+            }
+            else
+            {
+                constraints.Add(this.TopAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TopAnchor, (float)SnackbarMargin.Top));
+            }
         }
 
         if (UseAnimation) this.Alpha = 0;
-
-        if (Position is Position.Bottom)
-        {
-            constraints.Add(this.BottomAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.BottomAnchor, (float)-Margin.Bottom));
-        }
-        else constraints.Add(this.TopAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TopAnchor, (float)Margin.Top));
 
         NSLayoutConstraint.ActivateConstraints(constraints.ToArray());
 

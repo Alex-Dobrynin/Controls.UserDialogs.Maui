@@ -156,11 +156,13 @@ namespace Sample
             hudDialog.Dispose();
 
             hudDialog = UserDialogs.Instance.ShowHudImage("dotnet_bot.png", "Another Image HUD");
+#if ANDROID
             await Task.Delay(3000);
             hudDialog.Update("Previous Image but with action", -1, "dotnet_bot.png", "Cancel", cancel: () =>
             {
 
             });
+#endif
             await Task.Delay(10000);
             hudDialog.Dispose();
             // or

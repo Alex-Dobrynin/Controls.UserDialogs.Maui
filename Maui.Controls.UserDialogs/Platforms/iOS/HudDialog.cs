@@ -202,7 +202,7 @@ public class HudDialog : IHudDialog
         var bgView = toolbar.Subviews[0];
         bgView.Alpha = 0;
 
-        var indicator = toolbar.Subviews.Last() as UIActivityIndicatorView;
+        var indicator = toolbar.Subviews.OfType<UIActivityIndicatorView>().FirstOrDefault();
         if (_config.LoaderColor is not null)
         {
             indicator.Color = _config.LoaderColor.ToPlatform();
@@ -217,7 +217,8 @@ public class HudDialog : IHudDialog
         else font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
 
         if (_config.Cancel is null) return;
-        if (toolbar.Subviews[3] is not UIButton button) return;
+        var button = toolbar.Subviews.OfType<UIButton>().FirstOrDefault();
+        if (button is null) return;
 
         _cnclBtn = button;
         _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, _config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
