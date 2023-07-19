@@ -1,8 +1,10 @@
-# <img src="userdialogs_maui_icon.png" width="70" height="70"/> MAUI Controls Userdialogs
+# <img src="userdialogs_maui_icon.png" width="70" height="70"/> Controls.Userdialogs.Maui
 
-### A cross platform library that allows you to call for standard user dialogs.
+#### A cross platform library that allows you to call for native user dialogs, which can by styled from your maui application anywhere anytime.
 
-## Since the original (Acr.UserDialogs) repo is out of support, this will give new breath to UserDialogs. It is more flexible to style your dialogs as you want. 
+Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
+
+##### Since the original (Acr.UserDialogs) repo is out of support, this will give new breath to UserDialogs. It is more flexible to style your dialogs as you want. 
 
 ## Supported Platforms
 
@@ -24,7 +26,7 @@
 
 To use, make sure you are using the latest version of .NET MAUI
 
-#### Add UseUserDialogs(() => { }) to your MauiProgram.cs file
+Add ```UseUserDialogs(() => { })``` to your MauiProgram.cs file
 
 ```csharp
 builder
@@ -54,7 +56,6 @@ builder
 
 * Android - Progress/Loading uses Redth's [AndHUD](https://github.com/Redth/AndHUD)
 * iOS - Progress/Loading uses Nic Wise's [BTProgressHUD](https://github.com/nicwise/BTProgressHUD)
-* iOS - Toasts powered by TTGSnackBar ported by @MarcBruins (https://github.com/MarcBruins/TTGSnackbar-Xamarin-iOS)
 
 # Frequently Asked Questions
 
@@ -69,7 +70,7 @@ builder
 
 
     ```csharp
-    public class MyCustomUserDialogs : Maui.Controls.UserDialogs.UserDialogImplementation 
+    public class MyCustomUserDialogs : Controls.UserDialogs.Maui.UserDialogImplementation 
     {
             public override ..
     }
@@ -83,9 +84,9 @@ builder
         .UseUserDialogs(() =>
         {
     #if ANDROID
-            Maui.Controls.UserDialogs.UserDialogs.Instance = new MyCustomUserDialogs(); //Android realization
+            Controls.UserDialogs.Maui.UserDialogs.Instance = new MyCustomUserDialogs(); //Android realization
     #else
-            Maui.Controls.UserDialogs.UserDialogs.Instance = new MyCustomUserDialogs(); //iOS realization
+            Controls.UserDialogs.Maui.UserDialogs.Instance = new MyCustomUserDialogs(); //iOS realization
     #endif
 
             //setup your default styles for dialogs
