@@ -9,7 +9,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>Maui.Controls.UserDialogs</Title>
+		<Title>Controls.UserDialogs.Maui</Title>
 		<Version>1.0.0</Version>
 		<Authors>Alex Dobrynin</Authors>
 		<Description>This is the updated version of Acr.Userdialogs. It supports latest version of .Net and you have an ability to style your dialogs as you want</Description>
@@ -19,6 +19,7 @@
 		<RepositoryUrl>https://github.com/Alex-Dobrynin/UserDialogs.Maui</RepositoryUrl>
 		<PackageTags>Maui;UserDialogs;Dialog;Popup;Snackbar;Toast;Loading;Progress</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
@@ -30,6 +31,10 @@
 
 	<ItemGroup>
 	  <None Include="..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\readme.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>

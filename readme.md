@@ -6,6 +6,8 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 
 ##### Since the original (Acr.UserDialogs) repo is out of support, this will give new breath to UserDialogs. It is more flexible to style your dialogs as you want. 
 
+[![NuGet](https://img.shields.io/nuget/v/Controls.UserDialogs.Maui.svg?maxAge=2592000)](https://www.nuget.org/packages/Controls.UserDialogs.Maui)
+
 ## Supported Platforms
 
 * .NET7 for Android (min 7.0)(major target 13.0)
@@ -19,7 +21,7 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 * Loading/Progress
 * Toast
 * Snackbar
-* [Sample](https://github.com/Alex-Dobrynin/Maui.Controls.UserDialogs/tree/develop/Sample)
+* [Sample](https://github.com/Alex-Dobrynin/Maui.Controls.UserDialogs/Sample)
 
 ### As for now it supports only Android and iOS. I don't have in plans to add new platforms. You are welcome to submit PR's for issues you may be having or for features you need and they will be reviewed.
 

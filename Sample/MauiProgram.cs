@@ -1,4 +1,4 @@
-﻿using Maui.Controls.UserDialogs;
+﻿using Controls.UserDialogs.Maui;
 
 using Microsoft.Extensions.Logging;
 

@@ -46,7 +46,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Maui.Controls.UserDialogs\Maui.Controls.UserDialogs.csproj" />
+	  <ProjectReference Include="..\Controls.UserDialogs.Maui\Controls.UserDialogs.Maui.csproj" />
 	</ItemGroup>
 
 </Project>
