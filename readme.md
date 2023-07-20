@@ -22,7 +22,7 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 * Loading/Progress
 * Toast
 * Snackbar
-* [Sample]([https://github.com/Alex-Dobrynin/Maui.Controls.UserDialogs/Sample](https://github.com/Alex-Dobrynin/Controls.UserDialogs.Maui/tree/master/Sample))
+* [Sample](https://github.com/Alex-Dobrynin/Controls.UserDialogs.Maui/tree/master/Sample)
 
 ### As for now it supports only Android and iOS. I don't have in plans to add new platforms. You are welcome to submit PR's for issues you may be having or for features you need and they will be reviewed.
 
