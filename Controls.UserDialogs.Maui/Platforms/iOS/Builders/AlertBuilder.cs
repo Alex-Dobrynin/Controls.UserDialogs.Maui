@@ -33,10 +33,23 @@ public class AlertBuilder
         {
             titleFont = UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
         }
-        else titleFont = UIFont.FromName(config.FontFamily, config.TitleFontSize);
+        else
+        {
+            var boldFontDescriptor = new UIFontDescriptor()
+                .CreateWithFamily(config.FontFamily)
+                .CreateWithTraits(UIFontDescriptorSymbolicTraits.Bold);
+            titleFont = UIFont.FromDescriptor(boldFontDescriptor, config.TitleFontSize);
+            //titleFont = UIFont.FromName(config.FontFamily, config.TitleFontSize);
+        }
 
         var attributedString = new NSMutableAttributedString(config.Title, titleFont, config.TitleColor?.ToPlatform());
 
+        //var boldFontDescriptor = new UIFontDescriptor()
+        //    .CreateWithFamily(config.FontFamily)
+        //    .CreateWithTraits(UIFontDescriptorSymbolicTraits.Bold);
+        //var boldFont = UIFont.FromDescriptor(boldFontDescriptor, config.TitleFontSize);
+
+        //attributedString.AddAttribute(UIStringAttributeKey.Font, boldFont, new NSRange(0, config.Title.Length));
         return attributedString;
     }
 

@@ -249,7 +249,7 @@ public class SnackbarBuilder : Snackbar.Callback
 
         public override void OnTick(long millisUntilFinished)
         {
-            _text.Text = "" + Math.Round(millisUntilFinished * 1000.0);
+            _text.Text = "" + Math.Round(millisUntilFinished / 1000.0);
         }
     }
 }

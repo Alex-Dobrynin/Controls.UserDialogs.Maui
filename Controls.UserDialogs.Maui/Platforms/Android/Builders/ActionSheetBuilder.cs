@@ -146,6 +146,7 @@ public class ActionSheetBuilder
         if (config.FontFamily is not null)
         {
             titleSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+            titleSpan.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return titleSpan;

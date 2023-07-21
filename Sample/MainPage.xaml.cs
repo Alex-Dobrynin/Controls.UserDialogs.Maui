@@ -183,9 +183,10 @@ namespace Sample
             UserDialogs.Instance.ShowSnackbar(new SnackbarConfig()
             {
                 Icon = "dotnet_bot.png",
-                Message = "This is a Snackbar",
-                ActionText = "Understand",
+                Message = "This is snackbar",
+                ActionText = "Cancel",
                 ActionIcon = "dotnet_bot.png",
+                ShowCountDown = true,
                 Action = type =>
                 {
 
