@@ -29,7 +29,7 @@ namespace Sample
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans.ttf", "OpenSans");
-                    //fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     //fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
