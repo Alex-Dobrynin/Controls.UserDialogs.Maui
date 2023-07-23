@@ -13,6 +13,7 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 
 * .NET7 for Android (min 7.0)(major target 13.0)
 * .NET7 for iOS (min 14.2)
+* .NET7 for MAcCatalyst (min 13.1)
 
 ### Features
 
@@ -24,7 +25,7 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 * Snackbar
 * [Sample](https://github.com/Alex-Dobrynin/Controls.UserDialogs.Maui/tree/master/Sample)
 
-### As for now it supports only Android and iOS. I don't have in plans to add new platforms. You are welcome to submit PR's for issues you may be having or for features you need and they will be reviewed.
+### As for now it supports only Android, iOS and macOS. I don't have in plans to add new platforms. You are welcome to submit PR's for issues you may be having or for features you need and they will be reviewed.
 
 ## Setup
 
@@ -54,12 +55,12 @@ builder
     });
 ```
 
-##### Note: there are some properties available only for Android or only for iOS
+##### Note: there are some properties available only for Android or only for iOS/macOS
 
 ## Powered By:
 
 * Android - Progress/Loading uses Redth's [AndHUD](https://github.com/Redth/AndHUD)
-* iOS - Progress/Loading uses Nic Wise's [BTProgressHUD](https://github.com/nicwise/BTProgressHUD)
+* iOS/macOS - Progress/Loading uses Nic Wise's [BTProgressHUD](https://github.com/nicwise/BTProgressHUD)
 
 # Frequently Asked Questions
 
@@ -89,8 +90,10 @@ builder
         {
     #if ANDROID
             Controls.UserDialogs.Maui.UserDialogs.Instance = new MyCustomUserDialogs(); //Android realization
-    #else
+    #elif IOS
             Controls.UserDialogs.Maui.UserDialogs.Instance = new MyCustomUserDialogs(); //iOS realization
+    #else
+            Controls.UserDialogs.Maui.UserDialogs.Instance = new MyCustomUserDialogs(); //mac realization
     #endif
 
             //setup your default styles for dialogs
