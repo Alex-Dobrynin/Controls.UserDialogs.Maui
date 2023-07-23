@@ -40,7 +40,7 @@ public class ActionSheetBuilder
             _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
         }
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
 
         if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
@@ -75,7 +75,7 @@ public class ActionSheetBuilder
             _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
         }
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
 
         if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
@@ -134,7 +134,7 @@ public class ActionSheetBuilder
         return messageSpan;
     }
 
-    protected virtual SpannableString GetTitle(ActionSheetConfig config)
+    protected virtual SpannableString GetTitle(Activity activity, ActionSheetConfig config)
     {
         var titleSpan = new SpannableString(config.Title);
 
@@ -143,9 +143,10 @@ public class ActionSheetBuilder
             titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
         titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
-        if (config.FontFamily is not null)
+        if (config.TitleFontFamily is not null)
         {
-            titleSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+            titleSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
             titleSpan.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
 

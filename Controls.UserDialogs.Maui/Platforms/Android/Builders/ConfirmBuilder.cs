@@ -35,7 +35,7 @@ public class ConfirmBuilder
 
         builder.SetMessage(GetMessage(config));
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
 
         if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
@@ -65,7 +65,7 @@ public class ConfirmBuilder
 
         builder.SetMessage(GetMessage(config));
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(config));
+        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
 
         if (config.Icon is not null) builder.SetIcon(GetIcon(config));
 
@@ -112,7 +112,7 @@ public class ConfirmBuilder
         return messageSpan;
     }
 
-    protected virtual SpannableString GetTitle(ConfirmConfig config)
+    protected virtual SpannableString GetTitle(Activity activity, ConfirmConfig config)
     {
         var titleSpan = new SpannableString(config.Title);
 
@@ -124,7 +124,8 @@ public class ConfirmBuilder
 
         if (config.FontFamily is not null)
         {
-            titleSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+            titleSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
             titleSpan.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
 

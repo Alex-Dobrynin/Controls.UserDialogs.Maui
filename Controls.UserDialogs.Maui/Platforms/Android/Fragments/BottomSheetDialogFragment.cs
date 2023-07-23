@@ -124,7 +124,8 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Gravity = GravityFlags.CenterVertical
         };
         textView.SetTextSize(ComplexUnitType.Sp, (float)Config.TitleFontSize);
-        textView.SetTypeface(_typeface, TypefaceStyle.Bold);
+        var typeface = Typeface.CreateFromAsset(this.Activity.Assets, Config.FontFamily);
+        textView.SetTypeface(typeface, TypefaceStyle.Bold);
         if (Config.TitleColor is not null)
         {
             textView.SetTextColor(Config.TitleColor.ToPlatform());
