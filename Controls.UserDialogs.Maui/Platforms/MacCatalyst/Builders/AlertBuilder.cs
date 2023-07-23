@@ -28,12 +28,12 @@ public class AlertBuilder
 
     protected virtual NSAttributedString GetTitle(AlertConfig config)
     {
-        UIFont titleFont;
-        if (config.FontFamily is null)
+        UIFont titleFont = null;
+        if (config.TitleFontFamily is not null)
         {
-            titleFont = UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
+            titleFont = UIFont.FromName(config.TitleFontFamily, config.TitleFontSize);
         }
-        else titleFont = UIFont.FromName(config.FontFamily, config.TitleFontSize);
+        if (titleFont is null) titleFont = UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
 
         var attributedString = new NSMutableAttributedString(config.Title, titleFont, config.TitleColor?.ToPlatform());
 
@@ -42,12 +42,12 @@ public class AlertBuilder
 
     protected virtual NSAttributedString GetMessage(AlertConfig config)
     {
-        UIFont messageFont;
-        if (config.FontFamily is null)
+        UIFont messageFont = null;
+        if (config.FontFamily is not null)
         {
-            messageFont = UIFont.SystemFontOfSize(config.MessageFontSize);
+            messageFont = UIFont.FromName(config.FontFamily, config.MessageFontSize);
         }
-        else messageFont = UIFont.FromName(config.FontFamily, config.MessageFontSize);
+        if (messageFont is null) messageFont = UIFont.SystemFontOfSize(config.MessageFontSize);
 
         var attributedString = new NSMutableAttributedString(config.Message, messageFont, config.MessageColor?.ToPlatform());
 

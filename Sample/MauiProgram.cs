@@ -14,11 +14,12 @@ namespace Sample
                 .UseUserDialogs(() =>
                 {
 #if ANDROID
-                    var fontFamily = "OpenSans.ttf";
+                    var fontFamily = "OpenSans-Default.ttf";
 #else
-                    var fontFamily = "OpenSans";
+                    var fontFamily = "OpenSans-Regular";
 #endif
                     AlertConfig.DefaultFontFamily = fontFamily;
+                    AlertConfig.DefaultUserInterfaceStyle = UserInterfaceStyle.Dark;
                     AlertConfig.DefaultPositiveButtonTextColor = Colors.Purple;
                     ConfirmConfig.DefaultFontFamily = fontFamily;
                     ActionSheetConfig.DefaultFontFamily = fontFamily;
@@ -28,7 +29,7 @@ namespace Sample
                 })
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans.ttf", "OpenSans");
+                    fonts.AddFont("OpenSans-Default.ttf", "OpenSans");
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     //fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });

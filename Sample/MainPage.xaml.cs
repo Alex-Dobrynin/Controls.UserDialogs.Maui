@@ -78,6 +78,9 @@ namespace Sample
 
         private void Button_Clicked_6(object sender, EventArgs e)
         {
+#if MACCATALYST
+            UserDialogs.Instance.Alert("Bottom Action sheet is not supported on mac catalyst", "Warning", "Understand", "dotnet_bot.png");
+#else
             var config = new ActionSheetConfig()
             {
                 UseBottomSheet = true,
@@ -95,10 +98,14 @@ namespace Sample
             };
 
             UserDialogs.Instance.ActionSheet(config);
+#endif
         }
 
         private async void Button_Clicked_7(object sender, EventArgs e)
         {
+#if MACCATALYST
+            UserDialogs.Instance.Alert("Async Bottom Action sheet is not supported on mac catalyst", "Warning", "Understand", "dotnet_bot.png");
+#else
             var res = await UserDialogs.Instance.ActionSheetAsync(
                 "This is Async Bottom Action sheet",
                 "Async Bottom Action sheet",
@@ -111,6 +118,7 @@ namespace Sample
                 "Second option",
                 "Third option"
                 );
+#endif
         }
 
         private async void Button_Clicked_8(object sender, EventArgs e)

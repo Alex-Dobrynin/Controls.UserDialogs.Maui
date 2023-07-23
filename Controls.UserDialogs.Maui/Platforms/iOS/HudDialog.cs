@@ -16,8 +16,9 @@ public class HudDialog : IHudDialog
 {
     private HudDialogConfig _config;
     private UIButton _cnclBtn;
+    private Action _cancel;
 
-    public void Update(string message = null, int percentComplete = -1, string image = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action onCancel = null)
+    public void Update(string message = null, int percentComplete = -1, string image = null, string cancelText = null, bool show = true, MaskType? maskType = null, Action cancel = null)
     {
         this.Update(new HudDialogConfig()
         {
@@ -27,7 +28,7 @@ public class HudDialog : IHudDialog
             Image = image,
             AutoShow = show,
             MaskType = maskType ?? HudDialogConfig.DefaultMaskType,
-            Cancel = onCancel
+            Cancel = cancel
         });
     }
 
@@ -38,12 +39,12 @@ public class HudDialog : IHudDialog
 
         if (_cnclBtn is not null)
         {
-            UIFont font;
+            UIFont font = null;
             if (_config.FontFamily is not null)
             {
                 font = UIFont.FromName(_config.FontFamily, (float)config.NegativeButtonFontSize);
             }
-            else font = UIFont.SystemFontOfSize((float)config.NegativeButtonFontSize);
+            if (font is null) font = UIFont.SystemFontOfSize((float)config.NegativeButtonFontSize);
 
             _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
         }
@@ -51,6 +52,14 @@ public class HudDialog : IHudDialog
 
     public void Show()
     {
+        if (_config.Cancel is not null)
+        {
+            _cancel = () =>
+            {
+                this.Hide();
+                _config.Cancel?.Invoke();
+            };
+        }
         if (_config.Image is not null)
         {
             ShowImage();
@@ -67,7 +76,7 @@ public class HudDialog : IHudDialog
             {
                 hud.Show(
                     _config.CancelText,
-                    _config.Cancel,
+                    _cancel,
                     _config.Message,
                     percent,
                     _config.MaskType.ToNative()
@@ -134,22 +143,16 @@ public class HudDialog : IHudDialog
         var bgView = toolbar.Subviews[0];
         bgView.Alpha = 0;
 
-        bool isAlpha0 = bgView.Alpha == 0;
-        if (isAlpha0)
-        {
-
-        }
-
         var image = toolbar.Subviews[1] as UIImageView;
         image.Image = image.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
         image.Transform = CGAffineTransform.MakeScale(1.2f, 1.2f);
 
-        UIFont font;
+        UIFont font = null;
         if (_config.FontFamily is not null)
         {
             font = UIFont.FromName(_config.FontFamily, (float)_config.NegativeButtonFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
+        if (font is null) font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
 
         if (_config.Cancel is null) return;
         if (toolbar.Subviews[3] is not UIButton button) return;
@@ -180,12 +183,12 @@ public class HudDialog : IHudDialog
             }
         }
 
-        UIFont font;
+        UIFont font = null;
         if (_config.FontFamily is not null)
         {
             font = UIFont.FromName(_config.FontFamily, (float)_config.MessageFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)_config.MessageFontSize);
+        if (font is null) font = UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
         hud.HudFont = font;
     }
@@ -209,12 +212,12 @@ public class HudDialog : IHudDialog
         }
         indicator.Transform = CGAffineTransform.MakeScale(1.3f, 1.3f);
 
-        UIFont font;
+        UIFont font = null;
         if (_config.FontFamily is not null)
         {
             font = UIFont.FromName(_config.FontFamily, (float)_config.NegativeButtonFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
+        if (font is null) font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
 
         if (_config.Cancel is null) return;
         var button = toolbar.Subviews.OfType<UIButton>().FirstOrDefault();
@@ -229,6 +232,7 @@ public class HudDialog : IHudDialog
         try
         {
             _cnclBtn = null;
+            _cancel = null;
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
                 var hud = ProgressHUD.For(Extensions.GetDefaultWindow());

@@ -167,10 +167,18 @@ public partial class UserDialogsImplementation : IUserDialogs
 
     public virtual IHudDialog CreateOrUpdateHud(HudDialogConfig config)
     {
-        if (CurrentHudDialog is not null) CurrentHudDialog.Update(config);
-        else CurrentHudDialog = this.CreateHudInstance(config);
+        try
+        {
+            if (CurrentHudDialog is not null) CurrentHudDialog.Update(config);
+            else CurrentHudDialog = this.CreateHudInstance(config);
 
-        return CurrentHudDialog;
+            return CurrentHudDialog;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
     }
 
     public virtual IDisposable ShowToast(string message, string icon, TimeSpan? dismissTimer)

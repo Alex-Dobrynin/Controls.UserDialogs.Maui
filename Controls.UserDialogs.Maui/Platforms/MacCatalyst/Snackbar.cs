@@ -105,6 +105,11 @@ public class Snackbar : UIView
             this.CenterXAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.CenterXAnchor)
         };
 
+        _timer = new System.Timers.Timer
+        {
+            Interval = 500
+        };
+
         if (Style is Style.Toast)
         {
             var toast = SetupToast();
@@ -144,8 +149,9 @@ public class Snackbar : UIView
                 snack.BottomAnchor.ConstraintEqualTo(this.BottomAnchor, (float)-Padding.Bottom),
             });
 
-            constraints.Add(this.LeadingAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)SnackbarMargin.Left));
-            constraints.Add(this.TrailingAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)-SnackbarMargin.Right));
+            constraints.Add(this.LeadingAnchor.ConstraintGreaterThanOrEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)SnackbarMargin.Left));
+            constraints.Add(this.TrailingAnchor.ConstraintLessThanOrEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)SnackbarMargin.Right));
+            constraints.Add(this.WidthAnchor.ConstraintGreaterThanOrEqualTo(600));
 
             if (Position is Position.Bottom)
             {
@@ -168,11 +174,6 @@ public class Snackbar : UIView
                 this.Alpha = 1f;
             });
         }
-
-        _timer = new System.Timers.Timer
-        {
-            Interval = 500
-        };
 
         _endOfAnimation = DateTime.Now + DismissDuration;
         _timer.Elapsed += (s, a) =>
@@ -320,7 +321,7 @@ public class Snackbar : UIView
 
         if (ActionIcon is not null)
         {
-            button.SetImage(new UIImage(ActionIcon).ScaleTo(ActionIconSize), UIControlState.Normal);
+            button.SetImage(UIImage.FromBundle(ActionIcon).ScaleTo(ActionIconSize), UIControlState.Normal);
         }
 
         var widthConstraint = NSLayoutConstraint.Create(button, NSLayoutAttribute.Width, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 1f, button.IntrinsicContentSize.Width);
@@ -362,7 +363,7 @@ public class Snackbar : UIView
     {
         var image = new UIImageView(new CGRect(0, 0, IconSize, IconSize))
         {
-            Image = new UIImage(Icon).ScaleTo(IconSize),
+            Image = UIImage.FromBundle(Icon).ScaleTo(IconSize),
             ContentMode = UIViewContentMode.Center,
             TranslatesAutoresizingMaskIntoConstraints = false
         };
@@ -371,12 +372,16 @@ public class Snackbar : UIView
 
     protected virtual UIView GetLabel()
     {
-        UIFont font;
+        UIFont font = null;
         if (FontFamily is not null)
         {
             font = UIFont.FromName(FontFamily, MessageFontSize);
         }
-        else font = UIFont.SystemFontOfSize(MessageFontSize);
+
+        if (font is null)
+        {
+            font = UIFont.SystemFontOfSize(MessageFontSize);
+        }
 
         var label = new UILabel
         {

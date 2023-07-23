@@ -92,6 +92,8 @@ public partial class UserDialogsImplementation
 
     protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config)
     {
+        if (CurrentHudDialog is not null) CurrentHudDialog.Dispose();
+
         var dialog = new HudDialog();
         dialog.Update(config);
 

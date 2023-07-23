@@ -2,6 +2,7 @@
 
 public class ActionSheetConfig
 {
+    public static string DefaultTitleFontFamily { get; set; }
     public static string DefaultFontFamily { get; set; }
     /// <summary>
     /// iOS only
@@ -41,6 +42,7 @@ public class ActionSheetConfig
     /// </summary>
     public static float DefaultActionSheetOptionFontSize { get; set; } = 16;
 
+    public string TitleFontFamily { get; set; } = DefaultTitleFontFamily;
     public string FontFamily { get; set; } = DefaultFontFamily;
 
     /// <summary>
@@ -103,7 +105,7 @@ public class ActionSheetConfig
     public string Title { get; set; }
 
     /// <summary>
-    /// Used only within bottom action sheet
+    /// Not used on android action sheet if UseBottomSheet is False
     /// </summary>
     public string Message { get; set; }
 
