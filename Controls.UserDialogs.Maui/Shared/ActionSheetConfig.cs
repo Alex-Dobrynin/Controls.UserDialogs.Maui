@@ -4,6 +4,9 @@ public class ActionSheetConfig
 {
     public static string DefaultTitleFontFamily { get; set; }
     public static string DefaultFontFamily { get; set; }
+    public static string DefaultNegativeButtonFontFamily { get; set; }
+    public static string DefaultDestructiveButtonFontFamily { get; set; }
+    public static string DefaultOptionsButtonFontFamily { get; set; }
     /// <summary>
     /// iOS only
     /// </summary>
@@ -44,6 +47,9 @@ public class ActionSheetConfig
 
     public string TitleFontFamily { get; set; } = DefaultTitleFontFamily;
     public string FontFamily { get; set; } = DefaultFontFamily;
+    public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
+    public string DestructiveButtonFontFamily { get; set; } = DefaultDestructiveButtonFontFamily;
+    public string OptionsButtonFontFamily { get; set; } = DefaultOptionsButtonFontFamily;
 
     /// <summary>
     /// Android only

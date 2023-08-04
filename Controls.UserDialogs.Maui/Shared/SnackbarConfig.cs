@@ -3,6 +3,7 @@
 public class SnackbarConfig
 {
     public static string DefaultFontFamily { get; set; }
+    public static string DefaultNegativeButtonFontFamily { get; set; }
 
     public static float DefaultCornerRadius { get; set; } = 10;
     public static Color DefaultBackgroundColor { get; set; }
@@ -15,6 +16,8 @@ public class SnackbarConfig
     public static TimeSpan DefaultDuration { get; set; } = TimeSpan.FromSeconds(10);
 
     public string FontFamily { get; set; } = DefaultFontFamily;
+    public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
+
     public Color BackgroundColor { get; set; } = DefaultBackgroundColor;
     /// <summary>
     /// Android only

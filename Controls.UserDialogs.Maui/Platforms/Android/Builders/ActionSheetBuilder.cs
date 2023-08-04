@@ -4,8 +4,6 @@ using Android.Graphics.Drawables;
 using Android.Text;
 using Android.Text.Style;
 
-using AndroidX.AppCompat.App;
-
 using Microsoft.Maui.Platform;
 
 using static Controls.UserDialogs.Maui.Extensions;
@@ -29,169 +27,173 @@ public class ActionSheetBuilder
     public double OptionIconPadding { get; set; } = DefaultOptionIconPadding;
     public double OptionIconSize { get; set; } = DefaultOptionIconSize;
 
-    private Typeface _typeface;
+    protected Activity Activity { get; }
+    protected ActionSheetConfig Config { get; }
 
-    public virtual Dialog Build(Activity activity, ActionSheetConfig config)
+    public ActionSheetBuilder(Activity activity, ActionSheetConfig config)
     {
-        var builder = new AlertDialog.Builder(activity);
+        Activity = activity;
+        Config = config;
+    }
 
-        if (config.FontFamily is not null)
+    public virtual Dialog Build()
+    {
+        var builder = new AlertDialog.Builder(Activity);
+
+        if (Config.Title is not null) builder.SetTitle(GetTitle());
+
+        if (Config.Icon is not null) builder.SetIcon(GetIcon());
+
+        builder.SetAdapter(GetActionsAdapter(), (s, a) => Config.Options[a.Which].Action?.Invoke());
+
+        if (Config.Destructive is not null)
         {
-            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+            builder.SetNegativeButton(GetDestructiveButton(), (o, a) => Config.Destructive.Action?.Invoke());
         }
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
-
-        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
-
-        builder.SetAdapter(GetActionsAdapter(activity, config), (s, a) => config.Options[a.Which].Action?.Invoke());
-
-        if (config.Destructive is not null)
+        if (Config.Cancel is not null)
         {
-            builder.SetNegativeButton(GetDestructiveButton(config), (o, a) => config.Destructive.Action?.Invoke());
-        }
-
-        if (config.Cancel is not null)
-        {
-            builder.SetNeutralButton(GetCancelButton(config), (o, a) => config.Cancel.Action?.Invoke());
+            builder.SetNeutralButton(GetCancelButton(), (o, a) => Config.Cancel.Action?.Invoke());
         }
 
         var dialog = builder.Create();
 
-        if (config.BackgroundColor is not null)
+        if (Config.BackgroundColor is not null)
         {
-            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground());
         }
 
         return dialog;
     }
 
-    public virtual Dialog Build(AppCompatActivity activity, ActionSheetConfig config)
+    public virtual Dialog BuildAppCompat()
     {
-        var builder = new AppCompatAlertDialog.Builder(activity);
+        var builder = new AppCompatAlertDialog.Builder(Activity);
 
-        if (config.FontFamily is not null)
+        if (Config.Title is not null) builder.SetTitle(GetTitle());
+
+        if (Config.Icon is not null) builder.SetIcon(GetIcon());
+
+        builder.SetAdapter(GetActionsAdapter(), (s, a) => Config.Options[a.Which].Action?.Invoke());
+
+        if (Config.Destructive is not null)
         {
-            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
+            builder.SetNegativeButton(GetDestructiveButton(), (o, a) => Config.Destructive.Action?.Invoke());
         }
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
-
-        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
-
-        builder.SetAdapter(GetActionsAdapter(activity, config), (s, a) => config.Options[a.Which].Action?.Invoke());
-
-        if (config.Destructive is not null)
+        if (Config.Cancel is not null)
         {
-            builder.SetNegativeButton(GetDestructiveButton(config), (o, a) => config.Destructive.Action?.Invoke());
-        }
-
-        if (config.Cancel is not null)
-        {
-            builder.SetNeutralButton(GetCancelButton(config), (o, a) => config.Cancel.Action?.Invoke());
+            builder.SetNeutralButton(GetCancelButton(), (o, a) => Config.Cancel.Action?.Invoke());
         }
 
         var dialog = builder.Create();
 
-        if (config.BackgroundColor is not null)
+        if (Config.BackgroundColor is not null)
         {
-            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground());
         }
 
         return dialog;
     }
 
-    protected virtual ActionSheetListAdapter GetActionsAdapter(Android.Content.Context context, ActionSheetConfig config)
+    protected virtual ActionSheetListAdapter GetActionsAdapter()
     {
-        return new ActionSheetListAdapter(context, Android.Resource.Layout.SelectDialogItem, Android.Resource.Id.Text1, this, config, _typeface);
+        return new ActionSheetListAdapter(Activity, Android.Resource.Layout.SelectDialogItem, Android.Resource.Id.Text1, this, Config);
     }
 
-    protected virtual Drawable GetDialogBackground(ActionSheetConfig config)
+    protected virtual Drawable GetDialogBackground()
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
+        backgroundDrawable.SetColor(Config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(Config.CornerRadius));
 
         var draw = new InsetDrawable(backgroundDrawable, DpToPixels(ScreenMargin.Left), DpToPixels(ScreenMargin.Top), DpToPixels(ScreenMargin.Right), DpToPixels(ScreenMargin.Bottom));
 
         return draw;
     }
 
-    protected virtual SpannableString GetMessage(ActionSheetConfig config)
+    protected virtual SpannableString GetMessage()
     {
-        var messageSpan = new SpannableString(config.Message);
+        var messageSpan = new SpannableString(Config.Message);
 
-        if (config.MessageColor is not null)
+        if (Config.MessageColor is not null)
         {
-            messageSpan.SetSpan(new ForegroundColorSpan(config.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+            messageSpan.SetSpan(new ForegroundColorSpan(Config.MessageColor.ToPlatform()), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
-        messageSpan.SetSpan(new AbsoluteSizeSpan((int)config.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
-        if (config.FontFamily is not null)
+        messageSpan.SetSpan(new AbsoluteSizeSpan((int)Config.MessageFontSize, true), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
+
+        if (Config.FontFamily is not null)
         {
-            messageSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.FontFamily);
+            messageSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return messageSpan;
     }
 
-    protected virtual SpannableString GetTitle(Activity activity, ActionSheetConfig config)
+    protected virtual SpannableString GetTitle()
     {
-        var titleSpan = new SpannableString(config.Title);
+        var titleSpan = new SpannableString(Config.Title);
 
-        if (config.TitleColor is not null)
+        if (Config.TitleColor is not null)
         {
-            titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+            titleSpan.SetSpan(new ForegroundColorSpan(Config.TitleColor.ToPlatform()), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
-        titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
-        if (config.TitleFontFamily is not null)
+        titleSpan.SetSpan(new AbsoluteSizeSpan((int)Config.TitleFontSize, true), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
+
+        if (Config.TitleFontFamily is not null)
         {
-            var typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
-            titleSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
-            titleSpan.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.TitleFontFamily);
+            titleSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
+            titleSpan.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return titleSpan;
     }
 
-    protected virtual Drawable GetIcon(ActionSheetConfig config)
+    protected virtual Drawable GetIcon()
     {
-        var imgId = MauiApplication.Current.GetDrawableId(config.Icon);
+        var imgId = MauiApplication.Current.GetDrawableId(Config.Icon);
         var img = MauiApplication.Current.GetDrawable(imgId);
 
         return img;
     }
 
-    protected virtual SpannableString GetCancelButton(ActionSheetConfig config)
+    protected virtual SpannableString GetCancelButton()
     {
-        var buttonSpan = new SpannableString(config.Cancel.Text);
+        var buttonSpan = new SpannableString(Config.Cancel.Text);
 
-        if (config.NegativeButtonTextColor is not null)
+        if (Config.NegativeButtonTextColor is not null)
         {
-            buttonSpan.SetSpan(new ForegroundColorSpan(config.NegativeButtonTextColor.ToPlatform()), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+            buttonSpan.SetSpan(new ForegroundColorSpan(Config.NegativeButtonTextColor.ToPlatform()), 0, Config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
         }
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.NegativeButtonFontSize, true), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
-        if (config.FontFamily is not null)
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)Config.NegativeButtonFontSize, true), 0, Config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+        buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, Config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+
+        if (Config.NegativeButtonFontFamily is not null)
         {
-            buttonSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.NegativeButtonFontFamily);
+            buttonSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Cancel.Text.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return buttonSpan;
     }
 
-    protected virtual SpannableString GetDestructiveButton(ActionSheetConfig config)
+    protected virtual SpannableString GetDestructiveButton()
     {
-        var buttonSpan = new SpannableString(config.Destructive.Text);
+        var buttonSpan = new SpannableString(Config.Destructive.Text);
 
-        if (config.DestructiveButtonTextColor is not null)
+        if (Config.DestructiveButtonTextColor is not null)
         {
-            buttonSpan.SetSpan(new ForegroundColorSpan(config.DestructiveButtonTextColor.ToPlatform()), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+            buttonSpan.SetSpan(new ForegroundColorSpan(Config.DestructiveButtonTextColor.ToPlatform()), 0, Config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
         }
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.DestructiveButtonFontSize, true), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
-        if (config.FontFamily is not null)
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)Config.DestructiveButtonFontSize, true), 0, Config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+        buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, Config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+
+        if (Config.DestructiveButtonFontFamily is not null)
         {
-            buttonSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.DestructiveButtonFontFamily);
+            buttonSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Destructive.Text.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return buttonSpan;

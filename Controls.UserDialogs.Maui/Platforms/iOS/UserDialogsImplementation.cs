@@ -10,17 +10,17 @@ public partial class UserDialogsImplementation
 {
     public virtual partial IDisposable Alert(AlertConfig config) => this.Present(() =>
     {
-        return new AlertBuilder().Build(config);
+        return new AlertBuilder(config).Build();
     });
 
     public virtual partial IDisposable Confirm(ConfirmConfig config) => this.Present(() =>
     {
-        return new ConfirmBuilder().Build(config);
+        return new ConfirmBuilder(config).Build();
     });
 
     public virtual partial IDisposable ActionSheet(ActionSheetConfig config) => this.Present(() =>
     {
-        return new ActionSheetBuilder().Build(config);
+        return new ActionSheetBuilder(config).Build();
     });
 
     public virtual partial IDisposable ShowToast(ToastConfig config)
@@ -63,6 +63,7 @@ public partial class UserDialogsImplementation
                 CornerRadius = config.CornerRadius,
                 DismissDuration = config.Duration,
                 FontFamily = config.FontFamily,
+                CancelButtonFontFamily = config.NegativeButtonFontFamily,
                 Position = config.Position.ToNative(),
                 Style = Style.Snackbar,
                 ActionText = config.ActionText,

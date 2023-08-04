@@ -18,5 +18,5 @@ public class AlertAppCompatDialogFragment : AbstractAppCompatDialogFragment<Aler
         this.Dismiss();
     }
 
-    protected override Dialog CreateDialog(AlertConfig config) => new AlertBuilder().Build(this.AppCompatActivity, config);
+    protected override Dialog CreateDialog(AlertConfig config) => new AlertBuilder(this.AppCompatActivity, config).BuildAppCompat();
 }

@@ -40,5 +40,5 @@ public class ActionSheetAppCompatDialogFragment : AbstractAppCompatDialogFragmen
         this.Dismiss();
     }
 
-    protected override Dialog CreateDialog(ActionSheetConfig config) => new ActionSheetBuilder().Build(this.AppCompatActivity, config);
+    protected override Dialog CreateDialog(ActionSheetConfig config) => new ActionSheetBuilder(this.AppCompatActivity, config).BuildAppCompat();
 }

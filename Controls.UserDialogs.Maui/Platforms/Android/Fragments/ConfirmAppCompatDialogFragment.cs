@@ -17,5 +17,5 @@ public class ConfirmAppCompatDialogFragment : AbstractAppCompatDialogFragment<Co
         this.Dismiss();
     }
 
-    protected override Dialog CreateDialog(ConfirmConfig config) => new ConfirmBuilder().Build(this.AppCompatActivity, config);
+    protected override Dialog CreateDialog(ConfirmConfig config) => new ConfirmBuilder(this.AppCompatActivity, config).BuildAppCompat();
 }

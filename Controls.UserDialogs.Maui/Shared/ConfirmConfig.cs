@@ -4,6 +4,8 @@ public class ConfirmConfig
 {
     public static string DefaultTitleFontFamily { get; set; }
     public static string DefaultFontFamily { get; set; }
+    public static string DefaultPositiveButtonFontFamily { get; set; }
+    public static string DefaultNegativeButtonFontFamily { get; set; }
 
     /// <summary>
     /// iOS only
@@ -39,6 +41,8 @@ public class ConfirmConfig
 
     public string TitleFontFamily { get; set; } = DefaultTitleFontFamily;
     public string FontFamily { get; set; } = DefaultFontFamily;
+    public string PositiveButtonFontFamily { get; set; } = DefaultPositiveButtonFontFamily;
+    public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
     /// <summary>
     /// iOS only
     /// </summary>

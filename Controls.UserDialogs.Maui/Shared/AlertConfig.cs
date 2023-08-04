@@ -4,6 +4,7 @@ public class AlertConfig
 {
     public static string DefaultTitleFontFamily { get; set; }
     public static string DefaultFontFamily { get; set; }
+    public static string DefaultPositiveButtonFontFamily { get; set; }
 
     /// <summary>
     /// iOS only
@@ -33,6 +34,7 @@ public class AlertConfig
 
     public string TitleFontFamily { get; set; } = DefaultTitleFontFamily;
     public string FontFamily { get; set; } = DefaultFontFamily;
+    public string PositiveButtonFontFamily { get; set; } = DefaultPositiveButtonFontFamily;
     /// <summary>
     /// iOS only
     /// </summary>

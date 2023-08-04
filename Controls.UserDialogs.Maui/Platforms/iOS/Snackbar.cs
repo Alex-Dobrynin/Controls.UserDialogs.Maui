@@ -49,6 +49,7 @@ public class Snackbar : UIView
     public string Message { get; set; }
     public string Icon { get; set; }
     public string FontFamily { get; set; }
+    public string CancelButtonFontFamily { get; set; }
     public UIColor MessageColor { get; set; } = Colors.White.ToPlatform();
     public UIColor ActionColor { get; set; } = Colors.White.ToPlatform();
     public Position Position { get; set; }
@@ -297,12 +298,12 @@ public class Snackbar : UIView
             Action?.Invoke();
         };
 
-        UIFont font;
-        if (FontFamily is not null)
+        UIFont font = null;
+        if (CancelButtonFontFamily is not null)
         {
-            font = UIFont.FromName(FontFamily, ActionFontSize);
+            font = UIFont.FromName(CancelButtonFontFamily, ActionFontSize);
         }
-        else font = UIFont.SystemFontOfSize(ActionFontSize, UIFontWeight.Bold);
+        font ??= UIFont.SystemFontOfSize(ActionFontSize, UIFontWeight.Bold);
 
         button.SetAttributedTitle(new NSMutableAttributedString(ActionText, font, ActionColor), UIControlState.Normal);
 
@@ -371,12 +372,12 @@ public class Snackbar : UIView
 
     protected virtual UIView GetLabel()
     {
-        UIFont font;
+        UIFont font = null;
         if (FontFamily is not null)
         {
             font = UIFont.FromName(FontFamily, MessageFontSize);
         }
-        else font = UIFont.SystemFontOfSize(MessageFontSize);
+        font ??= UIFont.SystemFontOfSize(MessageFontSize);
 
         var label = new UILabel
         {

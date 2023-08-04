@@ -20,7 +20,7 @@ public partial class UserDialogsImplementation
         if (activity is AppCompatActivity act)
             return this.ShowDialog<AlertAppCompatDialogFragment, AlertConfig>(act, config);
 
-        return this.Show(activity, () => new AlertBuilder().Build(activity, config));
+        return this.Show(activity, () => new AlertBuilder(activity, config).Build());
     }
 
     public virtual partial IDisposable Confirm(ConfirmConfig config)
@@ -29,7 +29,7 @@ public partial class UserDialogsImplementation
         if (activity is AppCompatActivity act)
             return this.ShowDialog<ConfirmAppCompatDialogFragment, ConfirmConfig>(act, config);
 
-        return this.Show(activity, () => new ConfirmBuilder().Build(activity, config));
+        return this.Show(activity, () => new ConfirmBuilder(activity, config).Build());
     }
 
     public virtual partial IDisposable ActionSheet(ActionSheetConfig config)
@@ -43,7 +43,7 @@ public partial class UserDialogsImplementation
             return this.ShowDialog<ActionSheetAppCompatDialogFragment, ActionSheetConfig>(act, config);
         }
 
-        return this.Show(activity, () => new ActionSheetBuilder().Build(activity, config));
+        return this.Show(activity, () => new ActionSheetBuilder(activity, config).Build());
     }
 
     #endregion
@@ -96,7 +96,7 @@ public partial class UserDialogsImplementation
     {
         if (CurrentHudDialog is not null) CurrentHudDialog.Dispose();
 
-        var dialog = new HudDialog();
+        var dialog = new HudDialog(Platform.CurrentActivity);
         dialog.Update(config);
 
         return dialog;

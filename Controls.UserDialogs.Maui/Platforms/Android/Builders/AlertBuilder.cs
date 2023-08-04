@@ -4,8 +4,6 @@ using Android.Graphics.Drawables;
 using Android.Text;
 using Android.Text.Style;
 
-using AndroidX.AppCompat.App;
-
 using Microsoft.Maui.Platform;
 
 using static Controls.UserDialogs.Maui.Extensions;
@@ -20,137 +18,135 @@ public class AlertBuilder
     public static Thickness DefaultScreenMargin { get; set; } = new Thickness(20, 50);
 
     public Thickness ScreenMargin { get; set; } = DefaultScreenMargin;
+    protected Activity Activity { get; }
+    protected AlertConfig Config { get; }
 
-    private Typeface _typeface;
-
-    public virtual Dialog Build(Activity activity, AlertConfig config)
+    public AlertBuilder(Activity activity, AlertConfig config)
     {
-        var builder = new AlertDialog.Builder(activity)
+        Activity = activity;
+        Config = config;
+    }
+
+    public virtual Dialog Build()
+    {
+        var builder = new AlertDialog.Builder(Activity)
             .SetCancelable(false);
 
-        if (config.FontFamily is not null)
-        {
-            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
-        }
+        builder.SetMessage(GetMessage());
 
-        builder.SetMessage(GetMessage(config));
+        if (Config.Title is not null) builder.SetTitle(GetTitle());
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
+        if (Config.Icon is not null) builder.SetIcon(GetIcon());
 
-        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
-
-        builder.SetPositiveButton(GetPositiveButton(activity, config), (o, e) => config.Action?.Invoke());
+        builder.SetPositiveButton(GetPositiveButton(), (o, e) => Config.Action?.Invoke());
 
         var dialog = builder.Create();
 
-        if (config.BackgroundColor is not null)
+        if (Config.BackgroundColor is not null)
         {
-            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground());
         }
 
         return dialog;
     }
 
-    public virtual Dialog Build(AppCompatActivity activity, AlertConfig config)
+    public virtual Dialog BuildAppCompat()
     {
-        var builder = new AppCompatAlertDialog.Builder(activity)
+        var builder = new AppCompatAlertDialog.Builder(Activity)
             .SetCancelable(false);
 
-        if (config.FontFamily is not null)
-        {
-            _typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
-        }
+        builder.SetMessage(GetMessage());
 
-        builder.SetMessage(GetMessage(config));
+        if (Config.Title is not null) builder.SetTitle(GetTitle());
 
-        if (config.Title is not null) builder.SetTitle(GetTitle(activity, config));
+        if (Config.Icon is not null) builder.SetIcon(GetIcon());
 
-        if (config.Icon is not null) builder.SetIcon(GetIcon(config));
-
-        builder.SetPositiveButton(GetPositiveButton(activity, config), (o, e) => config.Action?.Invoke());
+        builder.SetPositiveButton(GetPositiveButton(), (o, e) => Config.Action?.Invoke());
 
         var dialog = builder.Create();
 
-        if (config.BackgroundColor is not null)
+        if (Config.BackgroundColor is not null)
         {
-            dialog.Window.SetBackgroundDrawable(GetDialogBackground(config));
+            dialog.Window.SetBackgroundDrawable(GetDialogBackground());
         }
 
         return dialog;
     }
 
-    protected virtual Drawable GetDialogBackground(AlertConfig config)
+    protected virtual Drawable GetDialogBackground()
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(config.BackgroundColor.ToInt());
-        backgroundDrawable.SetCornerRadius(DpToPixels(config.CornerRadius));
+        backgroundDrawable.SetColor(Config.BackgroundColor.ToInt());
+        backgroundDrawable.SetCornerRadius(DpToPixels(Config.CornerRadius));
 
         var draw = new InsetDrawable(backgroundDrawable, DpToPixels(ScreenMargin.Left), DpToPixels(ScreenMargin.Top), DpToPixels(ScreenMargin.Right), DpToPixels(ScreenMargin.Bottom));
 
         return draw;
     }
 
-    protected virtual SpannableString GetMessage(AlertConfig config)
+    protected virtual SpannableString GetMessage()
     {
-        var messageSpan = new SpannableString(config.Message);
+        var messageSpan = new SpannableString(Config.Message);
 
-        if (config.MessageColor is not null)
+        if (Config.MessageColor is not null)
         {
-            messageSpan.SetSpan(new ForegroundColorSpan(config.MessageColor.ToPlatform()), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+            messageSpan.SetSpan(new ForegroundColorSpan(Config.MessageColor.ToPlatform()), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
-        messageSpan.SetSpan(new AbsoluteSizeSpan((int)config.MessageFontSize, true), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+        messageSpan.SetSpan(new AbsoluteSizeSpan((int)Config.MessageFontSize, true), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
 
-        if (config.FontFamily is not null)
+        if (Config.FontFamily is not null)
         {
-            messageSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.Message.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.FontFamily);
+            messageSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return messageSpan;
     }
 
-    protected virtual SpannableString GetTitle(Activity activity, AlertConfig config)
+    protected virtual SpannableString GetTitle()
     {
-        var titleSpan = new SpannableString(config.Title);
+        var titleSpan = new SpannableString(Config.Title);
 
-        if (config.TitleColor is not null)
+        if (Config.TitleColor is not null)
         {
-            titleSpan.SetSpan(new ForegroundColorSpan(config.TitleColor.ToPlatform()), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+            titleSpan.SetSpan(new ForegroundColorSpan(Config.TitleColor.ToPlatform()), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
 
-        titleSpan.SetSpan(new AbsoluteSizeSpan((int)config.TitleFontSize, true), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+        titleSpan.SetSpan(new AbsoluteSizeSpan((int)Config.TitleFontSize, true), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
 
-        if (config.FontFamily is not null)
+        if (Config.TitleFontFamily is not null)
         {
-            var typeface = Typeface.CreateFromAsset(activity.Assets, config.FontFamily);
-            titleSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
-            titleSpan.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, config.Title.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.TitleFontFamily);
+            titleSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
+            titleSpan.SetSpan(new StyleSpan(TypefaceStyle.Bold), 0, Config.Title.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return titleSpan;
     }
 
-    protected virtual Drawable GetIcon(AlertConfig config)
+    protected virtual Drawable GetIcon()
     {
-        var imgId = MauiApplication.Current.GetDrawableId(config.Icon);
+        var imgId = MauiApplication.Current.GetDrawableId(Config.Icon);
         var img = MauiApplication.Current.GetDrawable(imgId);
 
         return img;
     }
 
-    protected virtual SpannableString GetPositiveButton(Activity activity, AlertConfig config)
+    protected virtual SpannableString GetPositiveButton()
     {
-        var buttonSpan = new SpannableString(config.OkText);
+        var buttonSpan = new SpannableString(Config.OkText);
 
-        if (config.PositiveButtonTextColor is not null)
+        if (Config.PositiveButtonTextColor is not null)
         {
-            buttonSpan.SetSpan(new ForegroundColorSpan(config.PositiveButtonTextColor.ToPlatform()), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+            buttonSpan.SetSpan(new ForegroundColorSpan(Config.PositiveButtonTextColor.ToPlatform()), 0, Config.OkText.Length, SpanTypes.ExclusiveExclusive);
         }
-        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)config.PositiveButtonFontSize, true), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
-        buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+        buttonSpan.SetSpan(new AbsoluteSizeSpan((int)Config.PositiveButtonFontSize, true), 0, Config.OkText.Length, SpanTypes.ExclusiveExclusive);
+        buttonSpan.SetSpan(new LetterSpacingSpan(0), 0, Config.OkText.Length, SpanTypes.ExclusiveExclusive);
 
-        if (config.FontFamily is not null)
+        if (Config.PositiveButtonFontFamily is not null)
         {
-            buttonSpan.SetSpan(new CustomTypeFaceSpan(_typeface), 0, config.OkText.Length, SpanTypes.ExclusiveExclusive);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.PositiveButtonFontFamily);
+            buttonSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.OkText.Length, SpanTypes.ExclusiveExclusive);
         }
 
         return buttonSpan;

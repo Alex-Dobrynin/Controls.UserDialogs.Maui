@@ -8,26 +8,33 @@ namespace Controls.UserDialogs.Maui;
 
 public class ConfirmBuilder
 {
-    public virtual UIAlertController Build(ConfirmConfig config)
+    protected ConfirmConfig Config { get; }
+
+    public ConfirmBuilder(ConfirmConfig config)
+    {
+        Config = config;
+    }
+
+    public virtual UIAlertController Build()
     {
         var alert = UIAlertController.Create("", "", UIAlertControllerStyle.Alert);
 
-        alert.AddAction(GetCancelAction(config));
-        alert.AddAction(GetOkAction(config));
+        alert.AddAction(GetCancelAction(Config));
+        alert.AddAction(GetOkAction(Config));
 
-        if (config.Title is not null)
+        if (Config.Title is not null)
         {
-            alert.SetValueForKey(GetTitle(config), new NSString("attributedTitle"));
+            alert.SetValueForKey(GetTitle(Config), new NSString("attributedTitle"));
         }
 
-        if (config.Message is not null)
+        if (Config.Message is not null)
         {
-            alert.SetValueForKey(GetMessage(config), new NSString("attributedMessage"));
+            alert.SetValueForKey(GetMessage(Config), new NSString("attributedMessage"));
         }
 
-        if (config.UserInterfaceStyle is not null)
+        if (Config.UserInterfaceStyle is not null)
         {
-            alert.OverrideUserInterfaceStyle = config.UserInterfaceStyle.Value.ToNative();
+            alert.OverrideUserInterfaceStyle = Config.UserInterfaceStyle.Value.ToNative();
         }
 
         return alert;
@@ -40,7 +47,7 @@ public class ConfirmBuilder
         {
             titleFont = UIFont.FromName(config.TitleFontFamily, config.TitleFontSize);
         }
-        if (titleFont is null) titleFont = UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
+        titleFont ??= UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
 
         var attributedString = new NSMutableAttributedString(config.Title, titleFont, config.TitleColor?.ToPlatform());
 
@@ -54,7 +61,7 @@ public class ConfirmBuilder
         {
             messageFont = UIFont.FromName(config.FontFamily, config.MessageFontSize);
         }
-        if (messageFont is null) messageFont = UIFont.SystemFontOfSize(config.MessageFontSize);
+        messageFont ??= UIFont.SystemFontOfSize(config.MessageFontSize);
 
         var attributedString = new NSMutableAttributedString(config.Message, messageFont, config.MessageColor?.ToPlatform());
 

@@ -34,8 +34,6 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
     public double OptionIconSize { get; set; } = DefaultOptionIconSize;
     public double IconSize { get; set; } = DefaultIconSize;
 
-    private Typeface _typeface;
-
     protected override void SetDialogDefaults(Dialog dialog)
     {
         base.SetDialogDefaults(dialog);
@@ -61,11 +59,6 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
 
     protected override Dialog CreateDialog(ActionSheetConfig config)
     {
-        if (config.FontFamily is not null)
-        {
-            _typeface = Typeface.CreateFromAsset(Activity.Assets, config.FontFamily);
-        }
-
         var dialog = new BottomSheetDialog(this.Activity);
 
         var layout = new LinearLayout(this.Activity)
@@ -74,24 +67,32 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         };
 
         if (config.Title is not null)
+        {
             layout.AddView(this.GetHeaderText());
+        }
 
         if (config.Message is not null)
+        {
             layout.AddView(this.GetMessageText());
+        }
 
         foreach (var action in config.Options)
+        {
             layout.AddView(this.CreateActionRow(action));
+        }
 
         if (config.Destructive is not null)
         {
             layout.AddView(this.CreateDivider());
             layout.AddView(this.CreateDestructiveRow(config.Destructive));
         }
+
         if (config.Cancel is not null)
         {
             layout.AddView(this.CreateDivider());
             layout.AddView(this.CreateCancelRow(config.Cancel));
         }
+
         if (config.BackgroundColor is not null)
         {
             layout.Background = GetDialogBackground();
@@ -124,8 +125,13 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Gravity = GravityFlags.CenterVertical
         };
         textView.SetTextSize(ComplexUnitType.Sp, (float)Config.TitleFontSize);
-        var typeface = Typeface.CreateFromAsset(this.Activity.Assets, Config.FontFamily);
-        textView.SetTypeface(typeface, TypefaceStyle.Bold);
+
+        if (Config.TitleFontFamily is not null)
+        {
+            var typeface = Typeface.CreateFromAsset(this.Activity.Assets, Config.TitleFontFamily);
+            textView.SetTypeface(typeface, TypefaceStyle.Bold);
+        }
+
         if (Config.TitleColor is not null)
         {
             textView.SetTextColor(Config.TitleColor.ToPlatform());
@@ -164,7 +170,12 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         {
             textView.SetTextColor(Config.MessageColor.ToPlatform());
         }
-        textView.SetTypeface(_typeface, TypefaceStyle.Normal);
+
+        if (Config.FontFamily is not null)
+        {
+            var typeface = Typeface.CreateFromAsset(this.Activity.Assets, Config.FontFamily);
+            textView.SetTypeface(typeface, TypefaceStyle.Normal);
+        }
 
         return textView;
     }
@@ -179,7 +190,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Foreground = Extensions.GetSelectableItemForeground(this.Activity)
         };
 
-        row.AddView(this.GetActionText(action, Config.DestructiveButtonTextColor, Config.DestructiveButtonFontSize));
+        row.AddView(this.GetActionText(action, Config.DestructiveButtonTextColor, Config.DestructiveButtonFontSize, Config.DestructiveButtonFontFamily));
         row.Click += (sender, args) =>
         {
             action.Action?.Invoke();
@@ -198,7 +209,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Foreground = Extensions.GetSelectableItemForeground(this.Activity)
         };
 
-        row.AddView(this.GetActionText(action, Config.NegativeButtonTextColor, Config.NegativeButtonFontSize));
+        row.AddView(this.GetActionText(action, Config.NegativeButtonTextColor, Config.NegativeButtonFontSize, Config.NegativeButtonFontFamily));
         row.Click += (sender, args) =>
         {
             action.Action?.Invoke();
@@ -217,7 +228,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Foreground = Extensions.GetSelectableItemForeground(this.Activity)
         };
 
-        row.AddView(this.GetActionText(action, Config.ActionSheetOptionTextColor, Config.ActionSheetOptionFontSize));
+        row.AddView(this.GetActionText(action, Config.ActionSheetOptionTextColor, Config.ActionSheetOptionFontSize, Config.OptionsButtonFontFamily));
         row.Click += (sender, args) =>
         {
             action.Action?.Invoke();
@@ -226,7 +237,7 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         return row;
     }
 
-    protected virtual TextView GetActionText(ActionSheetOption action, Color color, double fontSize)
+    protected virtual TextView GetActionText(ActionSheetOption action, Color color, double fontSize, string fontFamily)
     {
         var lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent, LinearLayout.LayoutParams.MatchParent);
 
@@ -239,11 +250,17 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             Gravity = GravityFlags.CenterVertical
         };
         textView.SetTextSize(ComplexUnitType.Sp, (int)fontSize);
+
         if (color is not null)
         {
             textView.SetTextColor(color.ToPlatform());
         }
-        textView.SetTypeface(_typeface, TypefaceStyle.Normal);
+
+        if (fontFamily is not null)
+        {
+            var typeface = Typeface.CreateFromAsset(this.Activity.Assets, fontFamily);
+            textView.SetTypeface(typeface, TypefaceStyle.Normal);
+        }
 
         if (action.Icon is not null)
         {

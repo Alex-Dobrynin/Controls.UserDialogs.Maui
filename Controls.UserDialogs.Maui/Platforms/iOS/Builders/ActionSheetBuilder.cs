@@ -15,29 +15,35 @@ public class ActionSheetBuilder
     public double OptionIconSize { get; set; } = DefaultOptionIconSize;
     public double DestructiveIconSize { get; set; } = DefaultDestructiveIconSize;
     public double CancelIconSize { get; set; } = DefaultCancelIconSize;
+    protected ActionSheetConfig Config { get; }
 
-    public virtual UIAlertController Build(ActionSheetConfig config)
+    public ActionSheetBuilder(ActionSheetConfig config)
+    {
+        Config = config;
+    }
+
+    public virtual UIAlertController Build()
     {
         var alert = UIAlertController.Create("", "", UIAlertControllerStyle.ActionSheet);
 
-        config.Options.ToList().ForEach(o => alert.AddAction(GetOptionAction(config, o)));
+        Config.Options.ToList().ForEach(o => alert.AddAction(GetOptionAction(Config, o)));
 
-        alert.AddAction(GetDestructiveAction(config));
-        alert.AddAction(GetCancelAction(config));
+        alert.AddAction(GetDestructiveAction(Config));
+        alert.AddAction(GetCancelAction(Config));
 
-        if (config.Title is not null)
+        if (Config.Title is not null)
         {
-            alert.SetValueForKey(GetTitle(config), new NSString("attributedTitle"));
+            alert.SetValueForKey(GetTitle(Config), new NSString("attributedTitle"));
         }
 
-        if (config.Message is not null)
+        if (Config.Message is not null)
         {
-            alert.SetValueForKey(GetMessage(config), new NSString("attributedMessage"));
+            alert.SetValueForKey(GetMessage(Config), new NSString("attributedMessage"));
         }
 
-        if (config.UserInterfaceStyle is not null)
+        if (Config.UserInterfaceStyle is not null)
         {
-            alert.OverrideUserInterfaceStyle = config.UserInterfaceStyle.Value.ToNative();
+            alert.OverrideUserInterfaceStyle = Config.UserInterfaceStyle.Value.ToNative();
         }
 
         return alert;
@@ -50,7 +56,7 @@ public class ActionSheetBuilder
         {
             titleFont = UIFont.FromName(config.TitleFontFamily, config.TitleFontSize);
         }
-        if (titleFont is null) titleFont = UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
+        titleFont ??= UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
 
         var attributedString = new NSMutableAttributedString(config.Title, titleFont, config.TitleColor?.ToPlatform());
 
@@ -64,7 +70,7 @@ public class ActionSheetBuilder
         {
             messageFont = UIFont.FromName(config.FontFamily, config.MessageFontSize);
         }
-        if (messageFont is null) messageFont = UIFont.SystemFontOfSize(config.MessageFontSize);
+        messageFont ??= UIFont.SystemFontOfSize(config.MessageFontSize);
 
         var attributedString = new NSMutableAttributedString(config.Message, messageFont, config.MessageColor?.ToPlatform());
 

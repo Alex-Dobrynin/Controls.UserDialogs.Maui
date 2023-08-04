@@ -14,16 +14,14 @@ namespace Controls.UserDialogs.Maui;
 
 public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
 {
-    private readonly ActionSheetBuilder _builder;
-    private readonly ActionSheetConfig _config;
-    private readonly Typeface _typeface;
+    protected ActionSheetBuilder Builder { get; }
+    protected ActionSheetConfig Config { get; }
 
-    public ActionSheetListAdapter(Context context, int resource, int textViewResourceId, ActionSheetBuilder builder, ActionSheetConfig config, Typeface typeface)
+    public ActionSheetListAdapter(Context context, int resource, int textViewResourceId, ActionSheetBuilder builder, ActionSheetConfig config)
         : base(context, resource, textViewResourceId, config.Options)
     {
-        _builder = builder;
-        _config = config;
-        _typeface = typeface;
+        Builder = builder;
+        Config = config;
     }
 
     public override View GetView(int position, View convertView, ViewGroup parent)
@@ -32,25 +30,30 @@ public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
         var view = base.GetView(position, convertView, parent);
         var textView = view.FindViewById<TextView>(Android.Resource.Id.Text1);
 
-        var item = this._config.Options.ElementAt(position);
+        var item = this.Config.Options.ElementAt(position);
 
         textView.Text = item.Text;
-        textView.SetTextSize(ComplexUnitType.Sp, (float)_config.ActionSheetOptionFontSize);
-        if (_config.ActionSheetOptionTextColor is not null)
+        textView.SetTextSize(ComplexUnitType.Sp, (float)Config.ActionSheetOptionFontSize);
+        if (Config.ActionSheetOptionTextColor is not null)
         {
-            textView.SetTextColor(_config.ActionSheetOptionTextColor.ToPlatform());
+            textView.SetTextColor(Config.ActionSheetOptionTextColor.ToPlatform());
         }
-        textView.SetPadding(DpToPixels(_builder.Padding.Left), 0, DpToPixels(_builder.Padding.Right), 0);
-        textView.SetTypeface(_typeface, TypefaceStyle.Normal);
+        textView.SetPadding(DpToPixels(Builder.Padding.Left), 0, DpToPixels(Builder.Padding.Right), 0);
+
+        if (Config.OptionsButtonFontFamily is not null)
+        {
+            var typeface = Typeface.CreateFromAsset(Context.Assets, Config.OptionsButtonFontFamily);
+            textView.SetTypeface(typeface, TypefaceStyle.Normal);
+        }
 
         if (item.Icon is not null)
         {
-            var imgId = MauiApplication.Current.GetDrawableId(_config.Icon);
+            var imgId = MauiApplication.Current.GetDrawableId(Config.Icon);
             var img = MauiApplication.Current.GetDrawable(imgId);
-            img.ScaleTo(_builder.OptionIconSize);
+            img.ScaleTo(Builder.OptionIconSize);
 
             textView.SetCompoundDrawables(img, null, null, null);
-            textView.CompoundDrawablePadding = DpToPixels(_builder.OptionIconPadding);
+            textView.CompoundDrawablePadding = DpToPixels(Builder.OptionIconPadding);
         }
 
         view.Foreground = Extensions.GetSelectableItemForeground(this.Context);
