@@ -6,7 +6,7 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 
 ##### Since the original (Acr.UserDialogs) repo is out of support, this will give new breath to UserDialogs. It is more flexible to style your dialogs as you want. 
 
-
+[![NuGet](https://img.shields.io/nuget/v/Controls.UserDialogs.Maui.svg?maxAge=2592000)](https://www.nuget.org/packages/Controls.UserDialogs.Maui) ![NuGet](https://img.shields.io/nuget/dt/Controls.UserDialogs.Maui)
 
 ## Supported Platforms
 
