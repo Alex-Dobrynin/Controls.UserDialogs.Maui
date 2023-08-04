@@ -2,20 +2,20 @@
 
 public class SnackbarConfig
 {
-    public static string DefaultFontFamily { get; set; }
+    public static string DefaultMessageFontFamily { get; set; }
     public static string DefaultNegativeButtonFontFamily { get; set; }
 
     public static float DefaultCornerRadius { get; set; } = 10;
     public static Color DefaultBackgroundColor { get; set; }
     public static double DefaultMessageFontSize { get; set; } = 16;
     public static Color DefaultMessageColor { get; set; }
-    public static Color DefaultPositiveButtonTextColor { get; set; }
-    public static double DefaultPositiveButtonFontSize { get; set; } = 16;
+    public static Color DefaultNegativeButtonTextColor { get; set; }
+    public static double DefaultNegativeButtonFontSize { get; set; } = 16;
     public static ToastPosition DefaultPosition { get; set; }
 
     public static TimeSpan DefaultDuration { get; set; } = TimeSpan.FromSeconds(10);
 
-    public string FontFamily { get; set; } = DefaultFontFamily;
+    public string MessageFontFamily { get; set; } = DefaultMessageFontFamily;
     public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
 
     public Color BackgroundColor { get; set; } = DefaultBackgroundColor;
@@ -28,8 +28,8 @@ public class SnackbarConfig
     public float CornerRadius { get; set; } = DefaultCornerRadius;
     public double MessageFontSize { get; set; } = DefaultMessageFontSize;
     public Color MessageColor { get; set; } = DefaultMessageColor;
-    public Color PositiveButtonTextColor { get; set; } = DefaultPositiveButtonTextColor;
-    public double PositiveButtonFontSize { get; set; } = DefaultPositiveButtonFontSize;
+    public Color NegativeButtonTextColor { get; set; } = DefaultNegativeButtonTextColor;
+    public double NegativeButtonFontSize { get; set; } = DefaultNegativeButtonFontSize;
     public ToastPosition Position { get; set; } = DefaultPosition;
 
     public string Message { get; set; }

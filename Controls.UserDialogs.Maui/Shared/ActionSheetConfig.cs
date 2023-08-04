@@ -3,7 +3,7 @@
 public class ActionSheetConfig
 {
     public static string DefaultTitleFontFamily { get; set; }
-    public static string DefaultFontFamily { get; set; }
+    public static string DefaultMessageFontFamily { get; set; }
     public static string DefaultNegativeButtonFontFamily { get; set; }
     public static string DefaultDestructiveButtonFontFamily { get; set; }
     public static string DefaultOptionsButtonFontFamily { get; set; }
@@ -46,7 +46,7 @@ public class ActionSheetConfig
     public static float DefaultActionSheetOptionFontSize { get; set; } = 16;
 
     public string TitleFontFamily { get; set; } = DefaultTitleFontFamily;
-    public string FontFamily { get; set; } = DefaultFontFamily;
+    public string MessageFontFamily { get; set; } = DefaultMessageFontFamily;
     public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
     public string DestructiveButtonFontFamily { get; set; } = DefaultDestructiveButtonFontFamily;
     public string OptionsButtonFontFamily { get; set; } = DefaultOptionsButtonFontFamily;

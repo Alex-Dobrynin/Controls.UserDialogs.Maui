@@ -18,14 +18,14 @@ namespace Sample
 #else
                     var fontFamily = "OpenSans-Regular";
 #endif
-                    AlertConfig.DefaultFontFamily = fontFamily;
+                    AlertConfig.DefaultMessageFontFamily = fontFamily;
                     AlertConfig.DefaultUserInterfaceStyle = UserInterfaceStyle.Dark;
                     AlertConfig.DefaultPositiveButtonTextColor = Colors.Purple;
-                    ConfirmConfig.DefaultFontFamily = fontFamily;
-                    ActionSheetConfig.DefaultFontFamily = fontFamily;
-                    ToastConfig.DefaultFontFamily = fontFamily;
-                    SnackbarConfig.DefaultFontFamily = fontFamily;
-                    HudDialogConfig.DefaultFontFamily = fontFamily;
+                    ConfirmConfig.DefaultMessageFontFamily = fontFamily;
+                    ActionSheetConfig.DefaultMessageFontFamily = fontFamily;
+                    ToastConfig.DefaultMessageFontFamily = fontFamily;
+                    SnackbarConfig.DefaultMessageFontFamily = fontFamily;
+                    HudDialogConfig.DefaultMessageFontFamily = fontFamily;
                 })
                 .ConfigureFonts(fonts =>
                 {

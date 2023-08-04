@@ -40,11 +40,11 @@ public class HudDialog : IHudDialog
         if (_cnclBtn is not null)
         {
             UIFont font = null;
-            if (_config.FontFamily is not null)
+            if (_config.NegativeButtonFontFamily is not null)
             {
-                font = UIFont.FromName(_config.FontFamily, (float)config.NegativeButtonFontSize);
+                font = UIFont.FromName(_config.NegativeButtonFontFamily, (float)config.NegativeButtonFontSize);
             }
-            if (font is null) font = UIFont.SystemFontOfSize((float)config.NegativeButtonFontSize);
+            font ??= UIFont.SystemFontOfSize((float)config.NegativeButtonFontSize);
 
             _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
         }
@@ -52,7 +52,7 @@ public class HudDialog : IHudDialog
 
     public void Show()
     {
-        if(_config.Cancel is not null)
+        if (_config.Cancel is not null)
         {
             _cancel = () =>
             {
@@ -121,12 +121,12 @@ public class HudDialog : IHudDialog
             hud.HudForegroundColor = _config.MessageColor.ToPlatform();
         }
 
-        UIFont font;
-        if (_config.FontFamily is not null)
+        UIFont font = null;
+        if (_config.MessageFontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)_config.MessageFontSize);
+            font = UIFont.FromName(_config.MessageFontFamily, (float)_config.MessageFontSize);
         }
-        else font = UIFont.SystemFontOfSize((float)_config.MessageFontSize);
+        font ??= UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
         hud.HudFont = font;
     }
@@ -148,11 +148,11 @@ public class HudDialog : IHudDialog
         image.Transform = CGAffineTransform.MakeScale(1.2f, 1.2f);
 
         UIFont font = null;
-        if (_config.FontFamily is not null)
+        if (_config.NegativeButtonFontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)_config.NegativeButtonFontSize);
+            font = UIFont.FromName(_config.NegativeButtonFontFamily, (float)_config.NegativeButtonFontSize);
         }
-        if (font is null) font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
+        font ??= UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
 
         if (_config.Cancel is null) return;
         if (toolbar.Subviews[3] is not UIButton button) return;
@@ -184,11 +184,11 @@ public class HudDialog : IHudDialog
         }
 
         UIFont font = null;
-        if (_config.FontFamily is not null)
+        if (_config.MessageFontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)_config.MessageFontSize);
+            font = UIFont.FromName(_config.MessageFontFamily, (float)_config.MessageFontSize);
         }
-        if (font is null) font = UIFont.SystemFontOfSize((float)_config.MessageFontSize);
+        font ??= UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
         hud.HudFont = font;
     }
@@ -213,11 +213,11 @@ public class HudDialog : IHudDialog
         indicator.Transform = CGAffineTransform.MakeScale(1.3f, 1.3f);
 
         UIFont font = null;
-        if (_config.FontFamily is not null)
+        if (_config.NegativeButtonFontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)_config.NegativeButtonFontSize);
+            font = UIFont.FromName(_config.NegativeButtonFontFamily, (float)_config.NegativeButtonFontSize);
         }
-        if (font is null) font = UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
+        font ??= UIFont.SystemFontOfSize((float)_config.NegativeButtonFontSize);
 
         if (_config.Cancel is null) return;
         var button = toolbar.Subviews.OfType<UIButton>().FirstOrDefault();

@@ -154,9 +154,9 @@ public class SnackbarBuilder : Snackbar.Callback
         var text = l.GetChildAt(0) as TextView;
         text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)Config.MessageFontSize);
 
-        if (Config.FontFamily is not null)
+        if (Config.MessageFontFamily is not null)
         {
-            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.FontFamily);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.MessageFontFamily);
             text.SetTypeface(typeface, TypefaceStyle.Normal);
         }
 
@@ -180,9 +180,9 @@ public class SnackbarBuilder : Snackbar.Callback
         var text = new SpannableString(Config.ActionText);
         text.SetSpan(new LetterSpacingSpan(0), 0, Config.ActionText.Length, SpanTypes.ExclusiveExclusive);
 
-        if (Config.PositiveButtonTextColor is not null)
+        if (Config.NegativeButtonTextColor is not null)
         {
-            snackbar.SetActionTextColor(Config.PositiveButtonTextColor.ToInt());
+            snackbar.SetActionTextColor(Config.NegativeButtonTextColor.ToInt());
         }
         snackbar.SetAction(text, v =>
         {
@@ -192,7 +192,7 @@ public class SnackbarBuilder : Snackbar.Callback
 
         var l = (snackbar.View as Snackbar.SnackbarLayout).GetChildAt(0) as SnackbarContentLayout;
         var button = l.GetChildAt(1) as Android.Widget.Button;
-        button.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)Config.PositiveButtonFontSize);
+        button.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)Config.NegativeButtonFontSize);
 
         if (Config.NegativeButtonFontFamily is not null)
         {
@@ -227,15 +227,15 @@ public class SnackbarBuilder : Snackbar.Callback
 
         var text = new TextView(Activity);
 
-        if (Config.FontFamily is not null)
+        if (Config.MessageFontFamily is not null)
         {
-            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.FontFamily);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.MessageFontFamily);
             text.SetTypeface(typeface, TypefaceStyle.Normal);
         }
 
-        if (Config.PositiveButtonTextColor is not null)
+        if (Config.NegativeButtonTextColor is not null)
         {
-            text.SetTextColor(Config.PositiveButtonTextColor.ToPlatform());
+            text.SetTextColor(Config.NegativeButtonTextColor.ToPlatform());
         }
         text.Text = "" + Math.Round(Config.Duration.TotalSeconds);
         text.LayoutParameters = lParams;

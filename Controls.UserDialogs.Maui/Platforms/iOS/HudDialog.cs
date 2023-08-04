@@ -122,9 +122,9 @@ public class HudDialog : IHudDialog
         }
 
         UIFont font = null;
-        if (_config.FontFamily is not null)
+        if (_config.MessageFontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)_config.MessageFontSize);
+            font = UIFont.FromName(_config.MessageFontFamily, (float)_config.MessageFontSize);
         }
         font ??= UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
@@ -184,9 +184,9 @@ public class HudDialog : IHudDialog
         }
 
         UIFont font = null;
-        if (_config.FontFamily is not null)
+        if (_config.MessageFontFamily is not null)
         {
-            font = UIFont.FromName(_config.FontFamily, (float)_config.MessageFontSize);
+            font = UIFont.FromName(_config.MessageFontFamily, (float)_config.MessageFontSize);
         }
         font ??= UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 

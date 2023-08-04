@@ -333,11 +333,19 @@ public class Snackbar : UIView
 
     protected virtual UIView GetCountDown()
     {
+        UIFont font = null;
+        if (FontFamily is not null)
+        {
+            font = UIFont.FromName(FontFamily, MessageFontSize);
+        }
+        font ??= UIFont.SystemFontOfSize(MessageFontSize);
+
         var labelCounter = new UILabel
         {
             TextColor = ActionColor,
             TranslatesAutoresizingMaskIntoConstraints = false,
-            Text = "" + (int)DismissDuration.TotalSeconds
+            Text = "" + (int)DismissDuration.TotalSeconds,
+            Font = font
         };
 
         _timer.Elapsed += (s, a) =>

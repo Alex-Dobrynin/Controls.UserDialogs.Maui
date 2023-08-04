@@ -2,7 +2,7 @@
 
 public class ToastConfig
 {
-    public static string DefaultFontFamily { get; set; }
+    public static string DefaultMessageFontFamily { get; set; }
     public static float DefaultCornerRadius { get; set; } = 15;
     public static Color DefaultBackgroundColor { get; set; }
     public static double DefaultMessageFontSize { get; set; } = 16;
@@ -25,7 +25,7 @@ public class ToastConfig
     public float CornerRadius { get; set; } = 15;
     public ToastPosition Position { get; set; } = DefaultPosition;
     public TimeSpan Duration { get; set; } = DefaultDuration;
-    public string FontFamily { get; set; } = DefaultFontFamily;
+    public string MessageFontFamily { get; set; } = DefaultMessageFontFamily;
 
     public ToastConfig SetMessage(string message)
     {

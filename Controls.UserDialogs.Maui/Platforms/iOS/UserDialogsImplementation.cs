@@ -37,7 +37,7 @@ public partial class UserDialogsImplementation
                 MessageFontSize = (float)config.MessageFontSize,
                 CornerRadius = config.CornerRadius,
                 DismissDuration = config.Duration,
-                FontFamily = config.FontFamily,
+                FontFamily = config.MessageFontFamily,
                 Position = config.Position.ToNative(),
             };
             bar.BackgroundColor ??= config.BackgroundColor.ToPlatform();
@@ -62,7 +62,7 @@ public partial class UserDialogsImplementation
                 MessageFontSize = (float)config.MessageFontSize,
                 CornerRadius = config.CornerRadius,
                 DismissDuration = config.Duration,
-                FontFamily = config.FontFamily,
+                FontFamily = config.MessageFontFamily,
                 CancelButtonFontFamily = config.NegativeButtonFontFamily,
                 Position = config.Position.ToNative(),
                 Style = Style.Snackbar,
@@ -76,7 +76,7 @@ public partial class UserDialogsImplementation
             };
             bar.BackgroundColor = config.BackgroundColor?.ToPlatform() ?? bar.BackgroundColor;
             bar.MessageColor = config.MessageColor?.ToPlatform() ?? bar.MessageColor;
-            bar.ActionColor = config.PositiveButtonTextColor?.ToPlatform() ?? bar.ActionColor;
+            bar.ActionColor = config.NegativeButtonTextColor?.ToPlatform() ?? bar.ActionColor;
             bar.Show();
             bar.Timeout += (s, a) =>
             {
@@ -93,7 +93,7 @@ public partial class UserDialogsImplementation
 
     protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config)
     {
-        if (CurrentHudDialog is not null) CurrentHudDialog.Dispose();
+        CurrentHudDialog?.Dispose();
 
         var dialog = new HudDialog();
         dialog.Update(config);

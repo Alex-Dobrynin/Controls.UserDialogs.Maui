@@ -171,9 +171,9 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
             textView.SetTextColor(Config.MessageColor.ToPlatform());
         }
 
-        if (Config.FontFamily is not null)
+        if (Config.MessageFontFamily is not null)
         {
-            var typeface = Typeface.CreateFromAsset(this.Activity.Assets, Config.FontFamily);
+            var typeface = Typeface.CreateFromAsset(this.Activity.Assets, Config.MessageFontFamily);
             textView.SetTypeface(typeface, TypefaceStyle.Normal);
         }
 

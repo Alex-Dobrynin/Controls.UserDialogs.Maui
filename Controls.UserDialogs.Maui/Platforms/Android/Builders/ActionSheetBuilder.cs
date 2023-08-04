@@ -122,9 +122,9 @@ public class ActionSheetBuilder
         }
         messageSpan.SetSpan(new AbsoluteSizeSpan((int)Config.MessageFontSize, true), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
 
-        if (Config.FontFamily is not null)
+        if (Config.MessageFontFamily is not null)
         {
-            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.FontFamily);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.MessageFontFamily);
             messageSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
 

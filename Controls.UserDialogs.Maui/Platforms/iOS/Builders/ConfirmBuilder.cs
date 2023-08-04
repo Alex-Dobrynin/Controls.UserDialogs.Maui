@@ -19,17 +19,17 @@ public class ConfirmBuilder
     {
         var alert = UIAlertController.Create("", "", UIAlertControllerStyle.Alert);
 
-        alert.AddAction(GetCancelAction(Config));
-        alert.AddAction(GetOkAction(Config));
+        alert.AddAction(GetCancelAction());
+        alert.AddAction(GetOkAction());
 
         if (Config.Title is not null)
         {
-            alert.SetValueForKey(GetTitle(Config), new NSString("attributedTitle"));
+            alert.SetValueForKey(GetTitle(), new NSString("attributedTitle"));
         }
 
         if (Config.Message is not null)
         {
-            alert.SetValueForKey(GetMessage(Config), new NSString("attributedMessage"));
+            alert.SetValueForKey(GetMessage(), new NSString("attributedMessage"));
         }
 
         if (Config.UserInterfaceStyle is not null)
@@ -40,53 +40,53 @@ public class ConfirmBuilder
         return alert;
     }
 
-    protected virtual NSAttributedString GetTitle(ConfirmConfig config)
+    protected virtual NSAttributedString GetTitle()
     {
         UIFont titleFont = null;
-        if (config.TitleFontFamily is not null)
+        if (Config.TitleFontFamily is not null)
         {
-            titleFont = UIFont.FromName(config.TitleFontFamily, config.TitleFontSize);
+            titleFont = UIFont.FromName(Config.TitleFontFamily, Config.TitleFontSize);
         }
-        titleFont ??= UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
+        titleFont ??= UIFont.SystemFontOfSize(Config.TitleFontSize, UIFontWeight.Bold);
 
-        var attributedString = new NSMutableAttributedString(config.Title, titleFont, config.TitleColor?.ToPlatform());
+        var attributedString = new NSMutableAttributedString(Config.Title, titleFont, Config.TitleColor?.ToPlatform());
 
         return attributedString;
     }
 
-    protected virtual NSAttributedString GetMessage(ConfirmConfig config)
+    protected virtual NSAttributedString GetMessage()
     {
         UIFont messageFont = null;
-        if (config.FontFamily is not null)
+        if (Config.MEssageFontFamily is not null)
         {
-            messageFont = UIFont.FromName(config.FontFamily, config.MessageFontSize);
+            messageFont = UIFont.FromName(Config.MEssageFontFamily, Config.MessageFontSize);
         }
-        messageFont ??= UIFont.SystemFontOfSize(config.MessageFontSize);
+        messageFont ??= UIFont.SystemFontOfSize(Config.MessageFontSize);
 
-        var attributedString = new NSMutableAttributedString(config.Message, messageFont, config.MessageColor?.ToPlatform());
+        var attributedString = new NSMutableAttributedString(Config.Message, messageFont, Config.MessageColor?.ToPlatform());
 
         return attributedString;
     }
 
-    protected virtual UIAlertAction GetOkAction(ConfirmConfig config)
+    protected virtual UIAlertAction GetOkAction()
     {
-        var action = UIAlertAction.Create(config.OkText, UIAlertActionStyle.Default, x => config.Action?.Invoke(true));
+        var action = UIAlertAction.Create(Config.OkText, UIAlertActionStyle.Default, x => Config.Action?.Invoke(true));
 
-        if (config.PositiveButtonTextColor is not null)
+        if (Config.PositiveButtonTextColor is not null)
         {
-            action.SetValueForKey(config.PositiveButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
+            action.SetValueForKey(Config.PositiveButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
         }
 
         return action;
     }
 
-    protected virtual UIAlertAction GetCancelAction(ConfirmConfig config)
+    protected virtual UIAlertAction GetCancelAction()
     {
-        var action = UIAlertAction.Create(config.CancelText, UIAlertActionStyle.Cancel, x => config.Action?.Invoke(false));
+        var action = UIAlertAction.Create(Config.CancelText, UIAlertActionStyle.Cancel, x => Config.Action?.Invoke(false));
 
-        if (config.NegativeButtonTextColor is not null)
+        if (Config.NegativeButtonTextColor is not null)
         {
-            action.SetValueForKey(config.NegativeButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
+            action.SetValueForKey(Config.NegativeButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
         }
 
         return action;

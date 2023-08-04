@@ -16,68 +16,75 @@ public class ActionSheetBuilder
     public double DestructiveIconSize { get; set; } = DefaultDestructiveIconSize;
     public double CancelIconSize { get; set; } = DefaultCancelIconSize;
 
-    public virtual UIAlertController Build(ActionSheetConfig config)
+    protected ActionSheetConfig Config { get; }
+
+    public ActionSheetBuilder(ActionSheetConfig config)
+    {
+        Config = config;
+    }
+
+    public virtual UIAlertController Build()
     {
         var alert = UIAlertController.Create("", "", UIAlertControllerStyle.Alert);
 
-        config.Options.ToList().ForEach(o => alert.AddAction(GetOptionAction(config, o)));
+        Config.Options.ToList().ForEach(o => alert.AddAction(GetOptionAction(o)));
 
-        alert.AddAction(GetDestructiveAction(config));
-        alert.AddAction(GetCancelAction(config));
+        alert.AddAction(GetDestructiveAction());
+        alert.AddAction(GetCancelAction());
 
-        if (config.Title is not null)
+        if (Config.Title is not null)
         {
-            alert.SetValueForKey(GetTitle(config), new NSString("attributedTitle"));
+            alert.SetValueForKey(GetTitle(), new NSString("attributedTitle"));
         }
 
-        if (config.Message is not null)
+        if (Config.Message is not null)
         {
-            alert.SetValueForKey(GetMessage(config), new NSString("attributedMessage"));
+            alert.SetValueForKey(GetMessage(), new NSString("attributedMessage"));
         }
 
-        if (config.UserInterfaceStyle is not null)
+        if (Config.UserInterfaceStyle is not null)
         {
-            alert.OverrideUserInterfaceStyle = config.UserInterfaceStyle.Value.ToNative();
+            alert.OverrideUserInterfaceStyle = Config.UserInterfaceStyle.Value.ToNative();
         }
 
         return alert;
     }
 
-    protected virtual NSAttributedString GetTitle(ActionSheetConfig config)
+    protected virtual NSAttributedString GetTitle()
     {
         UIFont titleFont = null;
-        if (config.TitleFontFamily is not null)
+        if (Config.TitleFontFamily is not null)
         {
-            titleFont = UIFont.FromName(config.TitleFontFamily, config.TitleFontSize);
+            titleFont = UIFont.FromName(Config.TitleFontFamily, Config.TitleFontSize);
         }
-        if (titleFont is null) titleFont = UIFont.SystemFontOfSize(config.TitleFontSize, UIFontWeight.Bold);
+        titleFont ??= UIFont.SystemFontOfSize(Config.TitleFontSize, UIFontWeight.Bold);
 
-        var attributedString = new NSMutableAttributedString(config.Title, titleFont, config.TitleColor?.ToPlatform());
+        var attributedString = new NSMutableAttributedString(Config.Title, titleFont, Config.TitleColor?.ToPlatform());
 
         return attributedString;
     }
 
-    protected virtual NSAttributedString GetMessage(ActionSheetConfig config)
+    protected virtual NSAttributedString GetMessage()
     {
         UIFont messageFont = null;
-        if (config.FontFamily is not null)
+        if (Config.MessageFontFamily is not null)
         {
-            messageFont = UIFont.FromName(config.FontFamily, config.MessageFontSize);
+            messageFont = UIFont.FromName(Config.MessageFontFamily, Config.MessageFontSize);
         }
-        if (messageFont is null) messageFont = UIFont.SystemFontOfSize(config.MessageFontSize);
+        messageFont ??= UIFont.SystemFontOfSize(Config.MessageFontSize);
 
-        var attributedString = new NSMutableAttributedString(config.Message, messageFont, config.MessageColor?.ToPlatform());
+        var attributedString = new NSMutableAttributedString(Config.Message, messageFont, Config.MessageColor?.ToPlatform());
 
         return attributedString;
     }
 
-    protected virtual UIAlertAction GetOptionAction(ActionSheetConfig config, ActionSheetOption option)
+    protected virtual UIAlertAction GetOptionAction(ActionSheetOption option)
     {
         var action = UIAlertAction.Create(option.Text, UIAlertActionStyle.Default, x => option.Action?.Invoke());
 
-        if (config.ActionSheetOptionTextColor is not null)
+        if (Config.ActionSheetOptionTextColor is not null)
         {
-            action.SetValueForKey(config.ActionSheetOptionTextColor.ToPlatform(), new NSString("titleTextColor"));
+            action.SetValueForKey(Config.ActionSheetOptionTextColor.ToPlatform(), new NSString("titleTextColor"));
         }
 
         if (option.Icon is not null)
@@ -89,36 +96,36 @@ public class ActionSheetBuilder
         return action;
     }
 
-    protected virtual UIAlertAction GetDestructiveAction(ActionSheetConfig config)
+    protected virtual UIAlertAction GetDestructiveAction()
     {
-        var action = UIAlertAction.Create(config.Destructive.Text, UIAlertActionStyle.Destructive, x => config.Destructive.Action?.Invoke());
+        var action = UIAlertAction.Create(Config.Destructive.Text, UIAlertActionStyle.Destructive, x => Config.Destructive.Action?.Invoke());
 
-        if (config.DestructiveButtonTextColor is not null)
+        if (Config.DestructiveButtonTextColor is not null)
         {
-            action.SetValueForKey(config.DestructiveButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
+            action.SetValueForKey(Config.DestructiveButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
         }
 
-        if (config.Destructive.Icon is not null)
+        if (Config.Destructive.Icon is not null)
         {
-            var img = UIImage.FromBundle(config.Destructive.Icon).ScaleTo(DestructiveIconSize);
+            var img = UIImage.FromBundle(Config.Destructive.Icon).ScaleTo(DestructiveIconSize);
             action.SetValueForKey(img, new NSString("image"));
         }
 
         return action;
     }
 
-    protected virtual UIAlertAction GetCancelAction(ActionSheetConfig config)
+    protected virtual UIAlertAction GetCancelAction()
     {
-        var action = UIAlertAction.Create(config.Cancel.Text, UIAlertActionStyle.Cancel, x => config.Cancel.Action?.Invoke());
+        var action = UIAlertAction.Create(Config.Cancel.Text, UIAlertActionStyle.Cancel, x => Config.Cancel.Action?.Invoke());
 
-        if (config.NegativeButtonTextColor is not null)
+        if (Config.NegativeButtonTextColor is not null)
         {
-            action.SetValueForKey(config.NegativeButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
+            action.SetValueForKey(Config.NegativeButtonTextColor.ToPlatform(), new NSString("titleTextColor"));
         }
 
-        if (config.Cancel.Icon is not null)
+        if (Config.Cancel.Icon is not null)
         {
-            var img = UIImage.FromBundle(config.Cancel.Icon).ScaleTo(CancelIconSize);
+            var img = UIImage.FromBundle(Config.Cancel.Icon).ScaleTo(CancelIconSize);
             action.SetValueForKey(img, new NSString("image"));
         }
 

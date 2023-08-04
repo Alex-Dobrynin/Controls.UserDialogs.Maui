@@ -2,7 +2,7 @@
 
 public class HudDialogConfig
 {
-    public static string DefaultFontFamily { get; set; }
+    public static string DefaultMessageFontFamily { get; set; }
     public static string DefaultNegativeButtonFontFamily { get; set; }
     public static float DefaultCornerRadius { get; set; } = 15;
     public static Color DefaultBackgroundColor { get; set; } = Colors.Black.WithAlpha(0.5f);
@@ -26,7 +26,7 @@ public class HudDialogConfig
     /// Doesn't work within ios image hud
     /// </summary>
     public Action Cancel { get; set; }
-    public string FontFamily { get; set; } = DefaultFontFamily;
+    public string MessageFontFamily { get; set; } = DefaultMessageFontFamily;
     public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
     public float CornerRadius { get; set; } = DefaultCornerRadius;
     public Color BackgroundColor { get; set; } = DefaultBackgroundColor;

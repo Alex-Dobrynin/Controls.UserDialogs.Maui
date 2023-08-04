@@ -133,9 +133,9 @@ public class ToastBuilder : Snackbar.Callback
         var text = l.GetChildAt(0) as TextView;
         text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)Config.MessageFontSize);
 
-        if (Config.FontFamily is not null)
+        if (Config.MessageFontFamily is not null)
         {
-            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.FontFamily);
+            var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.MessageFontFamily);
             text.SetTypeface(typeface, TypefaceStyle.Normal);
         }
 

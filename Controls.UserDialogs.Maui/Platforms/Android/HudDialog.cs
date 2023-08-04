@@ -126,9 +126,9 @@ public class HudDialog : IHudDialog
             return;
 
         Typeface typeFace = null;
-        if (_config.FontFamily is not null)
+        if (_config.MessageFontFamily is not null)
         {
-            typeFace = Typeface.CreateFromAsset(Activity.Assets, _config.FontFamily);
+            typeFace = Typeface.CreateFromAsset(Activity.Assets, _config.MessageFontFamily);
         }
 
         dialog.Window.AddFlags(WindowManagerFlags.NotFocusable);

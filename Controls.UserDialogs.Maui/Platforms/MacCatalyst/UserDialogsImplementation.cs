@@ -10,17 +10,17 @@ public partial class UserDialogsImplementation
 {
     public virtual partial IDisposable Alert(AlertConfig config) => this.Present(() =>
     {
-        return new AlertBuilder().Build(config);
+        return new AlertBuilder(config).Build();
     });
 
     public virtual partial IDisposable Confirm(ConfirmConfig config) => this.Present(() =>
     {
-        return new ConfirmBuilder().Build(config);
+        return new ConfirmBuilder(config).Build();
     });
 
     public virtual partial IDisposable ActionSheet(ActionSheetConfig config) => this.Present(() =>
     {
-        return new ActionSheetBuilder().Build(config);
+        return new ActionSheetBuilder(config).Build();
     });
 
     public virtual partial IDisposable ShowToast(ToastConfig config)
@@ -37,7 +37,7 @@ public partial class UserDialogsImplementation
                 MessageFontSize = (float)config.MessageFontSize,
                 CornerRadius = config.CornerRadius,
                 DismissDuration = config.Duration,
-                FontFamily = config.FontFamily,
+                FontFamily = config.MessageFontFamily,
                 Position = config.Position.ToNative(),
             };
             bar.BackgroundColor ??= config.BackgroundColor.ToPlatform();
@@ -62,7 +62,8 @@ public partial class UserDialogsImplementation
                 MessageFontSize = (float)config.MessageFontSize,
                 CornerRadius = config.CornerRadius,
                 DismissDuration = config.Duration,
-                FontFamily = config.FontFamily,
+                FontFamily = config.MessageFontFamily,
+                CancelButtonFontFamily = config.NegativeButtonFontFamily,
                 Position = config.Position.ToNative(),
                 Style = Style.Snackbar,
                 ActionText = config.ActionText,
@@ -75,7 +76,7 @@ public partial class UserDialogsImplementation
             };
             bar.BackgroundColor = config.BackgroundColor?.ToPlatform() ?? bar.BackgroundColor;
             bar.MessageColor = config.MessageColor?.ToPlatform() ?? bar.MessageColor;
-            bar.ActionColor = config.PositiveButtonTextColor?.ToPlatform() ?? bar.ActionColor;
+            bar.ActionColor = config.NegativeButtonTextColor?.ToPlatform() ?? bar.ActionColor;
             bar.Show();
             bar.Timeout += (s, a) =>
             {
@@ -92,7 +93,7 @@ public partial class UserDialogsImplementation
 
     protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config)
     {
-        if (CurrentHudDialog is not null) CurrentHudDialog.Dispose();
+        CurrentHudDialog?.Dispose();
 
         var dialog = new HudDialog();
         dialog.Update(config);
