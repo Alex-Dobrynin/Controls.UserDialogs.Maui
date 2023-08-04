@@ -41,9 +41,9 @@ builder
         //setup your default styles for dialogs
         AlertConfig.DefaultBackgroundColor = Colors.Purple;
 #if ANDROID
-        AlertConfig.DefaultFontFamily = "OpenSans-Regular.ttf";
+        AlertConfig.DefaultMessageFontFamily = "OpenSans-Regular.ttf";
 #else
-        AlertConfig.DefaultFontFamily = "OpenSans-Regular";
+        AlertConfig.DefaultMessageFontFamily = "OpenSans-Regular";
 #endif
 
         ToastConfig.DefaultCornerRadius = 15;
