@@ -4,24 +4,28 @@ namespace Sample
 {
     public partial class MainPage : ContentPage
     {
-        public MainPage()
+        private readonly IUserDialogs _userDialogs;
+
+        public MainPage(IUserDialogs userDialogs)
         {
+            _userDialogs = userDialogs;
+
             InitializeComponent();
         }
 
         private void Button_Clicked(object sender, EventArgs e)
         {
-            UserDialogs.Instance.Alert("This is Alert dialog", "Alert dialog", "Understand", "dotnet_bot.png");
+            _userDialogs.Alert("This is Alert dialog", "Alert dialog", "Understand", "dotnet_bot.png");
         }
 
         private async void Button_Clicked_1(object sender, EventArgs e)
         {
-            await UserDialogs.Instance.AlertAsync("This is asyn Alert dialog", "Async Alert dialog", "Understand", "dotnet_bot.png");
+            await _userDialogs.AlertAsync("This is asyn Alert dialog", "Async Alert dialog", "Understand", "dotnet_bot.png");
         }
 
         private void Button_Clicked_2(object sender, EventArgs e)
         {
-            UserDialogs.Instance.Confirm("This is Confirm dialog", "Confirm dialog", "Understand", "Nope", "dotnet_bot.png", res =>
+            _userDialogs.Confirm("This is Confirm dialog", "Confirm dialog", "Understand", "Nope", "dotnet_bot.png", res =>
             {
 
             });
@@ -29,7 +33,7 @@ namespace Sample
 
         private async void Button_Clicked_3(object sender, EventArgs e)
         {
-            var res = await UserDialogs.Instance.ConfirmAsync("This is Async Confirm dialog", "Async Confirm dialog", "Understand", "Cancel", "dotnet_bot.png");
+            var res = await _userDialogs.ConfirmAsync("This is Async Confirm dialog", "Async Confirm dialog", "Understand", "Cancel", "dotnet_bot.png");
         }
 
         private void Button_Clicked_4(object sender, EventArgs e)
@@ -52,7 +56,7 @@ namespace Sample
                 }
             };
 
-            UserDialogs.Instance.ActionSheet(config);
+            _userDialogs.ActionSheet(config);
 #endif
         }
 
@@ -61,7 +65,7 @@ namespace Sample
 #if IOS
             UserDialogs.Instance.Alert("Async Action sheet is not supported on ios", "Warning", "Understand", "dotnet_bot.png");
 #else
-            var res = await UserDialogs.Instance.ActionSheetAsync(
+            var res = await _userDialogs.ActionSheetAsync(
                 "not supported", 
                 "Async Action sheet", 
                 "Cancel", 
@@ -97,7 +101,7 @@ namespace Sample
                 }
             };
 
-            UserDialogs.Instance.ActionSheet(config);
+            _userDialogs.ActionSheet(config);
 #endif
         }
 
@@ -106,7 +110,7 @@ namespace Sample
 #if MACCATALYST
             UserDialogs.Instance.Alert("Async Bottom Action sheet is not supported on mac catalyst", "Warning", "Understand", "dotnet_bot.png");
 #else
-            var res = await UserDialogs.Instance.ActionSheetAsync(
+            var res = await _userDialogs.ActionSheetAsync(
                 "This is Async Bottom Action sheet",
                 "Async Bottom Action sheet",
                 "Cancel",
@@ -123,11 +127,11 @@ namespace Sample
 
         private async void Button_Clicked_8(object sender, EventArgs e)
         {
-            UserDialogs.Instance.ShowLoading("Loading HUD");
+            _userDialogs.ShowLoading("Loading HUD");
             await Task.Delay(3000);
-            UserDialogs.Instance.HideHud();
+            _userDialogs.HideHud();
 
-            var hudDialog = UserDialogs.Instance.Loading("Another loading HUD");
+            var hudDialog = _userDialogs.Loading("Another loading HUD");
             await Task.Delay(3000);
             hudDialog.Update("Previous loading but with action", -1, null, "Cancel", cancel: () =>
             {
@@ -141,7 +145,7 @@ namespace Sample
 
         private async void Button_Clicked_9(object sender, EventArgs e)
         {
-            var hudDialog = UserDialogs.Instance.Progress("Progress HUD");
+            var hudDialog = _userDialogs.Progress("Progress HUD");
             await Task.Delay(3000);
 
             for (int i = 0; i < 100; i++)
@@ -159,11 +163,11 @@ namespace Sample
 
         private async void Button_Clicked_10(object sender, EventArgs e)
         {
-            var hudDialog = UserDialogs.Instance.ShowHudImage("dotnet_bot.png", "Image HUD");
+            var hudDialog = _userDialogs.ShowHudImage("dotnet_bot.png", "Image HUD");
             await Task.Delay(3000);
             hudDialog.Dispose();
 
-            hudDialog = UserDialogs.Instance.ShowHudImage("dotnet_bot.png", "Another Image HUD");
+            hudDialog = _userDialogs.ShowHudImage("dotnet_bot.png", "Another Image HUD");
 #if ANDROID
             await Task.Delay(3000);
             hudDialog.Update("Previous Image but with action", -1, "dotnet_bot.png", "Cancel", cancel: () =>
@@ -179,7 +183,7 @@ namespace Sample
 
         private void Button_Clicked_11(object sender, EventArgs e)
         {
-            UserDialogs.Instance.ShowToast(new ToastConfig()
+            _userDialogs.ShowToast(new ToastConfig()
             {
                 Icon = "dotnet_bot.png",
                 Message = "This is toast notification"
@@ -188,7 +192,7 @@ namespace Sample
 
         private void Button_Clicked_12(object sender, EventArgs e)
         {
-            UserDialogs.Instance.ShowSnackbar(new SnackbarConfig()
+            _userDialogs.ShowSnackbar(new SnackbarConfig()
             {
                 Icon = "dotnet_bot.png",
                 Message = "This is snackbar",
@@ -204,7 +208,7 @@ namespace Sample
 
         private async void Button_Clicked_13(object sender, EventArgs e)
         {
-            var res = await UserDialogs.Instance.ShowSnackbarAsync(new SnackbarConfig()
+            var res = await _userDialogs.ShowSnackbarAsync(new SnackbarConfig()
             {
                 Icon = "dotnet_bot.png",
                 Message = "This is a Snackbar",
