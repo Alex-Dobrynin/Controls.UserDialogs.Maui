@@ -1,6 +1,6 @@
 ﻿namespace Controls.UserDialogs.Maui;
 
-public partial class UserDialogs
+public class UserDialogs
 {
     static IUserDialogs _currentInstance;
     public static IUserDialogs Instance
@@ -14,6 +14,4 @@ public partial class UserDialogs
         }
         set => _currentInstance = value;
     }
-
-    public static partial MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, Action configure = null);
 }
