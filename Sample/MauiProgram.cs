@@ -38,6 +38,8 @@ namespace Sample
             builder.Logging.AddDebug();
 #endif
 
+            builder.Services.AddTransient<MainPage>();
+
             return builder.Build();
         }
     }
