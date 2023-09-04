@@ -1,6 +1,6 @@
 ﻿namespace Controls.UserDialogs.Maui;
 
-public class UserDialogs
+public static class UserDialogs
 {
     static IUserDialogs _currentInstance;
     public static IUserDialogs Instance
@@ -13,5 +13,24 @@ public class UserDialogs
             return _currentInstance;
         }
         set => _currentInstance = value;
+    }
+
+    public static MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, Action configure = null)
+    {
+        return UseUserDialogs(builder, false, configure);
+    }
+
+    public static MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, bool registerInterface, Action configure = null)
+    {
+        Instance = new UserDialogsImplementation();
+
+        configure?.Invoke();
+
+        if (registerInterface)
+        {
+            builder.Services.AddTransient((s) => Instance);
+        }
+
+        return builder;
     }
 }

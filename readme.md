@@ -32,6 +32,12 @@ To use, make sure you are using the latest version of .NET MAUI
 
 Add ```UseUserDialogs(() => { })``` to your MauiProgram.cs file
 
+Also there is another overload which allows you to register UserDialogs instance in services and then use it with DI
+
+```csharp
+UseUserDialogs(registerInterface: true, () => { })
+```
+
 ```csharp
 builder
     .UseMauiApp<App>()
