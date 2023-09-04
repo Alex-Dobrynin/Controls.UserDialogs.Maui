@@ -8,7 +8,17 @@ public static class MauiAppBuilderExtension
 
         configure?.Invoke();
 
-        builder.Services.AddTransient((s) => UserDialogs.Instance);
+        return builder;
+    }
+
+    public static MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, bool registerInterface, Action configure = null)
+    {
+        UseUserDialogs(builder, configure);
+
+        if (registerInterface)
+        {
+            builder.Services.AddTransient((s) => UserDialogs.Instance);
+        }
 
         return builder;
     }
