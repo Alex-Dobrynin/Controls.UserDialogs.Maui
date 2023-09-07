@@ -33,7 +33,10 @@ public class ActionSheetBuilder
             alert.AddAction(GetDestructiveAction());
         }
 
-        alert.AddAction(GetCancelAction());
+        if (Config.Cancel is not null)
+        {
+            alert.AddAction(GetCancelAction());
+        }
 
         if (Config.Title is not null)
         {

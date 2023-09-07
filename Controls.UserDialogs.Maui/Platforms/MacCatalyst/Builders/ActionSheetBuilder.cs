@@ -29,8 +29,15 @@ public class ActionSheetBuilder
 
         Config.Options.ToList().ForEach(o => alert.AddAction(GetOptionAction(o)));
 
-        alert.AddAction(GetDestructiveAction());
-        alert.AddAction(GetCancelAction());
+        if (Config.Destructive is not null)
+        {
+            alert.AddAction(GetDestructiveAction());
+        }
+
+        if (Config.Cancel is not null)
+        {
+            alert.AddAction(GetCancelAction());
+        }
 
         if (Config.Title is not null)
         {
