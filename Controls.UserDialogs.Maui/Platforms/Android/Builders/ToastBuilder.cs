@@ -41,7 +41,7 @@ public class ToastBuilder : Snackbar.Callback
 
         var timer = new System.Timers.Timer
         {
-            Interval = Config.Duration.TotalMilliseconds - FadeInFadeOutAnimationDuration,
+            Interval = Config.Duration.TotalMilliseconds,
             AutoReset = false
         };
         timer.Elapsed += (s, a) =>
@@ -74,11 +74,9 @@ public class ToastBuilder : Snackbar.Callback
 
     public virtual Snackbar Build()
     {
-        var view = Activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
-
         var snackbar = Snackbar.Make(
             Activity,
-            view,
+            Activity.Window.DecorView,
             Config.Message,
             (int)Config.Duration.TotalMilliseconds
         );
@@ -106,7 +104,6 @@ public class ToastBuilder : Snackbar.Callback
             {
                 layoutParams.Gravity = GravityFlags.CenterHorizontal | GravityFlags.Top;
             }
-
 
             snackbar.View.LayoutParameters = layoutParams;
         }

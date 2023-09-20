@@ -280,7 +280,7 @@ public class HudDialog : IHudDialog
         {
             _progressText = null;
             _cnclBtn = null;
-            AndHUD.Shared.Dismiss(Activity);
+            AndHUD.Shared.Dismiss();
         }
         catch (Exception ex)
         {

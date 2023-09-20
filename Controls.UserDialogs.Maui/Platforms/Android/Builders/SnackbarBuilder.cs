@@ -48,7 +48,7 @@ public class SnackbarBuilder : Snackbar.Callback
 
         var timer = new System.Timers.Timer
         {
-            Interval = Config.Duration.TotalMilliseconds - FadeInFadeOutAnimationDuration,
+            Interval = Config.Duration.TotalMilliseconds,
             AutoReset = false
         };
         timer.Elapsed += (s, a) =>
@@ -93,11 +93,9 @@ public class SnackbarBuilder : Snackbar.Callback
 
     public virtual Snackbar Build()
     {
-        var view = Activity.Window.DecorView.RootView.FindViewById(Android.Resource.Id.Content);
-
         var snackbar = Snackbar.Make(
             Activity,
-            view,
+            Activity.Window.DecorView,
             Config.Message,
             (int)Config.Duration.TotalMilliseconds
         );
