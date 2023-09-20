@@ -14,7 +14,7 @@ namespace Controls.UserDialogs.Maui;
 
 public class ToastBuilder : Snackbar.Callback
 {
-    public static Thickness DefaultScreenMargin { get; set; } = new Thickness(20, 50, 20, 80);
+    public static Thickness DefaultScreenMargin { get; set; } = new Thickness(20, 50, 20, 100);
     public static double DefaultIconPadding { get; set; } = 10;
     public static double DefaultIconSize { get; set; } = 24;
     public static long DefaultFadeInFadeOutAnimationDuration { get; set; } = 300;
@@ -76,7 +76,7 @@ public class ToastBuilder : Snackbar.Callback
     {
         var snackbar = Snackbar.Make(
             Activity,
-            Activity.Window.DecorView,
+            Activity.Window.DecorView.RootView,
             Config.Message,
             (int)Config.Duration.TotalMilliseconds
         );
