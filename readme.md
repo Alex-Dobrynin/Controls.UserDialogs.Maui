@@ -11,7 +11,7 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 ## Supported Platforms
 
 * .NET8
-* .NET8 for Android (min 7.0)(major target 13.0)
+* .NET8 for Android (min 7.0)(major target 14.0)
 * .NET8 for iOS (min 14.2)
 * .NET8 for MacCatalyst (min 13.1)
 
