@@ -45,6 +45,12 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         dialog.SetCanceledOnTouchOutside(cancellable);
     }
 
+    public override void OnCancel(IDialogInterface dialog)
+    {
+        base.OnCancel(dialog);
+        this.Config?.Cancel?.Action?.Invoke();
+    }
+
     protected override void OnKeyPress(object sender, DialogKeyEventArgs args)
     {
         base.OnKeyPress(sender, args);

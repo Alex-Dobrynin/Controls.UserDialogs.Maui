@@ -45,7 +45,10 @@ namespace Sample
             {
                 UseBottomSheet = false,
                 Destructive = new ActionSheetOption("Destroy", () => { }, "dotnet_bot.png"),
-                Cancel = new ActionSheetOption("Cancel", () => { }, "dotnet_bot.png"),
+                Cancel = new ActionSheetOption("Cancel", () =>
+                {
+
+                }, "dotnet_bot.png"),
                 Title = "Action sheet",
                 Icon = "dotnet_bot.png",
                 Options = new ActionSheetOption[]
@@ -66,15 +69,15 @@ namespace Sample
             UserDialogs.Instance.Alert("Async Action sheet is not supported on ios", "Warning", "Understand", "dotnet_bot.png");
 #else
             var res = await _userDialogs.ActionSheetAsync(
-                "not supported", 
-                "Async Action sheet", 
-                "Cancel", 
-                "Destroy", 
-                "dotnet_bot.png", 
-                false, 
-                default, 
-                "First option", 
-                "Second option", 
+                "not supported",
+                "Async Action sheet",
+                "Cancel",
+                "Destroy",
+                "dotnet_bot.png",
+                false,
+                default,
+                "First option",
+                "Second option",
                 "Third option"
                 );
 #endif
@@ -89,7 +92,10 @@ namespace Sample
             {
                 UseBottomSheet = true,
                 Destructive = new ActionSheetOption("Destroy", () => { }, "dotnet_bot.png"),
-                Cancel = new ActionSheetOption("Cancel", () => { }, "dotnet_bot.png"),
+                Cancel = new ActionSheetOption("Cancel", () => 
+                { 
+                
+                }, "dotnet_bot.png"),
                 Title = "Bottom Action sheet",
                 Message = "This is Bottom Action sheet",
                 Icon = "dotnet_bot.png",
@@ -122,6 +128,8 @@ namespace Sample
                 "Second option",
                 "Third option"
                 );
+
+                var r = res;
 #endif
         }
 

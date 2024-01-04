@@ -40,7 +40,7 @@ public class ConfirmConfig
     public static float DefaultNegativeButtonFontSize { get; set; } = 18;
 
     public string TitleFontFamily { get; set; } = DefaultTitleFontFamily;
-    public string MEssageFontFamily { get; set; } = DefaultMessageFontFamily;
+    public string MessageFontFamily { get; set; } = DefaultMessageFontFamily;
     public string PositiveButtonFontFamily { get; set; } = DefaultPositiveButtonFontFamily;
     public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
     /// <summary>

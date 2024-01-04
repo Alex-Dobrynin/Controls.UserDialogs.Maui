@@ -57,9 +57,9 @@ public class ConfirmBuilder
     protected virtual NSAttributedString GetMessage()
     {
         UIFont messageFont = null;
-        if (Config.MEssageFontFamily is not null)
+        if (Config.MessageFontFamily is not null)
         {
-            messageFont = UIFont.FromName(Config.MEssageFontFamily, Config.MessageFontSize);
+            messageFont = UIFont.FromName(Config.MessageFontFamily, Config.MessageFontSize);
         }
         messageFont ??= UIFont.SystemFontOfSize(Config.MessageFontSize);
 
