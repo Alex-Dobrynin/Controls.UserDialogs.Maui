@@ -40,8 +40,8 @@ public partial class UserDialogsImplementation
                 FontFamily = config.MessageFontFamily,
                 Position = config.Position.ToNative(),
             };
-            bar.BackgroundColor ??= config.BackgroundColor.ToPlatform();
-            bar.MessageColor ??= config.MessageColor.ToPlatform();
+            bar.BackgroundColor = config.BackgroundColor?.ToPlatform() ?? bar.BackgroundColor;
+            bar.MessageColor = config.MessageColor?.ToPlatform() ?? bar.MessageColor;
             bar.Show();
         });
 
