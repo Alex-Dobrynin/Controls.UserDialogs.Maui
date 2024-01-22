@@ -11,7 +11,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Controls.UserDialogs.Maui</Title>
-		<Version>1.5.1</Version>
+		<Version>1.5.2</Version>
 		<Authors>Alex Dobrynin</Authors>
 		<Description>This is the updated version of Acr.Userdialogs. It supports latest version of .Net and you have an ability to style your dialogs as you want</Description>
 		<Copyright>Alex Dobrynin</Copyright>
