@@ -37,7 +37,7 @@ public class Snackbar : UIView
     public static float DefaultCornerRadius { get; set; } = 15f;
     public static float DefaultIconSpacing { get; set; } = 15f;
     public static UIBlurEffectStyle DefaultBlurEffectStyle { get; set; } = UIBlurEffectStyle.Dark;
-    public static UIColor DefaultBackgroundColor { get; set; } = Colors.Black.WithAlpha(0.1f).ToPlatform();
+    public static UIColor DefaultBackgroundColor { get; set; } = Colors.Black.WithAlpha(0.15f).ToPlatform();
 
     public double IconSize { get; set; } = DefaultIconSize;
     public double ActionIconSize { get; set; } = DefaultActionIconSize;
@@ -106,6 +106,11 @@ public class Snackbar : UIView
             this.CenterXAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.CenterXAnchor)
         };
 
+        _timer = new System.Timers.Timer
+        {
+            Interval = 500
+        };
+
         if (Style is Style.Toast)
         {
             var toast = SetupToast();
@@ -169,11 +174,6 @@ public class Snackbar : UIView
                 this.Alpha = 1f;
             });
         }
-
-        _timer = new System.Timers.Timer
-        {
-            Interval = 500
-        };
 
         _endOfAnimation = DateTime.Now + DismissDuration;
         _timer.Elapsed += (s, a) =>
@@ -356,9 +356,8 @@ public class Snackbar : UIView
                 _timer.Stop();
                 return;
             }
-            this.InvokeOnMainThread(() => { labelCounter.Text = "" + Math.Round(rest); });
+            this.InvokeOnMainThread(() => { labelCounter.Text = "" + (int)Math.Round(rest); });
         };
-        _timer.Start();
 
         var widthConstraint = NSLayoutConstraint.Create(labelCounter, NSLayoutAttribute.Width, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 1f, labelCounter.IntrinsicContentSize.Width);
         widthConstraint.Priority = (int)UILayoutPriority.Required;

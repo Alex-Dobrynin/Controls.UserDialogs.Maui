@@ -37,7 +37,7 @@ public class Snackbar : UIView
     public static float DefaultCornerRadius { get; set; } = 15f;
     public static float DefaultIconSpacing { get; set; } = 15f;
     public static UIBlurEffectStyle DefaultBlurEffectStyle { get; set; } = UIBlurEffectStyle.Dark;
-    public static UIColor DefaultBackgroundColor { get; set; } = Colors.Black.WithAlpha(0.1f).ToPlatform();
+    public static UIColor DefaultBackgroundColor { get; set; } = Colors.Black.WithAlpha(0.15f).ToPlatform();
 
     public double IconSize { get; set; } = DefaultIconSize;
     public double ActionIconSize { get; set; } = DefaultActionIconSize;
@@ -359,7 +359,6 @@ public class Snackbar : UIView
             }
             this.InvokeOnMainThread(() => { labelCounter.Text = "" + Math.Round(rest); });
         };
-        _timer.Start();
 
         var widthConstraint = NSLayoutConstraint.Create(labelCounter, NSLayoutAttribute.Width, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 1f, labelCounter.IntrinsicContentSize.Width);
         widthConstraint.Priority = (int)UILayoutPriority.Required;
