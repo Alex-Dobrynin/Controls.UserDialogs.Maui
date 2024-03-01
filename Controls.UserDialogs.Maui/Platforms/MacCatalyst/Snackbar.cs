@@ -111,65 +111,44 @@ public class Snackbar : UIView
             Interval = 500
         };
 
+        var popup = Style is Style.Toast ? SetupToast() : SetupSnackBar();
+
+        this.AddSubview(popup);
+
+        NSLayoutConstraint.ActivateConstraints(
+        [
+            popup.LeadingAnchor.ConstraintEqualTo(this.LeadingAnchor, (float)Padding.Left),
+            popup.TrailingAnchor.ConstraintEqualTo(this.TrailingAnchor, (float)-Padding.Right),
+            popup.TopAnchor.ConstraintEqualTo(this.TopAnchor, (float)Padding.Top),
+            popup.BottomAnchor.ConstraintEqualTo(this.BottomAnchor, (float)-Padding.Bottom),
+        ]);
+
         if (Style is Style.Toast)
         {
-            var toast = SetupToast();
-
-            this.AddSubview(toast);
-
-            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]
-            {
-                toast.LeadingAnchor.ConstraintEqualTo(this.LeadingAnchor, (float)Padding.Left),
-                toast.TrailingAnchor.ConstraintEqualTo(this.TrailingAnchor, (float)-Padding.Right),
-                toast.TopAnchor.ConstraintEqualTo(this.TopAnchor, (float)Padding.Top),
-                toast.BottomAnchor.ConstraintEqualTo(this.BottomAnchor, (float)-Padding.Bottom),
-            });
-
             constraints.Add(this.LeadingAnchor.ConstraintGreaterThanOrEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)ToastMargin.Left));
             constraints.Add(this.TrailingAnchor.ConstraintLessThanOrEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)ToastMargin.Right));
-            if (Position is Position.Bottom)
-            {
-                constraints.Add(this.BottomAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.BottomAnchor, (float)-ToastMargin.Bottom));
-            }
-            else
-            {
-                constraints.Add(this.TopAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TopAnchor, (float)ToastMargin.Top));
-            }
+
+            constraints.Add(Position is Position.Bottom
+                ? this.BottomAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.BottomAnchor, (float)-ToastMargin.Bottom)
+                : this.TopAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TopAnchor, (float)ToastMargin.Top));
         }
         else
         {
-            var snack = SetupSnackBar();
-
-            this.AddSubview(snack);
-
-            NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]
-            {
-                snack.LeadingAnchor.ConstraintEqualTo(this.LeadingAnchor, (float)Padding.Left),
-                snack.TrailingAnchor.ConstraintEqualTo(this.TrailingAnchor, (float)-Padding.Right),
-                snack.TopAnchor.ConstraintEqualTo(this.TopAnchor, (float)Padding.Top),
-                snack.BottomAnchor.ConstraintEqualTo(this.BottomAnchor, (float)-Padding.Bottom),
-            });
-
             constraints.Add(this.LeadingAnchor.ConstraintGreaterThanOrEqualTo(window.SafeAreaLayoutGuide.LeadingAnchor, (float)SnackbarMargin.Left));
             constraints.Add(this.TrailingAnchor.ConstraintLessThanOrEqualTo(window.SafeAreaLayoutGuide.TrailingAnchor, (float)SnackbarMargin.Right));
             constraints.Add(this.WidthAnchor.ConstraintGreaterThanOrEqualTo(600));
 
-            if (Position is Position.Bottom)
-            {
-                constraints.Add(this.BottomAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.BottomAnchor, (float)-SnackbarMargin.Bottom));
-            }
-            else
-            {
-                constraints.Add(this.TopAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TopAnchor, (float)SnackbarMargin.Top));
-            }
+            constraints.Add(Position is Position.Bottom
+                ? this.BottomAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.BottomAnchor, (float)-SnackbarMargin.Bottom)
+                : this.TopAnchor.ConstraintEqualTo(window.SafeAreaLayoutGuide.TopAnchor, (float)SnackbarMargin.Top));
         }
-
-        if (UseAnimation) this.Alpha = 0;
 
         NSLayoutConstraint.ActivateConstraints(constraints.ToArray());
 
         if (UseAnimation)
         {
+            this.Alpha = 0;
+
             UIView.Animate(AnimationDuration.TotalSeconds, () =>
             {
                 this.Alpha = 1f;
@@ -215,13 +194,13 @@ public class Snackbar : UIView
 
         this.AddSubview(effectsView);
 
-        NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]
-        {
+        NSLayoutConstraint.ActivateConstraints(
+        [
             effectsView.LeadingAnchor.ConstraintEqualTo(this.LeadingAnchor),
             effectsView.TrailingAnchor.ConstraintEqualTo(this.TrailingAnchor),
             effectsView.TopAnchor.ConstraintEqualTo(this.TopAnchor),
             effectsView.BottomAnchor.ConstraintEqualTo(this.BottomAnchor),
-        });
+        ]);
     }
 
     protected virtual UIView SetupToast()
