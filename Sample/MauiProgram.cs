@@ -34,10 +34,6 @@ namespace Sample
                     //fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if DEBUG
-            builder.Logging.AddDebug();
-#endif
-
             builder.Services.AddTransient<MainPage>();
 
             return builder.Build();
