@@ -131,8 +131,6 @@ public class HudDialog : IHudDialog
             typeFace = Typeface.CreateFromAsset(Activity.Assets, _config.MessageFontFamily);
         }
 
-        dialog.Window.AddFlags(WindowManagerFlags.NotFocusable);
-
         var textViewId = Activity.Resources.GetIdentifier("textViewStatus", "id", Activity.PackageName);
         var textView = dialog.FindViewById<TextView>(textViewId);
 
