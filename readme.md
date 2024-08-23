@@ -2,6 +2,8 @@
 
 #### A cross platform library that allows you to call for native user dialogs, which can by styled from your maui application anywhere anytime.
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/dimonovdd)
+
 Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 
 ##### Since the original (Acr.UserDialogs) repo is out of support, this will give new breath to UserDialogs. It is more flexible to style your dialogs as you want. 
