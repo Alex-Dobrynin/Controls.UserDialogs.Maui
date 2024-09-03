@@ -2,9 +2,9 @@
 
 public class AlertConfig
 {
-    public static string DefaultTitleFontFamily { get; set; }
-    public static string DefaultMessageFontFamily { get; set; }
-    public static string DefaultPositiveButtonFontFamily { get; set; }
+    public static string? DefaultTitleFontFamily { get; set; }
+    public static string? DefaultMessageFontFamily { get; set; }
+    public static string? DefaultPositiveButtonFontFamily { get; set; }
 
     /// <summary>
     /// iOS only
@@ -14,27 +14,27 @@ public class AlertConfig
     /// <summary>
     /// Android only
     /// </summary>
-    public static Color DefaultBackgroundColor { get; set; }
+    public static Color? DefaultBackgroundColor { get; set; }
 
     /// <summary>
     /// Android only
     /// </summary>
     public static float DefaultCornerRadius { get; set; } = 15;
 
-    public static Color DefaultMessageColor { get; set; }
-    public static Color DefaultTitleColor { get; set; }
+    public static Color? DefaultMessageColor { get; set; }
+    public static Color? DefaultTitleColor { get; set; }
     public static float DefaultTitleFontSize { get; set; } = 20;
     public static float DefaultMessageFontSize { get; set; } = 16;
-    public static Color DefaultPositiveButtonTextColor { get; set; }
+    public static Color? DefaultPositiveButtonTextColor { get; set; }
 
     /// <summary>
     /// Android only
     /// </summary>
     public static float DefaultPositiveButtonFontSize { get; set; } = 18;
 
-    public string TitleFontFamily { get; set; } = DefaultTitleFontFamily;
-    public string MessageFontFamily { get; set; } = DefaultMessageFontFamily;
-    public string PositiveButtonFontFamily { get; set; } = DefaultPositiveButtonFontFamily;
+    public string? TitleFontFamily { get; set; } = DefaultTitleFontFamily;
+    public string? MessageFontFamily { get; set; } = DefaultMessageFontFamily;
+    public string? PositiveButtonFontFamily { get; set; } = DefaultPositiveButtonFontFamily;
     /// <summary>
     /// iOS only
     /// </summary>
@@ -46,7 +46,7 @@ public class AlertConfig
     /// <summary>
     /// Android only
     /// </summary>
-    public Color BackgroundColor { get; set; } = DefaultBackgroundColor;
+    public Color? BackgroundColor { get; set; } = DefaultBackgroundColor;
 
     /// <summary>
     /// Android only
@@ -56,9 +56,9 @@ public class AlertConfig
     /// </remarks>
     public float CornerRadius { get; set; } = DefaultCornerRadius;
 
-    public Color MessageColor { get; set; } = DefaultMessageColor;
-    public Color TitleColor { get; set; } = DefaultTitleColor;
-    public Color PositiveButtonTextColor { get; set; } = DefaultPositiveButtonTextColor;
+    public Color? MessageColor { get; set; } = DefaultMessageColor;
+    public Color? TitleColor { get; set; } = DefaultTitleColor;
+    public Color? PositiveButtonTextColor { get; set; } = DefaultPositiveButtonTextColor;
     public float TitleFontSize { get; set; } = DefaultTitleFontSize;
     public float MessageFontSize { get; set; } = DefaultMessageFontSize;
 
@@ -70,41 +70,42 @@ public class AlertConfig
     public static string DefaultOkText { get; set; } = "Ok";
 
     public string OkText { get; set; } = DefaultOkText;
-    public string Title { get; set; }
+    public string? Title { get; set; }
     public string Message { get; set; }
+
     /// <summary>
     /// Android only
     /// </summary>
-    public string Icon { get; set; }
-    public Action Action { get; set; }
+    public string? Icon { get; set; }
+    public Action? Action { get; set; }
 
     public AlertConfig SetOkText(string text)
     {
-        this.OkText = text;
+        OkText = text;
         return this;
     }
 
     public AlertConfig SetTitle(string title)
     {
-        this.Title = title;
+        Title = title;
         return this;
     }
 
     public AlertConfig SetMessage(string message)
     {
-        this.Message = message;
+        Message = message;
         return this;
     }
 
     public AlertConfig SetAction(Action action)
     {
-        this.Action = action;
+        Action = action;
         return this;
     }
 
     public AlertConfig SetIcon(string icon)
     {
-        this.Icon = icon;
+        Icon = icon;
         return this;
     }
 }

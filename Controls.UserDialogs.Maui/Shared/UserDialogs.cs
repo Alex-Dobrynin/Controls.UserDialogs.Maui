@@ -2,7 +2,8 @@
 
 public static class UserDialogs
 {
-    static IUserDialogs _currentInstance;
+    private static IUserDialogs? _currentInstance;
+
     public static IUserDialogs Instance
     {
         get
@@ -15,12 +16,12 @@ public static class UserDialogs
         set => _currentInstance = value;
     }
 
-    public static MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, Action configure = null)
+    public static MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, Action? configure = null)
     {
         return UseUserDialogs(builder, false, configure);
     }
 
-    public static MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, bool registerInterface, Action configure = null)
+    public static MauiAppBuilder UseUserDialogs(this MauiAppBuilder builder, bool registerInterface, Action? configure = null)
     {
         Instance = new UserDialogsImplementation();
 

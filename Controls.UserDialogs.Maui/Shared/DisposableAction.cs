@@ -6,12 +6,12 @@ public class DisposableAction : IDisposable
 
     public DisposableAction(Action action)
     {
-        this._action = action;
+        _action = action;
     }
 
     public void Dispose()
     {
-        this._action();
+        _action();
         GC.SuppressFinalize(this);
     }
 }

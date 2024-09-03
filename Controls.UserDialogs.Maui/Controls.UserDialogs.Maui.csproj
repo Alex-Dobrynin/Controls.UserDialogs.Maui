@@ -5,14 +5,18 @@
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 		<MauiVersion>8.0.3</MauiVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.2</SupportedOSPlatformVersion>
+
+		<DefineConstants Condition="$(TargetFramework.Contains('ios')) OR $(TargetFramework.Contains('maccatalyst'))">$(DefineConstants);MACIOS</DefineConstants>
+		
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Controls.UserDialogs.Maui</Title>
-		<Version>1.5.4</Version>
+		<Version>1.6.0</Version>
 		<Authors>Alex Dobrynin</Authors>
 		<Description>This is the updated version of Acr.Userdialogs. It supports latest version of .Net and you have an ability to style your dialogs as you want</Description>
 		<Copyright>Alex Dobrynin</Copyright>
@@ -24,16 +28,38 @@
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
+	<ItemGroup Condition="!$(TargetFramework.Contains('android'))">
+		<Compile Remove="**\**\*.Android.cs" />
+		<None Include="**\**\*.Android.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+
+		<Compile Remove="**\**\Android\**\*.cs" />
+		<None Include="**\**\Android\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+
+	<ItemGroup Condition="!$(TargetFramework.Contains('ios')) AND !$(TargetFramework.Contains('maccatalyst'))">
+		<Compile Remove="**\**\*.MaciOS.cs" />
+		<None Include="**\**\*.MaciOS.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+
+		<Compile Remove="**\**\MaciOS\**\*.cs" />
+		<None Include="**\**\MaciOS\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+
+	<!-- .NET -->
+	<ItemGroup Condition="$(TargetFramework.Contains('-'))">
+		<!-- e.g net8.0 -->
+		<Compile Remove="**\*.net.cs" />
+		<None Include="**\*.net.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+
 	<ItemGroup Condition="$(TargetFramework.Contains('android'))">
 	  <PackageReference Include="AndHUD" Version="2.0.1" />
 	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.Contains('ios')) OR $(TargetFramework.Contains('catalyst')) ">
+	<ItemGroup Condition="$(TargetFramework.Contains('ios')) OR $(TargetFramework.Contains('maccatalyst')) ">
 	  <PackageReference Include="BTProgressHUD" Version="2.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -49,13 +75,6 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
-	</ItemGroup>
-
-	<!-- .NET -->
-	<ItemGroup Condition="$(TargetFramework.Contains('-'))">
-		<!-- e.g net8.0 -->
-		<Compile Remove="**\*.net.cs" />
-		<None Include="**\*.net.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
 
 </Project>

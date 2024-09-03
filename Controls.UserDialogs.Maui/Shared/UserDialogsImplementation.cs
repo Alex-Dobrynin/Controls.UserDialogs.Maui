@@ -4,7 +4,7 @@ public partial class UserDialogsImplementation : IUserDialogs
 {
     const string _noAction = "Action should not be set as async will not use it";
 
-    public IHudDialog CurrentHudDialog { get; protected set; }
+    public IHudDialog? CurrentHudDialog { get; protected set; }
 
     public virtual partial IDisposable Alert(AlertConfig config);
     public virtual partial IDisposable Confirm(ConfirmConfig config);
@@ -14,7 +14,7 @@ public partial class UserDialogsImplementation : IUserDialogs
 
     protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config);
 
-    public virtual IDisposable Alert(string message, string title, string okText, string icon, Action action)
+    public virtual IDisposable Alert(string message, string? title = null, string? okText = null, string? icon = null, Action? action = null)
     {
         return Alert(new AlertConfig
         {
@@ -26,7 +26,7 @@ public partial class UserDialogsImplementation : IUserDialogs
         });
     }
 
-    public virtual Task AlertAsync(string message, string title, string okText, string icon, CancellationToken? cancelToken = null)
+    public virtual Task AlertAsync(string message, string? title = null, string? okText = null, string? icon = null, CancellationToken cancelToken = default)
     {
         return AlertAsync(new AlertConfig
         {
@@ -37,24 +37,24 @@ public partial class UserDialogsImplementation : IUserDialogs
         }, cancelToken);
     }
 
-    public virtual async Task AlertAsync(AlertConfig config, CancellationToken? cancelToken = null)
+    public virtual async Task AlertAsync(AlertConfig config, CancellationToken cancelToken = default)
     {
         if (config.Action is not null)
             throw new ArgumentException(_noAction);
 
-        var tcs = new TaskCompletionSource<object>();
+        var tcs = new TaskCompletionSource<object?>();
         config.SetAction(() => tcs.TrySetResult(null));
 
         var disp = Alert(config);
-        using (cancelToken?.Register(() => Cancel(disp, tcs)))
+        using (cancelToken.Register(() => Cancel(disp, tcs)))
         {
             await tcs.Task;
         }
     }
 
-    public virtual IDisposable Confirm(string message, string title, string okText, string cancelText, string icon, Action<bool> action)
+    public virtual IDisposable Confirm(string message, string? title = null, string? okText = null, string? cancelText = null, string? icon = null, Action<bool>? action = null)
     {
-        return this.Confirm(new ConfirmConfig
+        return Confirm(new ConfirmConfig
         {
             Message = message,
             Title = title,
@@ -65,9 +65,9 @@ public partial class UserDialogsImplementation : IUserDialogs
         });
     }
 
-    public virtual Task<bool> ConfirmAsync(string message, string title, string okText, string cancelText, string icon, CancellationToken? cancelToken = null)
+    public virtual Task<bool> ConfirmAsync(string message, string? title = null, string? okText = null, string? cancelText = null, string? icon = null, CancellationToken cancelToken = default)
     {
-        return this.ConfirmAsync(new ConfirmConfig
+        return ConfirmAsync(new ConfirmConfig
         {
             Message = message,
             Title = title,
@@ -77,7 +77,7 @@ public partial class UserDialogsImplementation : IUserDialogs
         }, cancelToken);
     }
 
-    public virtual async Task<bool> ConfirmAsync(ConfirmConfig config, CancellationToken? cancelToken = null)
+    public virtual async Task<bool> ConfirmAsync(ConfirmConfig config, CancellationToken cancelToken = default)
     {
         if (config.Action is not null)
             throw new ArgumentException(_noAction);
@@ -85,14 +85,14 @@ public partial class UserDialogsImplementation : IUserDialogs
         var tcs = new TaskCompletionSource<bool>();
         config.SetAction(x => tcs.TrySetResult(x));
 
-        var disp = this.Confirm(config);
-        using (cancelToken?.Register(() => Cancel(disp, tcs)))
+        var disp = Confirm(config);
+        using (cancelToken.Register(() => Cancel(disp, tcs)))
         {
             return await tcs.Task;
         }
     }
 
-    public virtual async Task<string> ActionSheetAsync(string message, string title, string cancel, string destructive, string icon, bool useBottomSheet, CancellationToken? cancelToken = null, params string[] buttons)
+    public virtual async Task<string> ActionSheetAsync(string? message = null, string? title = null, string? cancel = null, string? destructive = null, string? icon = null, bool useBottomSheet = true, CancellationToken cancelToken = default, params string[] buttons)
     {
         var tcs = new TaskCompletionSource<string>();
         var cfg = new ActionSheetConfig()
@@ -114,16 +114,16 @@ public partial class UserDialogsImplementation : IUserDialogs
         foreach (var btn in buttons)
             cfg.Add(btn, () => tcs.TrySetResult(btn));
 
-        var disp = this.ActionSheet(cfg);
-        using (cancelToken?.Register(disp.Dispose))
+        var disp = ActionSheet(cfg);
+        using (cancelToken.Register(disp.Dispose))
         {
             return await tcs.Task;
         }
     }
 
-    public virtual void ShowLoading(string message, MaskType? maskType)
+    public virtual void ShowLoading(string? message = null, MaskType? maskType = null)
     {
-        this.Loading(message, null, true, maskType, null);
+        Loading(message, null, true, maskType, null);
     }
 
     public virtual void HideHud()
@@ -132,8 +132,8 @@ public partial class UserDialogsImplementation : IUserDialogs
         CurrentHudDialog = null;
     }
 
-    public virtual IHudDialog Loading(string message, string cancelText, bool show, MaskType? maskType, Action cancel)
-        => this.CreateOrUpdateHud(new HudDialogConfig
+    public virtual IHudDialog Loading(string? message = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
+        => CreateOrUpdateHud(new HudDialogConfig
         {
             Message = message,
             AutoShow = show,
@@ -143,8 +143,8 @@ public partial class UserDialogsImplementation : IUserDialogs
             Cancel = cancel
         });
 
-    public virtual IHudDialog Progress(string message, string cancelText, bool show, MaskType? maskType, Action cancel)
-        => this.CreateOrUpdateHud(new HudDialogConfig
+    public virtual IHudDialog Progress(string? message = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
+        => CreateOrUpdateHud(new HudDialogConfig
         {
             Message = message,
             AutoShow = show,
@@ -154,8 +154,8 @@ public partial class UserDialogsImplementation : IUserDialogs
             Cancel = cancel
         });
 
-    public virtual IHudDialog ShowHudImage(string image, string message, string cancelText, bool show, MaskType? maskType, Action cancel)
-       => this.CreateOrUpdateHud(new HudDialogConfig
+    public virtual IHudDialog ShowHudImage(string image, string? message = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
+       => CreateOrUpdateHud(new HudDialogConfig
        {
            Message = message,
            AutoShow = show,
@@ -170,7 +170,7 @@ public partial class UserDialogsImplementation : IUserDialogs
         try
         {
             if (CurrentHudDialog is not null) CurrentHudDialog.Update(config);
-            else CurrentHudDialog = this.CreateHudInstance(config);
+            else CurrentHudDialog = CreateHudInstance(config);
 
             return CurrentHudDialog;
         }
@@ -181,45 +181,45 @@ public partial class UserDialogsImplementation : IUserDialogs
         }
     }
 
-    public virtual IDisposable ShowToast(string message, string icon, TimeSpan? dismissTimer)
-        => this.ShowToast(new ToastConfig()
+    public virtual IDisposable ShowToast(string message, string? icon = null, TimeSpan? duration = null)
+        => ShowToast(new ToastConfig()
         {
             Message = message,
             Icon = icon,
-            Duration = dismissTimer ?? ToastConfig.DefaultDuration
+            Duration = duration ?? ToastConfig.DefaultDuration
         });
 
-    public virtual IDisposable ShowSnackbar(string message, string icon, TimeSpan? dismissTimer, string actionText, string actionIcon, bool showCountDown, Action<SnackbarActionType> action)
+    public virtual IDisposable ShowSnackbar(string message, string? actionText = null, string? icon = null, TimeSpan? duration = null, string? actionIcon = null, bool showCountDown = false, Action<SnackbarActionType>? action = null)
         => action is not null
-            ? this.ShowSnackbar(new SnackbarConfig()
+            ? ShowSnackbar(new SnackbarConfig()
             {
                 Message = message,
                 Icon = icon,
-                Duration = dismissTimer ?? SnackbarConfig.DefaultDuration,
+                Duration = duration ?? SnackbarConfig.DefaultDuration,
                 Action = action,
                 ActionIcon = actionIcon,
-                ActionText = actionText,
+                ActionText = actionText ?? SnackbarConfig.DefaultActionText,
                 ShowCountDown = showCountDown
             })
-            : this.ShowToast(new ToastConfig()
+            : ShowToast(new ToastConfig()
             {
                 Message = message,
                 Icon = icon,
-                Duration = dismissTimer ?? ToastConfig.DefaultDuration
+                Duration = duration ?? ToastConfig.DefaultDuration
             });
 
-    public virtual Task<SnackbarActionType> ShowSnackbarAsync(string message, string icon, TimeSpan? dismissTimer, string actionText, string actionIcon, bool showCountDown, CancellationToken? cancelToken)
-        => this.ShowSnackbarAsync(new SnackbarConfig()
+    public virtual Task<SnackbarActionType> ShowSnackbarAsync(string message, string? actionText = null, string? icon = null, TimeSpan? duration = null, string? actionIcon = null, bool showCountDown = false, CancellationToken cancelToken = default)
+        => ShowSnackbarAsync(new SnackbarConfig()
         {
             Message = message,
             Icon = icon,
-            Duration = dismissTimer ?? SnackbarConfig.DefaultDuration,
+            Duration = duration ?? SnackbarConfig.DefaultDuration,
             ActionIcon = actionIcon,
-            ActionText = actionText,
+            ActionText = actionText ?? SnackbarConfig.DefaultActionText,
             ShowCountDown = showCountDown
         }, cancelToken);
 
-    public virtual async Task<SnackbarActionType> ShowSnackbarAsync(SnackbarConfig config, CancellationToken? cancelToken)
+    public virtual async Task<SnackbarActionType> ShowSnackbarAsync(SnackbarConfig config, CancellationToken cancelToken = default)
     {
         if (config.Action is not null)
             throw new ArgumentException(_noAction);
@@ -227,14 +227,14 @@ public partial class UserDialogsImplementation : IUserDialogs
         var tcs = new TaskCompletionSource<SnackbarActionType>();
         config.SetAction(x => tcs.TrySetResult(x));
 
-        var disp = this.ShowSnackbar(config);
-        using (cancelToken?.Register(() => Cancel(disp, tcs)))
+        var disp = ShowSnackbar(config);
+        using (cancelToken.Register(() => Cancel(disp, tcs)))
         {
             return await tcs.Task;
         }
     }
 
-    static void Cancel<TResult>(IDisposable disp, TaskCompletionSource<TResult> tcs)
+    protected virtual void Cancel<TResult>(IDisposable disp, TaskCompletionSource<TResult> tcs)
     {
         disp.Dispose();
         tcs.TrySetCanceled();

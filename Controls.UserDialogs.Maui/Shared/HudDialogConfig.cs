@@ -2,8 +2,8 @@
 
 public class HudDialogConfig
 {
-    public static string DefaultMessageFontFamily { get; set; }
-    public static string DefaultNegativeButtonFontFamily { get; set; }
+    public static string? DefaultMessageFontFamily { get; set; }
+    public static string? DefaultNegativeButtonFontFamily { get; set; }
     public static float DefaultCornerRadius { get; set; } = 15;
     public static Color DefaultBackgroundColor { get; set; } = Colors.Black.WithAlpha(0.5f);
     public static double DefaultMessageFontSize { get; set; } = 14;
@@ -13,21 +13,21 @@ public class HudDialogConfig
     public static Color DefaultNegativeButtonTextColor { get; set; } = Colors.White;
     public static double DefaultNegativeButtonFontSize { get; set; } = 18;
 
-    public static string DefaultCancelText { get; set; }
+    public static string DefaultCancelText { get; set; } = "Cancel";
     public static MaskType DefaultMaskType { get; set; } = MaskType.Black;
 
-    public string CancelText { get; set; } = DefaultCancelText;
-    public string Message { get; set; }
-    public string Image { get; set; }
+    public string? CancelText { get; set; } = DefaultCancelText;
+    public string? Message { get; set; }
+    public string? Image { get; set; }
     public bool AutoShow { get; set; } = true;
     public int PercentComplete { get; set; } = -1;
     public MaskType MaskType { get; set; } = DefaultMaskType;
     /// <summary>
     /// Doesn't work within ios image hud
     /// </summary>
-    public Action Cancel { get; set; }
-    public string MessageFontFamily { get; set; } = DefaultMessageFontFamily;
-    public string NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
+    public Action? Cancel { get; set; }
+    public string? MessageFontFamily { get; set; } = DefaultMessageFontFamily;
+    public string? NegativeButtonFontFamily { get; set; } = DefaultNegativeButtonFontFamily;
     public float CornerRadius { get; set; } = DefaultCornerRadius;
     public Color BackgroundColor { get; set; } = DefaultBackgroundColor;
     public double MessageFontSize { get; set; } = DefaultMessageFontSize;
@@ -37,30 +37,30 @@ public class HudDialogConfig
     public Color NegativeButtonTextColor { get; set; } = DefaultNegativeButtonTextColor;
     public double NegativeButtonFontSize { get; set; } = DefaultNegativeButtonFontSize;
 
-    public HudDialogConfig SetCancel(string cancelText = null, Action onCancel = null)
+    public HudDialogConfig SetCancel(string? cancelText = null, Action? onCancel = null)
     {
         if (cancelText is not null)
-            this.CancelText = cancelText;
+            CancelText = cancelText;
 
-        this.Cancel = onCancel;
+        Cancel = onCancel;
         return this;
     }
 
     public HudDialogConfig SetMessage(string message)
     {
-        this.Message = message;
+        Message = message;
         return this;
     }
 
     public HudDialogConfig SetMaskType(MaskType maskType)
     {
-        this.MaskType = maskType;
+        MaskType = maskType;
         return this;
     }
 
     public HudDialogConfig SetAutoShow(bool autoShow)
     {
-        this.AutoShow = autoShow;
+        AutoShow = autoShow;
         return this;
     }
 }

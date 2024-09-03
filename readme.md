@@ -75,12 +75,14 @@ builder
 1. I'm getting a nullreferenceexception when using loading.
     * This happens when you run loading (or almost any dialog) from the constructor of your page or viewmodel.  The view hasn't been rendered yet, therefore there is nothing to render to.
 
-2. Navigating while inside of a loading/progress dialog causes exceptions or the progress no longer appears properly
+2. I'm getting a crash if I don't set some property or argument.
+    * Project is build using ```<Nullable>enable</Nullable>```, it means that if property or argument is not marked as nullable it must be set up.
+
+3. Navigating while inside of a loading/progress dialog causes exceptions or the progress no longer appears properly
     * Hide the progress dialog before navigating
 
-3. I don't like the way X method works on platform Y
+4. I don't like the way X method works on platform Y
     * No problems. Override the implementation like below. Note: this is a partial class which has shared and platform specific realizations
-
 
     ```csharp
     public class MyCustomUserDialogs : Controls.UserDialogs.Maui.UserDialogImplementation 
@@ -113,16 +115,13 @@ builder
         });
     ```
 
-4. Why don't you cancel a dialog when the app goes to the background (AND) why do I get an exception when I call for a dialog?
-
-    * USER DIALOGS DOES NOT SOLVE WORLD PEACE! Guess what - most android API version and iOS don't call this.  This library is not a window state manager, if you call for a dialog, 
+5. Why don't you cancel a dialog when the app goes to the background (AND) why do I get an exception when I call for a dialog?
+    * USER DIALOGS DOES NOT SOLVE WORLD PEACE! Guess what - most android API version and iOS don't call   This library is not a window state manager, if you call for a dialog, 
         it will try to present one. If your app goes to the background and you call for a dialog, iOS & Android are tossing you the exception. The library isn't here to save you from bad design choices.  
         Call us an anti-pattern if you want, we present dialogs!
 
-5. Why does the library allow me to open multiple windows?
-
+6. Why does the library allow me to open multiple windows?
     * Similar to #4 - the library does not manage windows. It opens dialogs - SURPRISE
     
-6. I'd like to customize the dialogs in native way (e.g. in Android in styles or themes)
-
-    * The library wasn't really designed or meant for this. It was meant for using native dialogs with programmatically styling. That's it. If you need something more you are free to contribute here or to use Acr.UserDialogs which is out of support.
+7. I'd like to customize the dialogs in native way (e.g. in Android in styles or themes)
+    * The library wasn't really designed or meant for  It was meant for using native dialogs with programmatically styling. That's it. If you need something more you are free to contribute here or to use Acr.UserDialogs which is out of support.
