@@ -1,4 +1,4 @@
-# <img src="userdialogs_maui_icon.png" width="70" height="70"/> Controls.Userdialogs.Maui
+# <img src="userdialogs_maui_icon.png" width="70" height="70"/> Controls.UserDialogs.Maui
 
 #### A cross platform library that allows you to call for native user dialogs, which can by styled from your maui application anywhere anytime.
 
