@@ -17,6 +17,7 @@ public class HudDialog : IHudDialog
     private HudDialogConfig _config;
     private UIButton? _cnclBtn;
     private Action? _cancel;
+    private UIWindow? _keyWindow;
 
     public void Update(string? message = null, int percentComplete = -1, string? image = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
     {
@@ -68,7 +69,8 @@ public class HudDialog : IHudDialog
 
         UIApplication.SharedApplication.InvokeOnMainThread(() =>
         {
-            var hud = ProgressHUD.For(Extensions.GetKeyWindow())!;
+            _keyWindow ??= Extensions.GetKeyWindow();
+            var hud = ProgressHUD.For(_keyWindow)!;
 
             BeforeShow(hud);
             var percent = _config.PercentComplete / 100f;
@@ -99,7 +101,8 @@ public class HudDialog : IHudDialog
     {
         UIApplication.SharedApplication.InvokeOnMainThread(() =>
         {
-            var hud = ProgressHUD.For(Extensions.GetKeyWindow())!;
+            _keyWindow ??= Extensions.GetKeyWindow();
+            var hud = ProgressHUD.For(_keyWindow)!;
 
             BeforeShowImage(hud);
 
@@ -240,8 +243,10 @@ public class HudDialog : IHudDialog
             _cancel = null;
             UIApplication.SharedApplication.InvokeOnMainThread(() =>
             {
-                var hud = ProgressHUD.For(Extensions.GetKeyWindow());
+                var window = _keyWindow ?? Extensions.GetKeyWindow();
+                var hud = ProgressHUD.For(window)!;
                 hud?.Dismiss();
+                _keyWindow = null;
             });
         }
         catch (Exception ex)
