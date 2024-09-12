@@ -1,6 +1,6 @@
 # <img src="userdialogs_maui_icon.png" width="70" height="70"/> Controls.UserDialogs.Maui
 
-#### A cross platform library that allows you to call for native user dialogs, which can by styled from your maui application anywhere anytime.
+#### A cross platform library that allows you to call for native user dialogs, which can be styled from your maui application anywhere anytime.
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/alexdobrynin)
 
