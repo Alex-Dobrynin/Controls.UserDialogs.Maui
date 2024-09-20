@@ -17,7 +17,7 @@ public class ConfirmBuilder
 
     public virtual UIAlertController Build()
     {
-        var alert = UIAlertController.Create("", "", UIAlertControllerStyle.Alert);
+        var alert = UIAlertController.Create(null, "", UIAlertControllerStyle.Alert);
 
         alert.AddAction(GetCancelAction());
         alert.AddAction(GetOkAction());
