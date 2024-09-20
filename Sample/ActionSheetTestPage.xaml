@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Sample.ActionSheetTestPage"
+             BackgroundColor="White">
+        
+        <ScrollView>
+            
+            <VerticalStackLayout Spacing="5"
+                                 Padding="30,0"
+                                 VerticalOptions="Center">
+            
+            <Button Text="Title and Message"
+                    Clicked="Button_Clicked_1" />
+
+            <Button Text="Async Title and Message"
+                    Clicked="Button_Clicked_2" />
+            
+            <Button Text="No Title"
+                    Clicked="Button_Clicked_3" />
+            
+            <Button Text="Async No Title"
+                    Clicked="Button_Clicked_4" />
+            
+            <Button Text="No Title No Message"
+                    Clicked="Button_Clicked_5" />
+            
+            <Button Text="Async No Title No Message"
+                    Clicked="Button_Clicked_6" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

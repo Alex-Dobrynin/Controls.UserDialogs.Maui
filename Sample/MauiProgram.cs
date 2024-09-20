@@ -35,6 +35,7 @@ namespace Sample
                 });
 
             builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<ActionSheetTestPage>();
 
             return builder.Build();
         }
