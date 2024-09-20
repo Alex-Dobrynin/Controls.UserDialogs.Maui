@@ -25,7 +25,7 @@ public class ActionSheetBuilder
 
     public virtual UIAlertController Build()
     {
-        var alert = UIAlertController.Create("", "",
+        var alert = UIAlertController.Create(null, null,
 #if IOS
             UIAlertControllerStyle.ActionSheet
 #else
