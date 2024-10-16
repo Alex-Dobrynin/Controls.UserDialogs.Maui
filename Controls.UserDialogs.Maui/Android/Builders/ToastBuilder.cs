@@ -142,7 +142,8 @@ public class ToastBuilder : Snackbar.Callback
 
         var icon = GetIcon();
 
-        text.SetCompoundDrawables(icon, null, null, null);
+        if (IsRTL()) text.SetCompoundDrawables(null, null, icon, null);
+        else text.SetCompoundDrawables(icon, null, null, null);
         text.CompoundDrawablePadding = DpToPixels(IconPadding);
     }
 

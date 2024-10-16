@@ -162,7 +162,10 @@ public class SnackbarBuilder : Snackbar.Callback
 
         var icon = GetIcon(Config.Icon);
         icon.ScaleTo(IconSize);
-        text.SetCompoundDrawables(icon, null, null, null);
+
+        if (IsRTL()) text.SetCompoundDrawables(null, null, icon, null);
+        else text.SetCompoundDrawables(icon, null, null, null);
+
         text.CompoundDrawablePadding = DpToPixels(IconPadding);
     }
 
@@ -202,7 +205,9 @@ public class SnackbarBuilder : Snackbar.Callback
 
         var icon = GetIcon(Config.Icon);
         icon.ScaleTo(ActionIconSize);
-        button.SetCompoundDrawables(icon, null, null, null);
+        if (IsRTL()) button.SetCompoundDrawables(null, null, icon, null);
+        else button.SetCompoundDrawables(icon, null, null, null);
+
         button.CompoundDrawablePadding = DpToPixels(ActionIconPadding);
     }
 

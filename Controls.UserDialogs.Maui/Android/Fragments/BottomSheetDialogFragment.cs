@@ -128,7 +128,8 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         {
             Text = Config!.Title,
             LayoutParameters = lParams,
-            Gravity = GravityFlags.CenterVertical
+            Gravity = GravityFlags.CenterVertical,
+            TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr
         };
         textView.SetTextSize(ComplexUnitType.Sp, (float)Config.TitleFontSize);
 
@@ -145,7 +146,10 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
 
         if (Config.Icon is not null)
         {
-            textView.SetCompoundDrawables(GetDialogIcon(), null, null, null);
+            var icon = GetDialogIcon();
+
+            if (IsRTL()) textView.SetCompoundDrawables(null, null, icon, null);
+            else textView.SetCompoundDrawables(icon, null, null, null);
 
             textView.CompoundDrawablePadding = DpToPixels(IconPadding);
         }
@@ -169,7 +173,8 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         var textView = new TextView(Activity)
         {
             Text = Config!.Message,
-            LayoutParameters = lParams
+            LayoutParameters = lParams,
+            TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr
         };
         textView.SetTextSize(ComplexUnitType.Sp, (float)Config.MessageFontSize);
         if (Config.MessageColor is not null)
@@ -253,7 +258,8 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
         {
             Text = action.Text,
             LayoutParameters = lParams,
-            Gravity = GravityFlags.CenterVertical
+            Gravity = GravityFlags.CenterVertical,
+            TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr
         };
         textView.SetTextSize(ComplexUnitType.Sp, (int)fontSize);
 
@@ -270,7 +276,10 @@ public class BottomSheetDialogFragment : AbstractAppCompatDialogFragment<ActionS
 
         if (action.Icon is not null)
         {
-            textView.SetCompoundDrawables(GetActionIcon(action), null, null, null);
+            var icon = GetActionIcon(action);
+
+            if (IsRTL()) textView.SetCompoundDrawables(null, null, icon, null);
+            else textView.SetCompoundDrawables(icon, null, null, null);
 
             textView.CompoundDrawablePadding = DpToPixels(OptionIconPadding);
         }

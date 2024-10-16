@@ -10,6 +10,7 @@ using static Controls.UserDialogs.Maui.Extensions;
 
 using AlertDialog = Android.App.AlertDialog;
 using AppCompatAlertDialog = AndroidX.AppCompat.App.AlertDialog;
+using Layout = Android.Text.Layout;
 
 namespace Controls.UserDialogs.Maui;
 
@@ -99,6 +100,8 @@ public class AlertBuilder
             var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.MessageFontFamily)!;
             messageSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
+
+        messageSpan.SetSpan(new AlignmentSpanStandard(IsRTL() ? Layout.Alignment.AlignOpposite! : Layout.Alignment.AlignNormal!), 0, Config.Message.Length, SpanTypes.InclusiveInclusive);
 
         return messageSpan;
     }

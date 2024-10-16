@@ -24,7 +24,7 @@ public static class Extensions
         {
             UserInterfaceStyle.Unspecified => UIUserInterfaceStyle.Unspecified,
             UserInterfaceStyle.Light => UIUserInterfaceStyle.Light,
-            UserInterfaceStyle.Dark => UIUserInterfaceStyle.Dark,
+            UserInterfaceStyle.Dark => UIUserInterfaceStyle.Dark
         };
     }
 
@@ -77,22 +77,13 @@ public static class Extensions
 
     public static BigTed.MaskType ToNative(this MaskType maskType)
     {
-        switch (maskType)
+        return maskType switch
         {
-            case MaskType.Black:
-                return BigTed.MaskType.Black;
-
-            case MaskType.Clear:
-                return BigTed.MaskType.Clear;
-
-            case MaskType.Gradient:
-                return BigTed.MaskType.Black;
-
-            case MaskType.None:
-                return BigTed.MaskType.None;
-
-            default:
-                throw new ArgumentException("Invalid Mask Type");
-        }
+            MaskType.Black => BigTed.MaskType.Black,
+            MaskType.Clear => BigTed.MaskType.Clear,
+            MaskType.Gradient => BigTed.MaskType.Black,
+            MaskType.None => BigTed.MaskType.None,
+            _ => throw new ArgumentException("Invalid Mask Type"),
+        };
     }
 }

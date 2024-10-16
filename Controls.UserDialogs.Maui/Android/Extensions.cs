@@ -71,4 +71,10 @@ public static class Extensions
 
         return ripple;
     }
+
+    public static bool IsRTL()
+    {
+        var layoutDirection = Platform.CurrentActivity!.Resources!.Configuration!.LayoutDirection;
+        return layoutDirection == Android.Views.LayoutDirection.Rtl;
+    }
 }

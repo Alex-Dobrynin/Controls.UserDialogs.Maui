@@ -40,6 +40,8 @@ public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
         }
         textView.SetPadding(DpToPixels(Builder.Padding.Left), 0, DpToPixels(Builder.Padding.Right), 0);
 
+        textView.TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr;
+
         if (Config.OptionsButtonFontFamily is not null)
         {
             var typeface = Typeface.CreateFromAsset(Context.Assets, Config.OptionsButtonFontFamily);
@@ -52,7 +54,9 @@ public class ActionSheetListAdapter : ArrayAdapter<ActionSheetOption>
             var img = MauiApplication.Current.GetDrawable(imgId)!;
             img.ScaleTo(Builder.OptionIconSize);
 
-            textView.SetCompoundDrawables(img, null, null, null);
+            if (IsRTL()) textView.SetCompoundDrawables(null, null, img, null);
+            else textView.SetCompoundDrawables(img, null, null, null);
+
             textView.CompoundDrawablePadding = DpToPixels(Builder.OptionIconPadding);
         }
 

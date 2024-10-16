@@ -138,8 +138,10 @@ public class HudDialog : IHudDialog
         }
         textView.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)_config.MessageFontSize);
         textView.SetTypeface(typeFace, TypefaceStyle.Normal);
+        textView.TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr;
 
         var parent = (textView.Parent as RelativeLayout)!;
+        parent.LayoutDirection = Android.Views.LayoutDirection.Ltr;
 
         if (_config.BackgroundColor is not null)
         {
@@ -202,6 +204,7 @@ public class HudDialog : IHudDialog
                     TextAlignment = Android.Views.TextAlignment.Gravity,
                     Gravity = GravityFlags.Center,
                     LayoutParameters = rParams,
+                    TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr
                 };
 
                 if (_config.ProgressColor is not null)
@@ -235,7 +238,8 @@ public class HudDialog : IHudDialog
             Text = _config.CancelText,
             TextAlignment = Android.Views.TextAlignment.Gravity,
             Gravity = GravityFlags.Center,
-            LayoutParameters = rParams
+            LayoutParameters = rParams,
+            TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr
         };
 
         _cnclBtn.SetBackgroundColor(Colors.Transparent.ToPlatform());

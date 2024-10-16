@@ -92,9 +92,9 @@ namespace Sample
             {
                 UseBottomSheet = true,
                 Destructive = new ActionSheetOption("Destroy", () => { }, "dotnet_bot.png"),
-                Cancel = new ActionSheetOption("Cancel", () => 
-                { 
-                
+                Cancel = new ActionSheetOption("Cancel", () =>
+                {
+
                 }, "dotnet_bot.png"),
                 Title = "Bottom Action sheet",
                 Message = "This is Bottom Action sheet",
@@ -129,7 +129,7 @@ namespace Sample
                 "Third option"
                 );
 
-                var r = res;
+            var r = res;
 #endif
         }
 
