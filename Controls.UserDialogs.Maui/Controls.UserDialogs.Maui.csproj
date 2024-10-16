@@ -16,7 +16,7 @@
 		
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Controls.UserDialogs.Maui</Title>
-		<Version>1.6.3</Version>
+		<Version>1.6.4</Version>
 		<Authors>Alex Dobrynin</Authors>
 		<Description>This is the updated version of Acr.Userdialogs. It supports latest version of .Net and you have an ability to style your dialogs as you want</Description>
 		<Copyright>Alex Dobrynin</Copyright>
