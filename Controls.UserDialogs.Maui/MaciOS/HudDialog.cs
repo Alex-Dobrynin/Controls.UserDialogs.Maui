@@ -126,7 +126,7 @@ public class HudDialog : IHudDialog
     {
         if (_config.MessageColor is not null)
         {
-            hud.HudForegroundColor = _config.MessageColor.ToPlatform();
+            ProgressHUDAppearance.HudTextColor = _config.MessageColor.ToPlatform();
         }
 
         UIFont? font = null;
@@ -136,7 +136,7 @@ public class HudDialog : IHudDialog
         }
         font ??= UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
-        hud.HudFont = font;
+        ProgressHUDAppearance.HudFont = font;
     }
 
     private void AfterShowImage(ProgressHUD hud)
@@ -173,10 +173,10 @@ public class HudDialog : IHudDialog
     {
         if (_config.MessageColor is not null)
         {
-            hud.HudForegroundColor = _config.MessageColor.ToPlatform();
+            ProgressHUDAppearance.HudTextColor = _config.MessageColor.ToPlatform();
         }
-        hud.RingThickness = 4f;
-        hud.RingRadius = 22f;
+        ProgressHUDAppearance.RingThickness = 4f;
+        ProgressHUDAppearance.RingRadius = 22f;
 
         if (hud.Subviews.FirstOrDefault() is UIToolbar toolbar && _config.ProgressColor is not null)
         {
@@ -198,7 +198,7 @@ public class HudDialog : IHudDialog
         }
         font ??= UIFont.SystemFontOfSize((float)_config.MessageFontSize);
 
-        hud.HudFont = font;
+        ProgressHUDAppearance.HudFont = font;
     }
 
     private void AfterShow(ProgressHUD hud)
