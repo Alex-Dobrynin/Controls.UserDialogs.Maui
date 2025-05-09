@@ -108,19 +108,26 @@ public partial class UserDialogsImplementation
         app.SafeInvokeOnMainThread(() =>
         {
             alert = alertFunc();
-            var top = Platform.GetCurrentUIViewController()!;
-            if (alert.PreferredStyle == UIAlertControllerStyle.ActionSheet && UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            var top = Platform.GetCurrentUIViewController();
+            if (alert.PreferredStyle == UIAlertControllerStyle.ActionSheet && 
+                UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad &&
+                top != null)
             {
                 var x = top.View!.Bounds.Width / 2;
                 var y = top.View.Bounds.Bottom;
                 var rect = new CGRect(x, y, 0, 0);
 #if __IOS__
-                alert.PopoverPresentationController!.SourceView = top.View;
-                alert.PopoverPresentationController.SourceRect = rect;
-                alert.PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Unknown;
+                // We need to check if the popover presentation controller is not null
+                // in case the iPadOS application is executing on a macOS device.
+                if (alert.PopoverPresentationController != null)
+                {
+                    alert.PopoverPresentationController.SourceView = top.View;
+                    alert.PopoverPresentationController.SourceRect = rect;
+                    alert.PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Unknown;
+                }
 #endif
             }
-            top.PresentViewController(alert, true, null);
+            top?.PresentViewController(alert, true, null);
         });
         return new DisposableAction(() => app.SafeInvokeOnMainThread(() => alert?.DismissViewController(true, null)));
     }
