@@ -31,7 +31,7 @@ public class SnackbarBuilder : Snackbar.Callback
     public double ActionIconPadding { get; set; } = DefaultActionIconPadding;
     public long FadeInFadeOutAnimationDuration { get; set; } = DefaultFadeInFadeOutAnimationDuration;
 
-    private Action _dismissed;
+    private Action? _dismissed;
 
     protected Activity Activity { get; }
     protected SnackbarConfig Config { get; }
@@ -148,7 +148,7 @@ public class SnackbarBuilder : Snackbar.Callback
 
     protected virtual void SetupSnackbarText(Snackbar snackbar)
     {
-        var l = ((snackbar.View as Snackbar.SnackbarLayout)!.GetChildAt(0) as SnackbarContentLayout)!;
+        var l = ((snackbar.View as FrameLayout)!.GetChildAt(0) as LinearLayout)!;
         var text = (l.GetChildAt(0) as TextView)!;
         text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)Config.MessageFontSize);
 
@@ -191,7 +191,7 @@ public class SnackbarBuilder : Snackbar.Callback
             Config.Action?.Invoke(SnackbarActionType.UserInteraction);
         });
 
-        var l = ((snackbar.View as Snackbar.SnackbarLayout)!.GetChildAt(0) as SnackbarContentLayout)!;
+        var l = ((snackbar.View as FrameLayout)!.GetChildAt(0) as LinearLayout)!;
         var button = (l.GetChildAt(1) as Android.Widget.Button)!;
         button.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)Config.NegativeButtonFontSize);
 
@@ -221,7 +221,7 @@ public class SnackbarBuilder : Snackbar.Callback
 
     protected virtual CountDownTimer PrepareProgress(Snackbar snackbar)
     {
-        var l = ((snackbar.View as Snackbar.SnackbarLayout)!.GetChildAt(0) as SnackbarContentLayout)!;
+        var l = ((snackbar.View as FrameLayout)!.GetChildAt(0) as LinearLayout)!;
 
         var lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent)
         {

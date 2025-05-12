@@ -12,7 +12,7 @@ public partial class UserDialogsImplementation : IUserDialogs
     public virtual partial IDisposable ShowToast(ToastConfig config);
     public virtual partial IDisposable ShowSnackbar(SnackbarConfig config);
 
-    protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config);
+    protected virtual partial IHudDialog? CreateHudInstance(HudDialogConfig config);
 
     public virtual IDisposable Alert(string message, string? title = null, string? okText = null, string? icon = null, Action? action = null)
     {
@@ -172,7 +172,7 @@ public partial class UserDialogsImplementation : IUserDialogs
             if (CurrentHudDialog is not null) CurrentHudDialog.Update(config);
             else CurrentHudDialog = CreateHudInstance(config);
 
-            return CurrentHudDialog;
+            return CurrentHudDialog!;
         }
         catch (Exception ex)
         {

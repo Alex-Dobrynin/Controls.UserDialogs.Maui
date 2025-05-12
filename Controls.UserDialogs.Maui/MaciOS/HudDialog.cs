@@ -14,7 +14,7 @@ namespace Controls.UserDialogs.Maui;
 
 public class HudDialog : IHudDialog
 {
-    private HudDialogConfig _config;
+    private HudDialogConfig? _config;
     private UIButton? _cnclBtn;
     private Action? _cancel;
     private UIWindow? _keyWindow;
@@ -53,7 +53,7 @@ public class HudDialog : IHudDialog
 
     public void Show()
     {
-        if (_config.Cancel is not null)
+        if (_config!.Cancel is not null)
         {
             _cancel = () =>
             {
@@ -108,9 +108,9 @@ public class HudDialog : IHudDialog
 
             hud.ShowImage(
 #if IOS
-                new UIImage(_config.Image!)
+                new UIImage(_config!.Image!)
 #else
-                UIImage.FromBundle(_config.Image!)!
+                UIImage.FromBundle(_config!.Image!)!
 #endif
                     .ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal).ScaleTo(100),
                 _config.Message,
@@ -124,7 +124,7 @@ public class HudDialog : IHudDialog
 
     private void BeforeShowImage(ProgressHUD hud)
     {
-        if (_config.MessageColor is not null)
+        if (_config!.MessageColor is not null)
         {
             ProgressHUDAppearance.HudTextColor = _config.MessageColor.ToPlatform();
         }
@@ -142,7 +142,7 @@ public class HudDialog : IHudDialog
     private void AfterShowImage(ProgressHUD hud)
     {
         var toolbar = hud.Subviews[0];
-        toolbar.Layer.CornerRadius = _config.CornerRadius;
+        toolbar.Layer.CornerRadius = _config!.CornerRadius;
         if (_config.BackgroundColor is not null)
         {
             toolbar.BackgroundColor = _config.BackgroundColor.ToPlatform();
@@ -171,7 +171,7 @@ public class HudDialog : IHudDialog
 
     private void BeforeShow(ProgressHUD hud)
     {
-        if (_config.MessageColor is not null)
+        if (_config!.MessageColor is not null)
         {
             ProgressHUDAppearance.HudTextColor = _config.MessageColor.ToPlatform();
         }
@@ -204,7 +204,7 @@ public class HudDialog : IHudDialog
     private void AfterShow(ProgressHUD hud)
     {
         var toolbar = hud.Subviews[0];
-        toolbar.Layer.CornerRadius = _config.CornerRadius;
+        toolbar.Layer.CornerRadius = _config!.CornerRadius;
         if (_config.BackgroundColor is not null)
         {
             toolbar.BackgroundColor = _config.BackgroundColor.ToPlatform();

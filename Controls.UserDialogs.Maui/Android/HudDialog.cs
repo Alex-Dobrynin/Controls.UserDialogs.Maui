@@ -20,7 +20,7 @@ public class HudDialog : IHudDialog
     public double ProgressSize { get; set; } = DefaultProgressSize;
     public bool ShowProgresPercents { get; set; } = DefaultShowProgresPercents;
 
-    private HudDialogConfig _config;
+    private HudDialogConfig? _config;
     private Android.Widget.Button? _cnclBtn;
     private TextView? _progressText;
 
@@ -62,7 +62,7 @@ public class HudDialog : IHudDialog
     {
         var dialog = AndHUD.Shared.CurrentDialog;
 
-        if (_config.Image is not null)
+        if (_config!.Image is not null)
         {
             ShowImage();
         }
@@ -92,7 +92,7 @@ public class HudDialog : IHudDialog
 
     private void ShowImage()
     {
-        var imgId = MauiApplication.Current.GetDrawableId(_config.Image!);
+        var imgId = MauiApplication.Current.GetDrawableId(_config!.Image!);
 
         AndHUD.Shared.ShowImage(
             Activity,
@@ -113,7 +113,7 @@ public class HudDialog : IHudDialog
 
         if (_cnclBtn is not null)
         {
-            _cnclBtn.Clickable = _config.Cancel is not null;
+            _cnclBtn.Clickable = _config!.Cancel is not null;
             _cnclBtn.Visibility = _config.Cancel is null ? ViewStates.Gone : ViewStates.Visible;
         }
         else SetupCancel(dialog);
@@ -124,7 +124,7 @@ public class HudDialog : IHudDialog
         if (dialog is null) return;
 
         Typeface? typeFace = null;
-        if (_config.MessageFontFamily is not null)
+        if (_config!.MessageFontFamily is not null)
         {
             typeFace = Typeface.CreateFromAsset(Activity.Assets, _config.MessageFontFamily)!;
         }
@@ -223,7 +223,7 @@ public class HudDialog : IHudDialog
 
     protected virtual void SetupCancel(Dialog dialog)
     {
-        if (_config.Cancel is null) return;
+        if (_config!.Cancel is null) return;
 
         int textViewId = Activity.Resources!.GetIdentifier("textViewStatus", "id", Activity.PackageName);
         var textView = dialog.FindViewById<TextView>(textViewId)!;
@@ -265,7 +265,7 @@ public class HudDialog : IHudDialog
     protected virtual Drawable GetDialogBackground(HudDialogConfig config)
     {
         var backgroundDrawable = new GradientDrawable();
-        backgroundDrawable.SetColor(_config.BackgroundColor.ToInt());
+        backgroundDrawable.SetColor(_config!.BackgroundColor.ToInt());
         backgroundDrawable.SetCornerRadius(DpToPixels(_config.CornerRadius));
 
         return backgroundDrawable;
@@ -273,7 +273,7 @@ public class HudDialog : IHudDialog
 
     void OnCancelClick()
     {
-        if (_config.Cancel is null)
+        if (_config!.Cancel is null)
             return;
 
         Hide();

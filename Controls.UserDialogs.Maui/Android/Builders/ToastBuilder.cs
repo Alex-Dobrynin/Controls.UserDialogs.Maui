@@ -24,7 +24,7 @@ public class ToastBuilder : Snackbar.Callback
     public double IconSize { get; set; } = DefaultIconSize;
     public long FadeInFadeOutAnimationDuration { get; set; } = DefaultFadeInFadeOutAnimationDuration;
 
-    private Action _dismissed;
+    private Action? _dismissed;
 
     protected Activity Activity { get; }
     protected ToastConfig Config { get; }
@@ -126,7 +126,7 @@ public class ToastBuilder : Snackbar.Callback
 
     protected virtual void SetupSnackbarText(Snackbar snackbar)
     {
-        var l = ((snackbar.View as Snackbar.SnackbarLayout)!.GetChildAt(0) as SnackbarContentLayout)!;
+        var l = ((snackbar.View as FrameLayout)!.GetChildAt(0) as LinearLayout)!;
         var text = (l.GetChildAt(0) as TextView)!;
         text.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)Config.MessageFontSize);
 

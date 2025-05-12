@@ -92,7 +92,7 @@ public partial class UserDialogsImplementation
 
     #region Internals
 
-    protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config)
+    protected virtual partial IHudDialog? CreateHudInstance(HudDialogConfig config)
     {
         CurrentHudDialog?.Dispose();
 

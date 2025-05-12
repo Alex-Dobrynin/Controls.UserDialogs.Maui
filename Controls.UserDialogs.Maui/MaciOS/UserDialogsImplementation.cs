@@ -91,7 +91,7 @@ public partial class UserDialogsImplementation
         }));
     }
 
-    protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config)
+    protected virtual partial IHudDialog? CreateHudInstance(HudDialogConfig config)
     {
         CurrentHudDialog?.Dispose();
 
@@ -109,7 +109,7 @@ public partial class UserDialogsImplementation
         {
             alert = alertFunc();
             var top = Platform.GetCurrentUIViewController();
-            if (alert.PreferredStyle == UIAlertControllerStyle.ActionSheet && 
+            if (alert.PreferredStyle == UIAlertControllerStyle.ActionSheet &&
                 UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad &&
                 top != null)
             {

@@ -22,7 +22,7 @@ public enum Style
 
 public class Snackbar : UIView
 {
-    private System.Timers.Timer _timer;
+    private System.Timers.Timer? _timer;
     private DateTime _endOfAnimation;
 
     public static double DefaultIconSize { get; set; } = 26;
@@ -46,7 +46,7 @@ public class Snackbar : UIView
     public Thickness SnackbarMargin { get; set; } = DefaultSnackbarMargin;
     public float MessageFontSize { get; set; } = 16f;
     public float ActionFontSize { get; set; } = 20f;
-    public string Message { get; set; }
+    public string? Message { get; set; }
     public string? Icon { get; set; }
     public string? FontFamily { get; set; }
     public string? CancelButtonFontFamily { get; set; }
@@ -54,9 +54,9 @@ public class Snackbar : UIView
     public UIColor ActionColor { get; set; } = Colors.White.ToPlatform();
     public Position Position { get; set; }
     public Style Style { get; set; }
-    public string ActionText { get; set; }
+    public string? ActionText { get; set; }
     public string? ActionIcon { get; set; }
-    public Action Action { get; set; }
+    public Action? Action { get; set; }
     public bool UseBlur { get; set; } = DefaultUseBlur;
     public bool UseAnimation { get; set; } = DefaultUseAnimation;
     public TimeSpan AnimationDuration { get; set; } = DefaultAnimationDuration;
@@ -69,7 +69,7 @@ public class Snackbar : UIView
     public float IconSpacing { get; set; } = DefaultIconSpacing;
     public UIBlurEffectStyle BlurEffectStyle { get; set; } = DefaultBlurEffectStyle;
     public bool ShowCountDown { get; set; }
-    public event EventHandler Timeout;
+    public event EventHandler? Timeout;
 
     public Snackbar()
     {
@@ -342,7 +342,7 @@ public class Snackbar : UIView
             Font = font
         };
 
-        _timer.Elapsed += (s, a) =>
+        _timer!.Elapsed += (s, a) =>
         {
             var rest = (_endOfAnimation - a.SignalTime).TotalSeconds;
             if (rest <= 0)

@@ -22,9 +22,9 @@ public static class Extensions
     {
         return style switch
         {
-            UserInterfaceStyle.Unspecified => UIUserInterfaceStyle.Unspecified,
             UserInterfaceStyle.Light => UIUserInterfaceStyle.Light,
-            UserInterfaceStyle.Dark => UIUserInterfaceStyle.Dark
+            UserInterfaceStyle.Dark => UIUserInterfaceStyle.Dark,
+            _ => UIUserInterfaceStyle.Unspecified,
         };
     }
 
@@ -32,8 +32,8 @@ public static class Extensions
     {
         return position switch
         {
-            ToastPosition.Bottom => Position.Bottom,
             ToastPosition.Top => Position.Top,
+            _ => Position.Bottom,
         };
     }
 

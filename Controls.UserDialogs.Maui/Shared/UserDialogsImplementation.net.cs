@@ -27,7 +27,7 @@ public partial class UserDialogsImplementation : IDisposable
         return this;
     }
 
-    protected virtual partial IHudDialog CreateHudInstance(HudDialogConfig config)
+    protected virtual partial IHudDialog? CreateHudInstance(HudDialogConfig config)
     {
         return CurrentHudDialog;
     }
