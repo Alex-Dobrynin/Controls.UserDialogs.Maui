@@ -70,7 +70,10 @@ public static class Extensions
     {
         var connectedScene = UIApplication.SharedApplication.ConnectedScenes
             .OfType<UIWindowScene>()
-            .FirstOrDefault(x => x.ActivationState == UISceneActivationState.ForegroundActive);
+            .OrderBy(x => x.ActivationState)
+            .FirstOrDefault(x => x.ActivationState
+                is UISceneActivationState.ForegroundActive
+                or UISceneActivationState.ForegroundInactive);
 
         return connectedScene;
     }
