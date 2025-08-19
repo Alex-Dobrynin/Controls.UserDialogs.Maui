@@ -31,9 +31,4 @@ public partial class UserDialogsImplementation : IDisposable
     {
         return CurrentHudDialog;
     }
-
-    public void Dispose()
-    {
-        CurrentHudDialog?.Dispose();
-    }
 }

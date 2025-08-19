@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst;net9.0;net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0;net9.0-windows10.0.19041.0</TargetFrameworks>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -14,10 +15,11 @@
 		<SupportedOSPlatformVersion Condition="$(TargetFramework) == 'net9.0-maccatalyst18.4'">15.0</SupportedOSPlatformVersion>
 
 		<DefineConstants Condition="$(TargetFramework.Contains('ios')) OR $(TargetFramework.Contains('maccatalyst'))">$(DefineConstants);MACIOS</DefineConstants>
+		<DefineConstants Condition="$(TargetFramework.Contains('windows'))">$(DefineConstants);WINDOWS</DefineConstants>
 		
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Controls.UserDialogs.Maui</Title>
-		<Version>1.8.1</Version>
+		<Version>1.9.0-windows.0</Version>
 		<Authors>Alex Dobrynin</Authors>
 		<Description>This is the updated version of Acr.Userdialogs. It supports latest version of .Net and you have an ability to style your dialogs as you want</Description>
 		<Copyright>Alex Dobrynin</Copyright>
@@ -37,12 +39,20 @@
 		<None Include="**\**\Android\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
 
-	<ItemGroup Condition="!$(TargetFramework.Contains('ios')) AND !$(TargetFramework.Contains('maccatalyst'))">
+	<ItemGroup Condition="!($(TargetFramework.Contains('ios')) OR $(TargetFramework.Contains('maccatalyst')))">
 		<Compile Remove="**\**\*.MaciOS.cs" />
 		<None Include="**\**\*.MaciOS.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 
 		<Compile Remove="**\**\MaciOS\**\*.cs" />
 		<None Include="**\**\MaciOS\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+	</ItemGroup>
+
+	<ItemGroup Condition="!$(TargetFramework.Contains('windows'))">
+		<Compile Remove="**\**\*.Windows.cs" />
+		<None Include="**\**\*.Windows.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
+
+		<Compile Remove="**\**\Windows\**\*.cs" />
+		<None Include="**\**\Windows\**\*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
 	</ItemGroup>
 
 	<!-- .NET -->
@@ -57,6 +67,11 @@
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework.Contains('ios')) OR $(TargetFramework.Contains('maccatalyst')) ">
 	  <PackageReference Include="BTProgressHUD" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetFramework.Contains('windows'))">
+	  <!-- No external packages required for initial Windows support.
+	       Keep this group for future WinUI/CommunityToolkit packages if needed. -->
 	</ItemGroup>
 
 	<ItemGroup>

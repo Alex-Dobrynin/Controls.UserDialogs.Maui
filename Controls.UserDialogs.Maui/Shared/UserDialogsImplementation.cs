@@ -1,6 +1,6 @@
 ﻿namespace Controls.UserDialogs.Maui;
-
-public partial class UserDialogsImplementation : IUserDialogs
+ 
+public partial class UserDialogsImplementation : IUserDialogs, IDisposable
 {
     const string _noAction = "Action should not be set as async will not use it";
 
@@ -238,5 +238,11 @@ public partial class UserDialogsImplementation : IUserDialogs
     {
         disp.Dispose();
         tcs.TrySetCanceled();
+    }
+
+    // Ensure IDisposable is implemented for all target frameworks (some partials may be excluded per-target)
+    public void Dispose()
+    {
+        CurrentHudDialog?.Dispose();
     }
 }
