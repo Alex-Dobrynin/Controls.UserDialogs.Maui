@@ -20,6 +20,7 @@ env:
     DOTNET_CLI_TELEMETRY_OPTOUT: true
     BUILD_PUSH: true
     DO_NOT_TRACK: '1'
+    NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
     contents: write
@@ -59,4 +60,4 @@ jobs:
 
       - name: Upload Nuget
         run: |
-          dotnet nuget push .\pack\Controls.UserDialogs.Maui.%NUGET_VERSION%.nupkg --source github_cenozon
+          dotnet nuget push .\pack\Controls.UserDialogs.Maui.*.nupkg --source github_cenozon
