@@ -25,7 +25,7 @@
 		<Copyright>Alex Dobrynin</Copyright>
 		<PackageIcon>userdialogs_maui_icon.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/Alex-Dobrynin/UserDialogs.Maui</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/Alex-Dobrynin/UserDialogs.Maui</RepositoryUrl>
+		<RepositoryUrl>https://github.com/cenozon/Controls.UserDialogs.Maui</RepositoryUrl>
 		<PackageTags>Maui;UserDialogs;Dialog;Popup;Snackbar;Toast;Loading;Progress</PackageTags>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
