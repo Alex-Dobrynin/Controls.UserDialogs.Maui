@@ -14,6 +14,12 @@ namespace Controls.UserDialogs.Maui;
 
 public class HudDialog : IHudDialog
 {
+    public static float DefaultProgressSize { get; set; } = 44f;
+    public static float DefaultProgressThickness { get; set; } = 4f;
+
+    public float ProgressRadius { get; set; } = DefaultProgressSize / 2f;
+    public float ProgressThickness { get; set; } = DefaultProgressThickness;
+
     private HudDialogConfig? _config;
     private UIButton? _cnclBtn;
     private Action? _cancel;
@@ -175,8 +181,8 @@ public class HudDialog : IHudDialog
         {
             ProgressHUDAppearance.HudTextColor = _config.MessageColor.ToPlatform();
         }
-        ProgressHUDAppearance.RingThickness = 4f;
-        ProgressHUDAppearance.RingRadius = 22f;
+        ProgressHUDAppearance.RingThickness = ProgressThickness;
+        ProgressHUDAppearance.RingRadius = ProgressRadius;
 
         if (hud.Subviews.FirstOrDefault() is UIToolbar toolbar && _config.ProgressColor is not null)
         {

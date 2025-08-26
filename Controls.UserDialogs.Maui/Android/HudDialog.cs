@@ -14,10 +14,12 @@ namespace Controls.UserDialogs.Maui;
 
 public class HudDialog : IHudDialog
 {
-    public static double DefaultProgressSize { get; set; } = 80;
+    public static double DefaultProgressSize { get; set; } = 80d;
+    public static double DefaultProgressThickness { get; set; } = 10d;
     public static bool DefaultShowProgresPercents { get; set; } = true;
 
-    public double ProgressSize { get; set; } = DefaultProgressSize;
+    public int ProgressSize { get; set; } = DpToPixels(DefaultProgressSize);
+    public int ProgressThickness { get; set; } = DpToPixels(DefaultProgressThickness);
     public bool ShowProgresPercents { get; set; } = DefaultShowProgresPercents;
 
     private HudDialogConfig? _config;
@@ -154,8 +156,8 @@ public class HudDialog : IHudDialog
         if (progressBar is not null)
         {
             var lparams = progressBar.LayoutParameters!;
-            lparams.Width = DpToPixels(ProgressSize);
-            lparams.Height = DpToPixels(ProgressSize);
+            lparams.Width = ProgressSize;
+            lparams.Height = ProgressSize;
 
             progressBar.LayoutParameters = lparams;
 
@@ -178,10 +180,12 @@ public class HudDialog : IHudDialog
         if (progressWheel is not null)
         {
             var lparams = progressWheel.LayoutParameters!;
-            lparams.Width = DpToPixels(ProgressSize);
-            lparams.Height = DpToPixels(ProgressSize);
+            lparams.Width = ProgressSize;
+            lparams.Height = ProgressSize;
 
             progressWheel.LayoutParameters = lparams;
+            progressWheel.RimWidth = ProgressThickness;
+            progressWheel.BarWidth = ProgressThickness;
 
             if (_config.ProgressColor is not null)
             {
@@ -271,7 +275,7 @@ public class HudDialog : IHudDialog
         return backgroundDrawable;
     }
 
-    void OnCancelClick()
+    private void OnCancelClick()
     {
         if (_config!.Cancel is null)
             return;
