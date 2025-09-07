@@ -6,17 +6,6 @@ namespace Controls.UserDialogs.Maui;
 
 public static class Extensions
 {
-    public static void SafeInvokeOnMainThread(this UIApplication app, Action action) => app.InvokeOnMainThread(() =>
-    {
-        try
-        {
-            action();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
-    });
 
     public static UIUserInterfaceStyle ToNative(this UserInterfaceStyle style)
     {

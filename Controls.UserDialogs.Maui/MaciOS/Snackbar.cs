@@ -172,10 +172,7 @@ public class Snackbar : UIView
             InvokeOnMainThread(() =>
             {
                 UIView.Animate(AnimationDuration.TotalSeconds,
-                    () =>
-                    {
-                        Alpha = 0f;
-                    },
+                    () => Alpha = 0f,
                     () =>
                     {
                         Dismiss();

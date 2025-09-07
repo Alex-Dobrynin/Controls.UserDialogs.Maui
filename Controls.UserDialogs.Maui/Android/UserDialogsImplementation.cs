@@ -53,34 +53,34 @@ public partial class UserDialogsImplementation
     public virtual partial IDisposable ShowToast(ToastConfig config)
     {
         Snackbar? snackbar = null;
-        var activity = Platform.CurrentActivity!;
-        activity.SafeRunOnUi(() =>
+
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
-            snackbar = new ToastBuilder(activity, config).Build();
+            snackbar = new ToastBuilder(Platform.CurrentActivity!, config).Build();
 
             snackbar.Show();
         });
         return new DisposableAction(() =>
         {
             if (snackbar?.IsShown is true)
-                activity.SafeRunOnUi(snackbar.Dismiss);
+                SharedExtensions.SafeInvokeOnMainThread(snackbar.Dismiss);
         });
     }
 
     public virtual partial IDisposable ShowSnackbar(SnackbarConfig config)
     {
         Snackbar? snackBar = null;
-        var activity = Platform.CurrentActivity!;
-        activity.SafeRunOnUi(() =>
+
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
-            snackBar = new SnackbarBuilder(activity, config).Build();
+            snackBar = new SnackbarBuilder(Platform.CurrentActivity!, config).Build();
 
             snackBar.Show();
         });
         return new DisposableAction(() =>
         {
             if (snackBar?.IsShown is true)
-                activity.SafeRunOnUi(() =>
+                SharedExtensions.SafeInvokeOnMainThread(() =>
                 {
                     snackBar.Dismiss();
                     config.Action?.Invoke(SnackbarActionType.Cancelled);
@@ -105,14 +105,15 @@ public partial class UserDialogsImplementation
     protected virtual IDisposable Show(Activity activity, Func<Dialog> dialogBuilder)
     {
         Dialog? dialog = null;
-        activity.SafeRunOnUi(() =>
+
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
             dialog = dialogBuilder();
             dialog.Show();
         });
         return new DisposableAction(() =>
         {
-            activity.SafeRunOnUi(() => dialog?.Dismiss());
+            SharedExtensions.SafeInvokeOnMainThread(() => dialog?.Dismiss());
         });
     }
 
@@ -121,7 +122,7 @@ public partial class UserDialogsImplementation
         where TConfig : class, new()
     {
         TFragment? frag = null;
-        activity.SafeRunOnUi(() =>
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
             frag = (TFragment)Activator.CreateInstance(typeof(TFragment))!;
             frag.Config = config;
@@ -129,7 +130,7 @@ public partial class UserDialogsImplementation
         });
         return new DisposableAction(() =>
         {
-            activity.SafeRunOnUi(() => frag?.Dismiss());
+            SharedExtensions.SafeInvokeOnMainThread(() => frag?.Dismiss());
         });
     }
 

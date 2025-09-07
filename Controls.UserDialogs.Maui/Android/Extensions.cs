@@ -28,18 +28,6 @@ public static class Extensions
         return (int)(density * number);
     }
 
-    public static void SafeRunOnUi(this Activity activity, Action action) => activity.RunOnUiThread(() =>
-    {
-        try
-        {
-            action();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
-    });
-
     public static AndroidHUD.MaskType ToNative(this MaskType maskType)
     {
         switch (maskType)

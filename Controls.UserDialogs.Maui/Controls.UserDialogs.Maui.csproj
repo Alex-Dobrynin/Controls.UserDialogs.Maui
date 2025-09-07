@@ -7,17 +7,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
-		<SupportedOSPlatformVersion Condition="$(TargetFramework) == 'net8.0-ios18.0'">14.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$(TargetFramework) == 'net9.0-ios18.4'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$(TargetFramework) == 'net8.0-maccatalyst18.0'">14.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$(TargetFramework) == 'net9.0-maccatalyst18.4'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
 
 		<DefineConstants Condition="$(TargetFramework.Contains('ios')) OR $(TargetFramework.Contains('maccatalyst'))">$(DefineConstants);MACIOS</DefineConstants>
 		
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>Controls.UserDialogs.Maui</Title>
-		<Version>1.9.0</Version>
+		<Version>1.10.0</Version>
 		<Authors>Alex Dobrynin</Authors>
 		<Description>This is the updated version of Acr.Userdialogs. It supports latest version of .Net and you have an ability to style your dialogs as you want</Description>
 		<Copyright>Alex Dobrynin</Copyright>

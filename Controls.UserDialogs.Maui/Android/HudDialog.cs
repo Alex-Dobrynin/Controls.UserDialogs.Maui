@@ -33,7 +33,7 @@ public class HudDialog : IHudDialog
         Activity = activity;
     }
 
-    public void Update(string? message = null, int percentComplete = -1, string? image = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
+    public virtual void Update(string? message = null, int percentComplete = -1, string? image = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
     {
         Update(new HudDialogConfig()
         {
@@ -47,7 +47,7 @@ public class HudDialog : IHudDialog
         });
     }
 
-    public void Update(HudDialogConfig config)
+    public virtual void Update(HudDialogConfig config)
     {
         _config = config;
         if (_config.AutoShow) Show();
@@ -60,7 +60,7 @@ public class HudDialog : IHudDialog
         }
     }
 
-    public void Show()
+    public virtual void Show()
     {
         var dialog = AndHUD.Shared.CurrentDialog;
 
@@ -80,8 +80,7 @@ public class HudDialog : IHudDialog
                 true,
                 null,
                 BeforeShow,
-                null
-            );
+                null);
         }
 
         var newDialog = AndHUD.Shared.CurrentDialog;
@@ -92,7 +91,7 @@ public class HudDialog : IHudDialog
         }
     }
 
-    private void ShowImage()
+    protected virtual void ShowImage()
     {
         var imgId = MauiApplication.Current.GetDrawableId(_config!.Image!);
 
@@ -105,8 +104,7 @@ public class HudDialog : IHudDialog
             null,
             null,
             BeforeShow,
-            null
-        );
+            null);
     }
 
     protected virtual void AfterShow(Dialog dialog)

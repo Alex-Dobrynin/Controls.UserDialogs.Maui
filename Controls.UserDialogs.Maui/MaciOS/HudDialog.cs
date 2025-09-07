@@ -24,8 +24,9 @@ public class HudDialog : IHudDialog
     private UIButton? _cnclBtn;
     private Action? _cancel;
     private UIWindow? _keyWindow;
+    private ProgressHUD? _hud;
 
-    public void Update(string? message = null, int percentComplete = -1, string? image = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
+    public virtual void Update(string? message = null, int percentComplete = -1, string? image = null, string? cancelText = null, bool show = true, MaskType? maskType = null, Action? cancel = null)
     {
         Update(new HudDialogConfig()
         {
@@ -39,7 +40,7 @@ public class HudDialog : IHudDialog
         });
     }
 
-    public void Update(HudDialogConfig config)
+    public virtual void Update(HudDialogConfig config)
     {
         _config = config;
         if (_config.AutoShow) Show();
@@ -57,7 +58,7 @@ public class HudDialog : IHudDialog
         }
     }
 
-    public void Show()
+    public virtual void Show()
     {
         if (_config!.Cancel is not null)
         {
@@ -73,46 +74,50 @@ public class HudDialog : IHudDialog
             return;
         }
 
-        UIApplication.SharedApplication.InvokeOnMainThread(() =>
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
-            _keyWindow ??= Extensions.GetKeyWindow();
-            var hud = ProgressHUD.For(_keyWindow)!;
+            if (_hud is null)
+            {
+                _keyWindow ??= Extensions.GetKeyWindow();
+                _hud = ProgressHUD.For(_keyWindow)!;
+            }
 
-            BeforeShow(hud);
+            BeforeShow(_hud);
             var percent = _config.PercentComplete / 100f;
             if (_config.Cancel is not null)
             {
-                hud.Show(
+                _hud.Show(
                     _config.CancelText!,
                     _cancel!,
                     _config.Message,
                     percent,
-                    _config.MaskType.ToNative()
-                    );
+                    _config.MaskType.ToNative());
             }
             else
             {
-                hud.Show(
+                _hud.Show(
                     _config.Message,
                     percent,
-                    _config.MaskType.ToNative()
-                    );
+                    _config.MaskType.ToNative());
             }
 
-            AfterShow(hud);
+            AfterShow(_hud);
         });
     }
 
-    private void ShowImage()
+    protected virtual void ShowImage()
     {
-        UIApplication.SharedApplication.InvokeOnMainThread(() =>
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
-            _keyWindow ??= Extensions.GetKeyWindow();
-            var hud = ProgressHUD.For(_keyWindow)!;
+            if (_hud is null)
+            {
+                _keyWindow ??= Extensions.GetKeyWindow();
+                _hud = ProgressHUD.For(_keyWindow)!;
+            }
 
-            BeforeShowImage(hud);
+            BeforeShowImage(_hud);
 
-            hud.ShowImage(
+            _hud.ShowImage(
 #if IOS
                 new UIImage(_config!.Image!)
 #else
@@ -121,14 +126,13 @@ public class HudDialog : IHudDialog
                     .ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal).ScaleTo(100),
                 _config.Message,
                 _config.MaskType.ToNative(),
-                TimeSpan.MaxValue.TotalMilliseconds
-                );
+                TimeSpan.MaxValue.TotalMilliseconds);
 
-            AfterShowImage(hud);
+            AfterShowImage(_hud);
         });
     }
 
-    private void BeforeShowImage(ProgressHUD hud)
+    protected virtual void BeforeShowImage(ProgressHUD hud)
     {
         if (_config!.MessageColor is not null)
         {
@@ -145,7 +149,7 @@ public class HudDialog : IHudDialog
         ProgressHUDAppearance.HudFont = font;
     }
 
-    private void AfterShowImage(ProgressHUD hud)
+    protected virtual void AfterShowImage(ProgressHUD hud)
     {
         var toolbar = hud.Subviews[0];
         toolbar.Layer.CornerRadius = _config!.CornerRadius;
@@ -175,7 +179,7 @@ public class HudDialog : IHudDialog
         _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, _config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
     }
 
-    private void BeforeShow(ProgressHUD hud)
+    protected virtual void BeforeShow(ProgressHUD hud)
     {
         if (_config!.MessageColor is not null)
         {
@@ -207,7 +211,7 @@ public class HudDialog : IHudDialog
         ProgressHUDAppearance.HudFont = font;
     }
 
-    private void AfterShow(ProgressHUD hud)
+    protected virtual void AfterShow(ProgressHUD hud)
     {
         var toolbar = hud.Subviews[0];
         toolbar.Layer.CornerRadius = _config!.CornerRadius;
@@ -241,18 +245,22 @@ public class HudDialog : IHudDialog
         _cnclBtn.SetAttributedTitle(new NSMutableAttributedString(_config.CancelText, font, _config.NegativeButtonTextColor?.ToPlatform()), UIControlState.Normal);
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
         try
         {
             _cnclBtn = null;
             _cancel = null;
-            UIApplication.SharedApplication.InvokeOnMainThread(() =>
+            SharedExtensions.SafeInvokeOnMainThread(() =>
             {
-                var window = _keyWindow ?? Extensions.GetKeyWindow();
-                var hud = ProgressHUD.For(window)!;
-                hud?.Dismiss();
+                if (_hud is null)
+                {
+                    _keyWindow ??= Extensions.GetKeyWindow();
+                    _hud = ProgressHUD.For(_keyWindow)!;
+                }
+                _hud?.Dismiss();
                 _keyWindow = null;
+                _hud = null;
             });
         }
         catch (Exception ex)
@@ -261,7 +269,7 @@ public class HudDialog : IHudDialog
         }
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         Hide();
         GC.SuppressFinalize(this);

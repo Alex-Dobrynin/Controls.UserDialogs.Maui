@@ -26,9 +26,8 @@ public partial class UserDialogsImplementation
     public virtual partial IDisposable ShowToast(ToastConfig config)
     {
         Snackbar? bar = null;
-        var app = UIApplication.SharedApplication;
 
-        app.SafeInvokeOnMainThread(() =>
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
             bar = new Snackbar()
             {
@@ -45,15 +44,14 @@ public partial class UserDialogsImplementation
             bar.Show();
         });
 
-        return new DisposableAction(() => app.SafeInvokeOnMainThread(() => bar?.Dismiss()));
+        return new DisposableAction(() => SharedExtensions.SafeInvokeOnMainThread(() => bar?.Dismiss()));
     }
 
     public virtual partial IDisposable ShowSnackbar(SnackbarConfig config)
     {
         Snackbar? bar = null;
-        var app = UIApplication.SharedApplication;
 
-        app.SafeInvokeOnMainThread(() =>
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
             bar = new Snackbar
             {
@@ -84,7 +82,7 @@ public partial class UserDialogsImplementation
             };
         });
 
-        return new DisposableAction(() => app.SafeInvokeOnMainThread(() =>
+        return new DisposableAction(() => SharedExtensions.SafeInvokeOnMainThread(() =>
         {
             bar?.Dismiss();
             config.Action?.Invoke(SnackbarActionType.Cancelled);
@@ -104,11 +102,13 @@ public partial class UserDialogsImplementation
     protected virtual IDisposable Present(Func<UIAlertController> alertFunc)
     {
         UIAlertController? alert = null;
-        var app = UIApplication.SharedApplication;
-        app.SafeInvokeOnMainThread(() =>
+
+        SharedExtensions.SafeInvokeOnMainThread(() =>
         {
             alert = alertFunc();
             var top = Platform.GetCurrentUIViewController();
+
+#if IOS
             if (alert.PreferredStyle == UIAlertControllerStyle.ActionSheet &&
                 UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad &&
                 top != null)
@@ -116,7 +116,6 @@ public partial class UserDialogsImplementation
                 var x = top.View!.Bounds.Width / 2;
                 var y = top.View.Bounds.Bottom;
                 var rect = new CGRect(x, y, 0, 0);
-#if __IOS__
                 // We need to check if the popover presentation controller is not null
                 // in case the iPadOS application is executing on a macOS device.
                 if (alert.PopoverPresentationController != null)
@@ -125,19 +124,20 @@ public partial class UserDialogsImplementation
                     alert.PopoverPresentationController.SourceRect = rect;
                     alert.PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Unknown;
                 }
-#endif
             }
+#endif
+
             top?.PresentViewController(alert, true, null);
         });
-        return new DisposableAction(() => app.SafeInvokeOnMainThread(() => alert?.DismissViewController(true, null)));
+
+        return new DisposableAction(() => SharedExtensions.SafeInvokeOnMainThread(() => alert?.DismissViewController(true, null)));
     }
 
     protected virtual IDisposable Present(UIViewController controller)
     {
-        var app = UIApplication.SharedApplication;
         var top = Platform.GetCurrentUIViewController()!;
 
-        app.InvokeOnMainThread(() => top.PresentViewController(controller, true, null));
-        return new DisposableAction(() => app.SafeInvokeOnMainThread(() => controller.DismissViewController(true, null)));
+        SharedExtensions.SafeInvokeOnMainThread(() => top.PresentViewController(controller, true, null));
+        return new DisposableAction(() => SharedExtensions.SafeInvokeOnMainThread(() => controller.DismissViewController(true, null)));
     }
 }
