@@ -124,9 +124,9 @@ public class HudDialog : IHudDialog
                 UIImage.FromBundle(_config!.Image!)!
 #endif
                     .ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal).ScaleTo(100),
-                _config.Message,
-                _config.MaskType.ToNative(),
-                TimeSpan.MaxValue.TotalMilliseconds);
+                        _config.Message,
+                        _config.MaskType.ToNative(),
+                        TimeSpan.MaxValue.TotalMilliseconds);
 
             AfterShowImage(_hud);
         });
@@ -251,17 +251,16 @@ public class HudDialog : IHudDialog
         {
             _cnclBtn = null;
             _cancel = null;
-            SharedExtensions.SafeInvokeOnMainThread(() =>
+
+            if (_hud is null)
             {
-                if (_hud is null)
-                {
-                    _keyWindow ??= Extensions.GetKeyWindow();
-                    _hud = ProgressHUD.For(_keyWindow)!;
-                }
-                _hud?.Dismiss();
-                _keyWindow = null;
-                _hud = null;
-            });
+                _keyWindow ??= Extensions.GetKeyWindow();
+                _hud = ProgressHUD.For(_keyWindow)!;
+            }
+
+            _hud?.Dismiss();
+            _keyWindow = null;
+            _hud = null;
         }
         catch (Exception ex)
         {

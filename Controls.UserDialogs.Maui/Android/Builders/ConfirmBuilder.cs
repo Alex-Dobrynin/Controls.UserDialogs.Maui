@@ -10,7 +10,6 @@ using static Controls.UserDialogs.Maui.Extensions;
 
 using AlertDialog = Android.App.AlertDialog;
 using AppCompatAlertDialog = AndroidX.AppCompat.App.AlertDialog;
-using Layout = Android.Text.Layout;
 
 namespace Controls.UserDialogs.Maui;
 
@@ -51,6 +50,9 @@ public class ConfirmBuilder
             dialog.Window!.SetBackgroundDrawable(GetDialogBackground());
         }
 
+        dialog.Window!.DecorView.LayoutDirection = IsRTL() ? Android.Views.LayoutDirection.Rtl : Android.Views.LayoutDirection.Ltr;
+        dialog.Window!.DecorView.TextDirection = IsRTL() ? Android.Views.TextDirection.Rtl : Android.Views.TextDirection.Ltr;
+
         return dialog;
     }
 
@@ -75,6 +77,9 @@ public class ConfirmBuilder
         {
             dialog.Window!.SetBackgroundDrawable(GetDialogBackground());
         }
+
+        dialog.Window!.DecorView.LayoutDirection = IsRTL() ? Android.Views.LayoutDirection.Rtl : Android.Views.LayoutDirection.Ltr;
+        dialog.Window!.DecorView.TextDirection = IsRTL() ? Android.Views.TextDirection.Rtl : Android.Views.TextDirection.Ltr;
 
         return dialog;
     }
@@ -105,8 +110,6 @@ public class ConfirmBuilder
             var typeface = Typeface.CreateFromAsset(Activity.Assets, Config.MessageFontFamily)!;
             messageSpan.SetSpan(new CustomTypeFaceSpan(typeface), 0, Config.Message.Length, SpanTypes.ExclusiveExclusive);
         }
-
-        messageSpan.SetSpan(new AlignmentSpanStandard(IsRTL() ? Layout.Alignment.AlignOpposite! : Layout.Alignment.AlignNormal!), 0, Config.Message.Length, SpanTypes.InclusiveInclusive);
 
         return messageSpan;
     }
