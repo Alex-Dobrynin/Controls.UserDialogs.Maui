@@ -124,7 +124,7 @@ public partial class UserDialogsImplementation
         TFragment? frag = null;
         SharedExtensions.SafeInvokeOnMainThread(() =>
         {
-            frag = (TFragment)Activator.CreateInstance(typeof(TFragment))!;
+            frag = Activator.CreateInstance<TFragment>();
             frag.Config = config;
             frag.Show(activity.SupportFragmentManager, FragmentTag);
         });

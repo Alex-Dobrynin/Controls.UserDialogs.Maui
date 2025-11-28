@@ -2,7 +2,7 @@
 
 public partial class UserDialogsImplementation : IUserDialogs
 {
-    const string _noAction = "Action should not be set as async will not use it";
+    private const string _noAction = "Action should not be set as async will not use it";
 
     public IHudDialog? CurrentHudDialog { get; protected set; }
 
@@ -45,8 +45,8 @@ public partial class UserDialogsImplementation : IUserDialogs
         var tcs = new TaskCompletionSource<object?>();
         config.SetAction(() => tcs.TrySetResult(null));
 
-        var disp = Alert(config);
-        using (cancelToken.Register(() => Cancel(disp, tcs)))
+        var disposable = Alert(config);
+        using (cancelToken.Register(() => Cancel(disposable, tcs)))
         {
             await tcs.Task;
         }
@@ -85,8 +85,8 @@ public partial class UserDialogsImplementation : IUserDialogs
         var tcs = new TaskCompletionSource<bool>();
         config.SetAction(x => tcs.TrySetResult(x));
 
-        var disp = Confirm(config);
-        using (cancelToken.Register(() => Cancel(disp, tcs)))
+        var disposable = Confirm(config);
+        using (cancelToken.Register(() => Cancel(disposable, tcs)))
         {
             return await tcs.Task;
         }
@@ -103,7 +103,7 @@ public partial class UserDialogsImplementation : IUserDialogs
             Icon = icon,
         };
 
-        // you must have a cancel option for actionsheetasync
+        // you must have a cancel option for ActionSheetAsync
         if (cancel is null)
             throw new ArgumentException("You must have a cancel option for the async version");
 
@@ -114,8 +114,8 @@ public partial class UserDialogsImplementation : IUserDialogs
         foreach (var btn in buttons)
             cfg.Add(btn, () => tcs.TrySetResult(btn));
 
-        var disp = ActionSheet(cfg);
-        using (cancelToken.Register(disp.Dispose))
+        var disposable = ActionSheet(cfg);
+        using (cancelToken.Register(disposable.Dispose))
         {
             return await tcs.Task;
         }
@@ -227,16 +227,16 @@ public partial class UserDialogsImplementation : IUserDialogs
         var tcs = new TaskCompletionSource<SnackbarActionType>();
         config.SetAction(x => tcs.TrySetResult(x));
 
-        var disp = ShowSnackbar(config);
-        using (cancelToken.Register(() => Cancel(disp, tcs)))
+        var disposable = ShowSnackbar(config);
+        using (cancelToken.Register(() => Cancel(disposable, tcs)))
         {
             return await tcs.Task;
         }
     }
 
-    protected virtual void Cancel<TResult>(IDisposable disp, TaskCompletionSource<TResult> tcs)
+    protected virtual void Cancel<TResult>(IDisposable disposable, TaskCompletionSource<TResult> tcs)
     {
-        disp.Dispose();
+        disposable.Dispose();
         tcs.TrySetCanceled();
     }
 }

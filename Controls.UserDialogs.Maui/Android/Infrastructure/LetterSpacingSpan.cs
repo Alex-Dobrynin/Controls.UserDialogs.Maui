@@ -12,7 +12,7 @@ public class LetterSpacingSpan : MetricAffectingSpan
         _letterSpacing = letterSpacing;
     }
 
-    public float getLetterSpacing()
+    public float GetLetterSpacing()
     {
         return _letterSpacing;
     }

@@ -264,7 +264,7 @@ public class HudDialog : IHudDialog
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception ({ex.GetType().FullName}) occured while dismissing dialog: {ex.Message}");
+            Console.WriteLine($"Exception ({ex.GetType().FullName}) occurred while dismissing dialog: {ex.Message}");
         }
     }
 

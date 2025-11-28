@@ -16,14 +16,14 @@ public class HudDialog : IHudDialog
 {
     public static double DefaultProgressSize { get; set; } = 80d;
     public static double DefaultProgressThickness { get; set; } = 10d;
-    public static bool DefaultShowProgresPercents { get; set; } = true;
+    public static bool DefaultShowProgressPercent { get; set; } = true;
 
     public int ProgressSize { get; set; } = DpToPixels(DefaultProgressSize);
     public int ProgressThickness { get; set; } = DpToPixels(DefaultProgressThickness);
-    public bool ShowProgresPercents { get; set; } = DefaultShowProgresPercents;
+    public bool ShowProgressPercent { get; set; } = DefaultShowProgressPercent;
 
     private HudDialogConfig? _config;
-    private Android.Widget.Button? _cnclBtn;
+    private Android.Widget.Button? _cancelBtn;
     private TextView? _progressText;
 
     protected Activity Activity { get; }
@@ -111,10 +111,10 @@ public class HudDialog : IHudDialog
     {
         if (dialog is null) return;
 
-        if (_cnclBtn is not null)
+        if (_cancelBtn is not null)
         {
-            _cnclBtn.Clickable = _config!.Cancel is not null;
-            _cnclBtn.Visibility = _config.Cancel is null ? ViewStates.Gone : ViewStates.Visible;
+            _cancelBtn.Clickable = _config!.Cancel is not null;
+            _cancelBtn.Visibility = _config.Cancel is null ? ViewStates.Gone : ViewStates.Visible;
         }
         else SetupCancel(dialog);
     }
@@ -153,11 +153,11 @@ public class HudDialog : IHudDialog
 
         if (progressBar is not null)
         {
-            var lparams = progressBar.LayoutParameters!;
-            lparams.Width = ProgressSize;
-            lparams.Height = ProgressSize;
+            var lParams = progressBar.LayoutParameters!;
+            lParams.Width = ProgressSize;
+            lParams.Height = ProgressSize;
 
-            progressBar.LayoutParameters = lparams;
+            progressBar.LayoutParameters = lParams;
 
             var spinnerDraw = progressBar.IndeterminateDrawable!;
             if (_config.LoaderColor is not null)
@@ -177,11 +177,11 @@ public class HudDialog : IHudDialog
         var progressWheel = dialog.FindViewById<ProgressWheel>(progressId);
         if (progressWheel is not null)
         {
-            var lparams = progressWheel.LayoutParameters!;
-            lparams.Width = ProgressSize;
-            lparams.Height = ProgressSize;
+            var lParams = progressWheel.LayoutParameters!;
+            lParams.Width = ProgressSize;
+            lParams.Height = ProgressSize;
 
-            progressWheel.LayoutParameters = lparams;
+            progressWheel.LayoutParameters = lParams;
             progressWheel.RimWidth = ProgressThickness;
             progressWheel.BarWidth = ProgressThickness;
 
@@ -191,7 +191,7 @@ public class HudDialog : IHudDialog
                 progressWheel.RimColor = _config.ProgressColor.WithAlpha(0.3f).ToPlatform();
             }
 
-            if (ShowProgresPercents)
+            if (ShowProgressPercent)
             {
                 var rParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WrapContent, RelativeLayout.LayoutParams.WrapContent);
                 rParams.AddRule(LayoutRules.AlignBottom, progressWheel.Id);
@@ -235,7 +235,7 @@ public class HudDialog : IHudDialog
         rParams.AddRule(LayoutRules.Below, textViewId);
         rParams.AddRule(LayoutRules.CenterHorizontal);
 
-        _cnclBtn = new Android.Widget.Button(Activity)
+        _cancelBtn = new Android.Widget.Button(Activity)
         {
             Text = _config.CancelText,
             TextAlignment = Android.Views.TextAlignment.Gravity,
@@ -244,24 +244,24 @@ public class HudDialog : IHudDialog
             TextDirection = IsRTL() ? TextDirection.Rtl : TextDirection.Ltr
         };
 
-        _cnclBtn.SetBackgroundColor(Colors.Transparent.ToPlatform());
+        _cancelBtn.SetBackgroundColor(Colors.Transparent.ToPlatform());
         if (_config.NegativeButtonTextColor is not null)
         {
-            _cnclBtn.SetTextColor(_config.NegativeButtonTextColor.ToPlatform());
+            _cancelBtn.SetTextColor(_config.NegativeButtonTextColor.ToPlatform());
         }
-        _cnclBtn.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)_config.NegativeButtonFontSize);
+        _cancelBtn.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)_config.NegativeButtonFontSize);
 
         if (_config.NegativeButtonFontFamily is not null)
         {
             var typeFace = Typeface.CreateFromAsset(Activity.Assets, _config.NegativeButtonFontFamily);
-            _cnclBtn.SetTypeface(typeFace, TypefaceStyle.Normal);
+            _cancelBtn.SetTypeface(typeFace, TypefaceStyle.Normal);
         }
-        _cnclBtn.Click += (s, e) =>
+        _cancelBtn.Click += (s, e) =>
         {
             OnCancelClick();
         };
 
-        parent?.AddView(_cnclBtn);
+        parent?.AddView(_cancelBtn);
     }
 
     protected virtual Drawable GetDialogBackground(HudDialogConfig config)
@@ -287,12 +287,12 @@ public class HudDialog : IHudDialog
         try
         {
             _progressText = null;
-            _cnclBtn = null;
+            _cancelBtn = null;
             AndHUD.Shared.Dismiss();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Exception ({ex.GetType().FullName}) occured while dismissing dialog: {ex.Message}");
+            Console.WriteLine($"Exception ({ex.GetType().FullName}) occurred while dismissing dialog: {ex.Message}");
         }
     }
 

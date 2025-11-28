@@ -40,7 +40,7 @@ public static class Extensions
         else size = new CGSize(newSize, newSize / ratio);
 
         var renderer = new UIGraphicsImageRenderer(size);
-        var resizedImage = renderer.CreateImage((UIGraphicsImageRendererContext context) =>
+        var resizedImage = renderer.CreateImage(context =>
         {
             image.Draw(new CGRect(CGPoint.Empty, size));
         }).ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
