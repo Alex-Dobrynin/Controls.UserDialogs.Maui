@@ -12,14 +12,14 @@ Inspired by [Allan Ritchie](https://github.com/aritchie)'s Acr.UserDialogs
 
 ## Supported Platforms
 
-* .NET8
-* .NET8 for Android (min 7.0)(major 14.0)
-* .NET8 for iOS (min 14.2)
-* .NET8 for MacCatalyst (min 14.2)
 * .NET9
 * .NET9 for Android (min 7.0)(major 15.0)
-* .NET9 for iOS (min 15.0)
-* .NET9 for MacCatalyst (min 15.0)
+* .NET9 for iOS (min 15)
+* .NET9 for MacCatalyst (min 15)
+* .NET10
+* .NET10 for Android (min 7.0)(major 16.0)
+* .NET10 for iOS (min 15.0)
+* .NET10 for MacCatalyst (min 15.0)
 
 ### Features
 
